@@ -46,14 +46,31 @@ src/
   선택 상태·체크 아이콘·카피로 드러냅니다.
 - **3D 에셋 대체**: 실제 3D/이미지 에셋 확정 전까지 중립 회색 SVG 관절
   마네킹(`components/demo/Mannequin.tsx`)으로 포즈 5종을 표현합니다.
-- **베타 폼**: 백엔드 미연결 상태입니다. 클라이언트 검증까지만 수행하고
-  실제 등록 성공을 위조하지 않으며 "화면 시연용"임을 명시합니다.
-  실제 수집을 붙일 때 `BetaSignupForm.tsx`의 `HAS_BACKEND`와 endpoint를 연결하세요.
+- **베타 폼**: [Formspree](https://formspree.io) 연동을 지원합니다. 폼 ID를
+  환경변수(`VITE_FORMSPREE_ID`)로 주입하면 실제 제출 모드로, 없으면 검증만
+  수행하는 데모 모드로 동작합니다. 데모 모드에서는 등록 성공을 위조하지 않고
+  "화면 시연용"임을 명시합니다.
 - **접근성**: skip link, `focus-visible` 링, `prefers-reduced-motion` 대응,
   키보드 접근(후보 버튼·네이티브 `<details>` FAQ), 색+아이콘 병행 표기.
+
+## 베타 폼(Formspree) 연동
+
+1. [formspree.io](https://formspree.io)에 가입하고 새 폼을 생성합니다.
+2. 발급된 엔드포인트(`https://formspree.io/f/xxxxxxxx`)에서 **폼 ID**(`xxxxxxxx`)를 복사합니다.
+3. 프로젝트 루트에 `.env.local`을 만들고 아래처럼 넣습니다(커밋하지 않음):
+   ```env
+   VITE_FORMSPREE_ID=xxxxxxxx
+   ```
+4. 개발 서버를 재시작(`npm run dev`)하면 폼이 실제 제출 모드로 바뀝니다.
+5. 첫 제출 후 Formspree 대시보드에서 등록 내역을 확인하고,
+   이메일 알림을 받으려면 폼 설정에서 알림 주소를 지정하세요.
+
+> 배포 환경(Vercel/Netlify 등)에서는 해당 플랫폼의 환경변수 설정에
+> `VITE_FORMSPREE_ID`를 등록합니다. Formspree 무료 플랜은 도메인 등록/월 제출
+> 한도가 있으니 공개 전 플랜과 스팸 필터(reCAPTCHA 등)를 확인하세요.
 
 ## 남은 TODO
 
 - [ ] 실제 3D/이미지 포즈 에셋 및 OG 이미지(1200×630) 제작 후 교체
-- [ ] 베타 폼 수집 endpoint 연결 및 개인정보 처리방침 문서 링크
+- [ ] Formspree 폼 ID 발급·주입 및 개인정보 처리방침 문서 링크
 - [ ] canonical / og:url / og:image 실제 도메인 확정 후 추가
