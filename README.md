@@ -24,14 +24,22 @@ npm run lint     # ESLint 검사
 
 ## 페이지 구조
 
-`Header → Hero → Product Demo → Problem → Workflow → Core Benefits →
-Product Principles → Clip Studio → Beta CTA → FAQ → Footer`
+두 개의 독립 문서로 빌드된다(Vite MPA). 라우터는 쓰지 않으므로 정적 호스트에
+SPA rewrite 설정이 필요 없다.
+
+- `/` (`index.html`) — 랜딩
+  `Header → Hero → Product Demo → Problem → Workflow → Core Benefits →
+  Product Principles → Clip Studio → Beta CTA → FAQ → Footer`
+- `/signup` (`signup/index.html`) — 계정 만들기. 데스크톱 앱의 "웹에서 계정
+  만들기" 버튼이 이 페이지를 외부 브라우저로 연다.
 
 ## 디렉터리
 
 ```text
 src/
 ├─ components/   레이아웃·Hero·Demo·섹션·폼·공통 컴포넌트
+├─ pages/        SignupPage (가입 페이지 문서)
+├─ lib/          api.ts (BFF 호출 + 오류 코드 → 문구 매핑)
 ├─ data/         카피/후보/FAQ 콘텐츠 (content.ts, poseCandidates.ts, faq.ts)
 ├─ hooks/        useReveal, useActiveSection
 ├─ types/        landing.ts
@@ -52,6 +60,33 @@ src/
   "화면 시연용"임을 명시합니다.
 - **접근성**: skip link, `focus-visible` 링, `prefers-reduced-motion` 대응,
   키보드 접근(후보 버튼·네이티브 `<details>` FAQ), 색+아이콘 병행 표기.
+
+## 가입 페이지(/signup)
+
+회원가입은 데스크톱 앱이 아니라 웹에서 처리한다(앱 `docs/06_AUTH_SPEC.md` §1).
+약관 동의와 이메일 인증이 브라우저 흐름이기 때문이다.
+
+흐름:
+
+```text
+앱 로그인 화면 → "웹에서 계정 만들기"
+  → /signup 에서 가입 (POST /v1/auth/register)
+  → "인증 메일을 보냈습니다" + [앱으로 돌아가기]
+  → 메일 링크 클릭 → 인증 완료
+  → standin:// 로 앱 복귀 → 앱에서 로그인
+```
+
+로컬에서 확인하려면 BFF(`Standin-app-server`)를 함께 띄우고 `.env.local`에
+`VITE_API_BASE_URL=http://localhost:8080`을 넣는다. 이 값이 없으면 가입 폼은
+데모 모드가 되어 **가입 성공을 가장하지 않는다**.
+
+BFF의 `CORS_ORIGINS`에 이 개발 서버 출처(`http://localhost:5173`)가 들어 있어야
+요청이 나간다.
+
+> ⚠ **배포된 랜딩에서는 아직 동작하지 않는다.** 랜딩은 HTTPS인데 BFF의 ALB가
+> 80 HTTP 전용이라 브라우저가 mixed content로 차단한다. 도메인·ACM 인증서를
+> 붙여 443 리스너를 만든 뒤에 가입 링크를 공개한다. 인증 라우트 레이트리밋과
+> 개인정보 처리방침 문서도 공개 전 선행 조건이다.
 
 ## 베타 폼(Formspree) 연동
 

@@ -183,12 +183,57 @@ export const beta = {
 
 export const footer = {
   tagline: "콘티와 밑그림 사이, 더 나은 3D 시작점.",
+  // 푸터는 /signup 에서도 렌더되므로 hash를 루트 기준(`/#`)으로 둔다.
+  // 인덱스에서는 같은 문서 안의 hash 이동이라 동작이 그대로다.
   links: [
-    { label: "작동 방식", href: "#workflow" },
-    { label: "제품 원칙", href: "#principles" },
-    { label: "FAQ", href: "#faq" },
+    { label: "작동 방식", href: "/#workflow" },
+    { label: "제품 원칙", href: "/#principles" },
+    { label: "FAQ", href: "/#faq" },
     // 개인정보 처리방침: 실제 문서 준비 전까지 비활성 처리
     { label: "개인정보 처리방침", href: null },
   ],
   copyright: "© 2026 Standin. All rights reserved.",
+};
+
+/**
+ * 가입 페이지(/signup) 카피.
+ *
+ * 회원가입은 데스크톱 앱이 아니라 웹에서 처리한다 — 약관 동의와 이메일 인증이
+ * 브라우저 흐름이기 때문이다. 앱은 이 페이지를 외부 브라우저로 열기만 한다.
+ */
+export const signup = {
+  eyebrow: "CREATE ACCOUNT",
+  title: "Standin 계정 만들기",
+  body: "가입 후 인증 메일의 링크를 누르면 계정이 활성화됩니다. 그다음 데스크톱 앱에서 로그인해 주세요.",
+  emailLabel: "이메일",
+  emailPlaceholder: "artist@example.com",
+  passwordLabel: "비밀번호",
+  passwordPlaceholder: "8자 이상",
+  passwordConfirmLabel: "비밀번호 확인",
+  displayNameLabel: "표시 이름",
+  displayNameHint: "선택 · 비워두면 이메일 앞부분을 사용합니다",
+  displayNamePlaceholder: "작가명",
+  consentPrefix: "서비스 이용약관과",
+  consentPolicyLabel: "개인정보 처리방침",
+  consentSuffix: "에 동의합니다.",
+  cta: "계정 만들기",
+  showPassword: "비밀번호 표시",
+  hidePassword: "비밀번호 숨기기",
+  // 성공 상태
+  successTitle: "인증 메일을 보냈습니다",
+  successBody:
+    "메일의 링크를 눌러 인증을 마친 뒤, 데스크톱 앱에서 로그인해 주세요.",
+  successHint: "메일이 보이지 않으면 스팸함도 확인해 주세요.",
+  backToApp: "앱으로 돌아가기",
+  backToAppHint: "앱이 열리지 않으면 Standin을 직접 실행해 주세요.",
+  resend: "인증 메일 다시 보내기",
+  resendSending: "보내는 중…",
+  resendDone: "인증 메일을 다시 보냈습니다.",
+  resendCooldown: (sec: number) => `${sec}초 후 다시 보낼 수 있습니다`,
+  // 앱 안내
+  hasAccountPrefix: "이미 계정이 있나요?",
+  hasAccountBody: "데스크톱 앱에서 로그인하세요.",
+  // 백엔드 미연결 시
+  demoNotice:
+    "현재 서버가 연결되어 있지 않아 실제 가입은 진행되지 않습니다. VITE_API_BASE_URL을 설정한 뒤 다시 시도해 주세요.",
 };

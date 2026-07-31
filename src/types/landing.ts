@@ -31,3 +31,11 @@ export type BetaFormValues = {
 };
 
 export type SubmitState = "idle" | "submitting" | "success" | "error";
+
+export type SignupFormValues = {
+  email: string;
+  password: string;
+  passwordConfirm: string;
+  displayName: string;
+  consent: boolean;
+};
