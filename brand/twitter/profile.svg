@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#F8F5EF" stroke-opacity="0.05" stroke-width="1" />
+    </pattern>
+    <radialGradient id="glow" cx="50%" cy="42%" r="60%">
+      <stop offset="0%" stop-color="#8ED8E8" stop-opacity="0.10" />
+      <stop offset="100%" stop-color="#8ED8E8" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- 배경 -->
+  <rect width="400" height="400" fill="#152238" />
+  <rect width="400" height="400" fill="url(#grid)" />
+  <rect width="400" height="400" fill="url(#glow)" />
+
+  <!-- 워드마크 -->
+  <text x="200" y="205" text-anchor="middle"
+        font-family="'Pretendard Variable', 'Malgun Gothic', 'Segoe UI', sans-serif"
+        font-size="66" font-weight="800" letter-spacing="-1.5" fill="#FFFFFF">Standin<tspan fill="#FF6B57">.</tspan></text>
+
+  <!-- 코랄 룰 -->
+  <rect x="170" y="228" width="60" height="4" rx="2" fill="#FF6B57" />
+
+  <!-- 아이브로 -->
+  <text x="200" y="262" text-anchor="middle"
+        font-family="'Pretendard Variable', 'Malgun Gothic', 'Segoe UI', sans-serif"
+        font-size="15" font-weight="700" letter-spacing="4" fill="#D8DDE5">3D POSE ASSISTANT</text>
+</svg>

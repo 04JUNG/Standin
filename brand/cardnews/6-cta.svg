@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <pattern id="gridC" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0 H0 V60" fill="none" stroke="#F8F5EF" stroke-opacity="0.05" stroke-width="1" />
+    </pattern>
+    <radialGradient id="glowC" cx="50%" cy="34%" r="60%">
+      <stop offset="0%" stop-color="#FF6B57" stop-opacity="0.14" />
+      <stop offset="100%" stop-color="#FF6B57" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="1080" height="1080" fill="#152238" />
+  <rect width="1080" height="1080" fill="url(#gridC)" />
+  <rect width="1080" height="1080" fill="url(#glowC)" />
+
+  <g font-family="'Pretendard Variable', 'Malgun Gothic', 'Segoe UI', sans-serif">
+    <text x="540" y="366" text-anchor="middle" font-size="24" font-weight="700" letter-spacing="6" fill="#FF6B57">EARLY ACCESS</text>
+
+    <text x="540" y="482" text-anchor="middle" font-size="66" font-weight="800" letter-spacing="-2.5" fill="#FFFFFF">다음 컷은, 빈 인형이 아니라</text>
+    <text x="540" y="566" text-anchor="middle" font-size="66" font-weight="800" letter-spacing="-2.5" fill="#FFFFFF">가까운 <tspan fill="#FF6B57">포즈에서 시작</tspan>하세요.</text>
+
+    <text x="540" y="648" text-anchor="middle" font-size="30" font-weight="500" letter-spacing="-0.4" fill="#D8DDE5">Standin은 지금 초기 베타 참여자를 모집하고 있습니다.</text>
+
+    <!-- pseudo CTA 버튼 -->
+    <rect x="390" y="712" width="300" height="86" rx="43" fill="#FF6B57" />
+    <text x="540" y="766" text-anchor="middle" font-size="32" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF">베타 대기 등록 →</text>
+
+    <text x="540" y="864" text-anchor="middle" font-size="25" font-weight="500" letter-spacing="0.3" fill="#A7AFBD">랜딩페이지에서 이메일만 남기면 됩니다.</text>
+
+    <!-- footer -->
+    <text x="96" y="1010" font-size="30" font-weight="800" letter-spacing="-1" fill="#FFFFFF">Standin<tspan fill="#FF6B57">.</tspan></text>
+    <text x="984" y="1010" text-anchor="end" font-size="24" font-weight="600" letter-spacing="1" fill="#A7AFBD">06 / 06</text>
+  </g>
+</svg>
