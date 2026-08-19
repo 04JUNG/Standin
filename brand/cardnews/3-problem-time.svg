@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <pattern id="gridL3" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0 H0 V60" fill="none" stroke="#152238" stroke-opacity="0.035" stroke-width="1" />
+    </pattern>
+  </defs>
+
+  <rect width="1080" height="1080" fill="#F8F5EF" />
+  <rect width="1080" height="1080" fill="url(#gridL3)" />
+
+  <g font-family="'Pretendard Variable', 'Malgun Gothic', 'Segoe UI', sans-serif">
+    <text x="96" y="180" font-size="24" font-weight="700" letter-spacing="5" fill="#FF6B57">PROBLEM 01</text>
+    <rect x="98" y="204" width="64" height="5" rx="2.5" fill="#FF6B57" />
+
+    <text x="92" y="316" font-size="58" font-weight="800" letter-spacing="-2.5" fill="#152238">웹툰 작가는 일주일 중</text>
+    <text x="92" y="392" font-size="58" font-weight="800" letter-spacing="-2.5" fill="#152238"><tspan fill="#FF6B57">6일 이상</tspan>을 창작에 씁니다</text>
+
+    <!-- 통계 패널 -->
+    <rect x="96" y="470" width="888" height="332" rx="28" fill="#FFFFFF" stroke="#D8DDE5" />
+    <line x1="392" y1="530" x2="392" y2="742" stroke="#D8DDE5" stroke-width="1" />
+    <line x1="688" y1="530" x2="688" y2="742" stroke="#D8DDE5" stroke-width="1" />
+
+    <g text-anchor="middle">
+      <text x="244" y="626" font-size="84" font-weight="800" letter-spacing="-2" fill="#2E9B73">36.9%</text>
+      <text x="244" y="686" font-size="27" font-weight="600" fill="#293446">주 6일 이상 창작</text>
+      <text x="244" y="724" font-size="21" font-weight="500" fill="#667085">가장 많은 응답</text>
+
+      <text x="540" y="626" font-size="84" font-weight="800" letter-spacing="-2" fill="#152238">5.8<tspan font-size="46">일</tspan></text>
+      <text x="540" y="686" font-size="27" font-weight="600" fill="#293446">주 평균 창작 일수</text>
+      <text x="540" y="724" font-size="21" font-weight="500" fill="#667085">2023년 기준</text>
+
+      <text x="836" y="626" font-size="84" font-weight="800" letter-spacing="-2" fill="#152238">9.5<tspan font-size="46">시간</tspan></text>
+      <text x="836" y="686" font-size="27" font-weight="600" fill="#293446">하루 평균 창작 시간</text>
+      <text x="836" y="724" font-size="21" font-weight="500" fill="#667085">창작하는 날 기준</text>
+    </g>
+
+    <text x="96" y="878" font-size="34" font-weight="700" letter-spacing="-0.8" fill="#152238">창작에 쓰는 시간은 이미 절대적으로 깁니다.</text>
+    <text x="96" y="924" font-size="26" font-weight="500" letter-spacing="-0.3" fill="#667085">그래서 그리기 전 준비 작업 1분이 더 아깝습니다.</text>
+
+    <!-- footer -->
+    <text x="96" y="1010" font-size="20" font-weight="500" fill="#A7AFBD">자료: 웹툰 작가 실태조사 기준 (조사기관·연도 표기 권장)</text>
+    <text x="984" y="1010" text-anchor="end" font-size="24" font-weight="600" letter-spacing="1" fill="#A7AFBD">03 / 06</text>
+  </g>
+</svg>
