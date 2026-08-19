@@ -1,7 +1,7 @@
 type MediaVideoProps = {
   src: string;
   poster?: string;
-  label: string;
+  label?: string;
   ariaLabel: string;
   /** 영상 원본 비율. 기본값은 화면 녹화(1440×828) 비율. */
   aspect?: string;
@@ -41,11 +41,13 @@ export function MediaVideo({
           preload="metadata"
         />
       </div>
-      <figcaption
-        className={`mt-3 text-sm ${dark ? "text-neutral-400" : "text-neutral-600"}`}
-      >
-        {label}
-      </figcaption>
+      {label ? (
+        <figcaption
+          className={`mt-3 text-sm ${dark ? "text-neutral-400" : "text-neutral-600"}`}
+        >
+          {label}
+        </figcaption>
+      ) : null}
     </figure>
   );
 }

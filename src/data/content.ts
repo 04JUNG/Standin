@@ -8,6 +8,7 @@ export const nav = {
     { label: "처리 과정", href: "#process" },
     { label: "활용 결과", href: "#result" },
   ],
+  launchDate: "8. 31. OPEN BETA",
   cta: "오픈베타 사전등록",
   ctaHref: "#beta",
 };
@@ -16,6 +17,7 @@ export const hero = {
   eyebrow: "WEBTOON 3D POSE TOOL",
   title: "러프 이미지에서\n원하는 3D 포즈를 찾아보세요.",
   body: "그림 위에 마우스를 올려 Standin이 찾은 같은 자세의 3D 인형을 직접 비교해 보세요.",
+  launchBadge: "2026. 8. 31. OPEN BETA",
   primaryCta: "오픈베타 사전등록",
   secondaryCta: "사용 과정 보기",
   assistiveLine: "스포츠·액션·공중 동작까지 네 가지 포즈 예시를 직접 확인할 수 있습니다.",
@@ -185,8 +187,9 @@ export const clipStudio = {
 
 export const beta = {
   eyebrow: "OPEN BETA",
+  launchDate: "2026. 8. 31. 오픈",
   title: "Standin 오픈베타를 먼저 사용해 보세요.",
-  body: "사전등록한 이메일로 오픈베타 일정과 참여 방법을 안내드립니다.",
+  body: "2026년 8월 31일 오픈베타를 시작합니다. 사전등록한 이메일로 참여 방법을 안내드립니다.",
   note: "가격이나 결제 정보는 받지 않습니다. 등록 정보는 오픈베타 참여 안내에만 사용합니다.",
   emailLabel: "이메일",
   emailPlaceholder: "artist@example.com",

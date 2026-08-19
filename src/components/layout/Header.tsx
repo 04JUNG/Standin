@@ -67,6 +67,9 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2">
+            <span className="hidden items-center rounded-full border border-brand-coral/30 bg-brand-coral/12 px-3 py-1 text-[13px] font-semibold whitespace-nowrap text-brand-coral-dark md:inline-flex">
+              {nav.launchDate}
+            </span>
             <Button as="a" href={nav.ctaHref} className="hidden sm:inline-flex">
               {nav.cta}
             </Button>
@@ -101,6 +104,9 @@ export function Header() {
                   {link.label}
                 </a>
               ))}
+              <span className="mt-2 inline-flex items-center self-start rounded-full border border-brand-coral/30 bg-brand-coral/12 px-3 py-1 text-[13px] font-semibold text-brand-coral-dark">
+                {nav.launchDate}
+              </span>
               <Button
                 as="a"
                 href={nav.ctaHref}
