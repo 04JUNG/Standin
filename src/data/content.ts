@@ -37,7 +37,7 @@ export const flow = {
     title: "Standin이 비슷한 3D 자세를 찾습니다.",
     body: "이미지 속 인물의 자세를 바탕으로 가까운 3D 포즈를 찾아 보여줍니다. 결과를 하나로 확정하지 않고 직접 비교할 수 있게 제공합니다.",
     steps: ["이미지 확인", "비슷한 자세 검색", "결과 비교"],
-    mediaLabel: "포즈 검색 과정 · GIF 또는 짧은 영상 삽입 예정",
+    mediaLabel: "배구 러프와 3D 포즈 후보 5개를 비교하는 약 5초 데모",
   },
   result: {
     eyebrow: "03 · RESULT",

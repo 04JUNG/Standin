@@ -1,5 +1,5 @@
 import { Container } from "../common/Container";
-import { MediaPlaceholder } from "../common/MediaPlaceholder";
+import { PoseSearchVideo } from "../demo/PoseSearchVideo";
 import { flow } from "../../data/content";
 
 export function ProcessSection() {
@@ -27,9 +27,9 @@ export function ProcessSection() {
             </ol>
           </div>
 
-          <MediaPlaceholder
+          <PoseSearchVideo
             label={flow.process.mediaLabel}
-            ariaLabel="Standin이 비슷한 3D 자세를 찾는 장면이 들어갈 빈 영역"
+            ariaLabel="클립스튜디오의 배구 러프를 분석해 서로 다른 3D 자세 후보 다섯 개를 비교하고 가장 가까운 포즈를 선택하는 데모"
           />
         </div>
       </Container>
