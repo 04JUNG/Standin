@@ -83,10 +83,9 @@ src/
 BFF의 `CORS_ORIGINS`에 이 개발 서버 출처(`http://localhost:5173`)가 들어 있어야
 요청이 나간다.
 
-> ⚠ **배포된 랜딩에서는 아직 동작하지 않는다.** 랜딩은 HTTPS인데 BFF의 ALB가
-> 80 HTTP 전용이라 브라우저가 mixed content로 차단한다. 도메인·ACM 인증서를
-> 붙여 443 리스너를 만든 뒤에 가입 링크를 공개한다. 인증 라우트 레이트리밋과
-> 개인정보 처리방침 문서도 공개 전 선행 조건이다.
+배포 환경의 BFF는 `https://api.standinpose.com`을 사용한다. Vercel 환경변수
+`VITE_API_BASE_URL`도 이 값으로 설정해야 한다. 인증 라우트 레이트리밋과 개인정보
+처리방침 문서는 가입 링크 공개 전 선행 조건이다.
 
 ## 베타 폼(Formspree) 연동
 
