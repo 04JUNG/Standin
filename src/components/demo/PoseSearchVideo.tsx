@@ -25,7 +25,7 @@ export function PoseSearchVideo({ label, ariaLabel }: PoseSearchVideoProps) {
       >
         <img
           className="pose-reference-demo__workspace"
-          src="/assets/workspace/clip-studio-reference.png"
+          src="/assets/workspace/clip-studio-volleyball-workflow.png"
           alt=""
           aria-hidden="true"
         />

@@ -116,7 +116,7 @@ export function BetaSignupForm() {
           utm_medium: campaign.utmMedium,
           utm_campaign: campaign.utmCampaign,
           utm_content: campaign.utmContent,
-          _subject: "Standin 오픈베타 사전등록",
+          _subject: "Standin 클로즈베타 사전등록",
         }),
       });
 

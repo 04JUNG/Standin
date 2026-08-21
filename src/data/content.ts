@@ -8,8 +8,8 @@ export const nav = {
     { label: "처리 과정", href: "#process" },
     { label: "활용 결과", href: "#result" },
   ],
-  launchDate: "8. 31. OPEN BETA",
-  cta: "오픈베타 사전등록",
+  launchDate: "9. 4. CLOSED BETA",
+  cta: "클로즈베타 사전등록",
   ctaHref: "#beta",
 };
 
@@ -17,8 +17,8 @@ export const hero = {
   eyebrow: "WEBTOON 3D POSE TOOL",
   title: "러프 이미지에서\n원하는 3D 포즈를 찾아보세요.",
   body: "그림 위에 마우스를 올려 Standin이 찾은 같은 자세의 3D 인형을 직접 비교해 보세요.",
-  launchBadge: "2026. 8. 31. OPEN BETA",
-  primaryCta: "오픈베타 사전등록",
+  launchBadge: "2026. 9. 4. CLOSED BETA",
+  primaryCta: "클로즈베타 사전등록",
   secondaryCta: "사용 과정 보기",
   assistiveLine: "스포츠·액션·공중 동작까지 네 가지 포즈 예시를 직접 확인할 수 있습니다.",
   mediaLabel: "실제 Standin 사용 영상 · 추후 삽입",
@@ -43,7 +43,6 @@ export const flow = {
     eyebrow: "03 · RESULT",
     title: "원하는 결과를 골라 Clip Studio에서 이어서 작업하세요.",
     body: "가까운 3D 인형을 선택하고 필요한 부분을 조정한 뒤, 내보낸 결과를 기존 작화 작업에 활용합니다.",
-    note: "Standin은 Clip Studio의 공식 플러그인 또는 공식 제휴 서비스가 아닙니다.",
     mediaLabel: "Standin 결과와 Clip Studio 적용 장면 · 영상 또는 이미지 삽입 예정",
   },
 };
@@ -186,11 +185,11 @@ export const clipStudio = {
 };
 
 export const beta = {
-  eyebrow: "OPEN BETA",
-  launchDate: "2026. 8. 31. 오픈",
-  title: "Standin 오픈베타를 먼저 사용해 보세요.",
-  body: "2026년 8월 31일 오픈베타를 시작합니다. 사전등록한 이메일로 참여 방법을 안내드립니다.",
-  note: "가격이나 결제 정보는 받지 않습니다. 등록 정보는 오픈베타 참여 안내에만 사용합니다.",
+  eyebrow: "CLOSED BETA",
+  launchDate: "2026. 9. 4. 시작",
+  title: "Standin 클로즈베타를 먼저 사용해 보세요.",
+  body: "2026년 9월 4일 클로즈베타를 시작합니다. 사전등록한 이메일로 참여 방법을 안내드립니다.",
+  note: "가격이나 결제 정보는 받지 않습니다. 등록 정보는 클로즈베타 참여 안내에만 사용합니다.",
   emailLabel: "이메일",
   emailPlaceholder: "artist@example.com",
   roleLabel: "작업 형태",
@@ -239,9 +238,9 @@ export const beta = {
     { value: "pinterest", label: "Pinterest" },
     { value: "other", label: "기타" },
   ],
-  consent: "오픈베타 일정과 참여 방법을 이메일로 받는 데 동의합니다.",
-  cta: "오픈베타 사전등록",
-  success: "사전등록되었습니다. 오픈베타 일정과 참여 방법을 이메일로 안내드릴게요.",
+  consent: "클로즈베타 일정과 참여 방법을 이메일로 받는 데 동의합니다.",
+  cta: "클로즈베타 사전등록",
+  success: "사전등록되었습니다. 클로즈베타 일정과 참여 방법을 이메일로 안내드릴게요.",
   demoSuccess: "입력 형식이 확인되었습니다. 실제 사전등록 수집 기능은 아직 연결되지 않았습니다.",
   demoNotice:
     "현재 폼은 화면 시연용입니다. 실제 신청 수집 기능을 연결한 뒤 공개해 주세요.",
