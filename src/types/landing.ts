@@ -28,7 +28,8 @@ export type BetaFormValues = {
   email: string;
   role: BetaRole;
   workStatus: "" | "active" | "occasional" | "not-now";
-  clipStudioVersion: "" | "pro" | "ex" | "other" | "none";
+  clipStudioEdition: "" | "pro" | "ex" | "other" | "none";
+  clipStudioVersion: "" | "1" | "2" | "3" | "4" | "5" | "unknown" | "none";
   mannequinExperience: "" | "often" | "sometimes" | "tried" | "none";
   source:
     | ""

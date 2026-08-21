@@ -9,6 +9,7 @@ const initialValues: BetaFormValues = {
   email: "",
   role: "",
   workStatus: "",
+  clipStudioEdition: "",
   clipStudioVersion: "",
   mannequinExperience: "",
   source: "",
@@ -57,8 +58,11 @@ function validate(values: BetaFormValues) {
   }
   if (!values.role) errors.role = "작업 형태를 선택해 주세요.";
   if (!values.workStatus) errors.workStatus = "현재 작업 여부를 선택해 주세요.";
+  if (!values.clipStudioEdition) {
+    errors.clipStudioEdition = "Clip Studio 제품을 선택해 주세요.";
+  }
   if (!values.clipStudioVersion) {
-    errors.clipStudioVersion = "Clip Studio 사용 버전을 선택해 주세요.";
+    errors.clipStudioVersion = "Clip Studio 버전을 선택해 주세요.";
   }
   if (!values.mannequinExperience) {
     errors.mannequinExperience = "3D 인형 사용 경험을 선택해 주세요.";
@@ -206,7 +210,21 @@ export function BetaSignupForm() {
           disabled={submitting}
         />
         <SelectField
-          id="beta-clip-studio"
+          id="beta-clip-studio-edition"
+          label={beta.clipStudioEditionLabel}
+          value={values.clipStudioEdition}
+          options={beta.clipStudioEditionOptions}
+          onChange={(value) =>
+            setValues((v) => ({
+              ...v,
+              clipStudioEdition: value as BetaFormValues["clipStudioEdition"],
+            }))
+          }
+          error={errors.clipStudioEdition}
+          disabled={submitting}
+        />
+        <SelectField
+          id="beta-clip-studio-version"
           label={beta.clipStudioVersionLabel}
           value={values.clipStudioVersion}
           options={beta.clipStudioVersionOptions}
