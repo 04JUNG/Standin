@@ -207,18 +207,21 @@ export function HeroPoseReveal() {
 
   const handleStagePointerUp = (event: PointerEvent<HTMLDivElement>) => {
     setHasInteracted(true);
-    if (event.pointerType === "mouse" || showFullResult) {
+    if (event.pointerType === "mouse") {
       setShowWorkspace(true);
       return;
     }
-    setShowFullResult(true);
+
+    if (!showFullResult) {
+      setShowFullResult(true);
+    }
   };
 
   const handleStageKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       setHasInteracted(true);
-      if (showFullResult) {
+      if (showFullResult && !isCoarsePointer) {
         setShowWorkspace(true);
       } else {
         setShowFullResult(true);
@@ -310,7 +313,11 @@ export function HeroPoseReveal() {
               role="button"
               tabIndex={0}
               aria-pressed={showFullResult}
-              aria-label={`${activePose.title}. 마우스를 움직여 3D 인형을 확인하고 클릭하면 작업 화면으로 이동합니다.`}
+              aria-label={
+                isCoarsePointer
+                  ? `${activePose.title}. 눌러서 3D 인형을 확인합니다.`
+                  : `${activePose.title}. 마우스를 움직여 3D 인형을 확인하고 클릭하면 작업 화면으로 이동합니다.`
+              }
               onPointerEnter={handlePointerEnter}
               onPointerMove={updateLens}
               onPointerLeave={handlePointerLeave}
@@ -350,7 +357,10 @@ export function HeroPoseReveal() {
               <span className="hero-pose__instruction">
                 {showFullResult ? (
                   <>
-                    <MousePointer2 size={15} /> 클릭해 작업 화면 열기
+                    <MousePointer2 size={15} />
+                    {isCoarsePointer
+                      ? "3D 포즈 확인 완료"
+                      : "클릭해 작업 화면 열기"}
                   </>
                 ) : (
                   <>
