@@ -7,7 +7,14 @@ export function ProcessSection() {
     <section id="process" className="bg-neutral-100 py-20 sm:py-24 lg:py-28">
       <Container wide>
         <div className="grid items-center gap-12 lg:grid-cols-[5fr_7fr] lg:gap-20">
-          <div className="max-w-xl">
+          <div className="lg:order-2">
+            <PoseSearchVideo
+              label={flow.process.mediaLabel}
+              ariaLabel="클립스튜디오의 배구 러프를 분석해 서로 다른 3D 자세 후보 다섯 개를 비교하고 가장 가까운 포즈를 선택하는 데모"
+            />
+          </div>
+
+          <div className="max-w-xl lg:order-1">
             <p className="eyebrow">{flow.process.eyebrow}</p>
             <h2 className="mt-4 text-[34px] leading-[1.15] font-bold tracking-tight text-brand-ink sm:text-[40px] lg:text-[46px]">
               {flow.process.title}
@@ -26,11 +33,6 @@ export function ProcessSection() {
               ))}
             </ol>
           </div>
-
-          <PoseSearchVideo
-            label={flow.process.mediaLabel}
-            ariaLabel="클립스튜디오의 배구 러프를 분석해 서로 다른 3D 자세 후보 다섯 개를 비교하고 가장 가까운 포즈를 선택하는 데모"
-          />
         </div>
       </Container>
     </section>
