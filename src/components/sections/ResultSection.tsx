@@ -8,8 +8,8 @@ export function ResultSection() {
       <Container wide>
         <div className="grid items-center gap-12 lg:grid-cols-[7fr_5fr] lg:gap-20">
           <MediaVideo
-            src="/assets/videos/result-demo-rough-v1.mp4"
-            poster="/assets/videos/result-demo-rough-v1-poster.jpg"
+            src="/assets/videos/result-demo-rough-v3.mp4"
+            poster="/assets/videos/result-demo-rough-v3-poster.jpg"
             ariaLabel="Standin이 찾은 3D 포즈를 Clip Studio 캔버스에 배치해 레이어로 생성하는 화면 녹화"
             aspect="aspect-[144/85]"
           />
