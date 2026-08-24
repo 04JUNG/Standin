@@ -35,6 +35,7 @@ export type BetaFormValues = {
     | ""
     | "pd-network"
     | "ahart"
+    | "webtoon-academy"
     | "bansa"
     | "x"
     | "postype"

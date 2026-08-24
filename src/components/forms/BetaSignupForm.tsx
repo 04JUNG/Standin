@@ -19,6 +19,7 @@ const initialValues: BetaFormValues = {
 const allowedSources = new Set<BetaFormValues["source"]>([
   "pd-network",
   "ahart",
+  "webtoon-academy",
   "bansa",
   "x",
   "postype",
