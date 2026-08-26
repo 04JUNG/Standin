@@ -269,7 +269,7 @@ export function SignupForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-brand-coral px-6 font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-coral-dark disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0"
+        className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-brand-coral px-6 font-semibold text-brand-ink transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ff806f] disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0"
       >
         {submitting ? (
           <>

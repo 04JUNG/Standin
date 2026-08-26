@@ -6,7 +6,6 @@ import { ProcessSection } from "./components/sections/ProcessSection";
 import { ResultSection } from "./components/sections/ResultSection";
 import { BetaSection } from "./components/sections/BetaSection";
 import { StandinIntro } from "./components/hero/StandinIntro";
-import { StickyBetaCta } from "./components/layout/StickyBetaCta";
 
 export function App() {
   return (
@@ -24,7 +23,6 @@ export function App() {
         <BetaSection />
       </main>
       <Footer />
-      <StickyBetaCta />
     </div>
   );
 }

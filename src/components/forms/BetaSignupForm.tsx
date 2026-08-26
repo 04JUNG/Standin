@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { ArrowRight, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { beta } from "../../data/content";
 import type { BetaFormValues, SubmitState } from "../../types/landing";
@@ -81,6 +81,7 @@ const ENDPOINT = FORMSPREE_ID
 const HAS_BACKEND = Boolean(ENDPOINT);
 
 export function BetaSignupForm() {
+  const formRef = useRef<HTMLFormElement>(null);
   const [campaign] = useState(readCampaign);
   const [values, setValues] = useState<BetaFormValues>(() => ({
     ...initialValues,
@@ -98,6 +99,11 @@ export function BetaSignupForm() {
 
     if (Object.keys(nextErrors).length > 0) {
       setState("idle");
+      window.requestAnimationFrame(() => {
+        formRef.current
+          ?.querySelector<HTMLElement>("[aria-invalid='true']")
+          ?.focus();
+      });
       return;
     }
 
@@ -164,6 +170,7 @@ export function BetaSignupForm() {
 
   return (
     <form
+      ref={formRef}
       onSubmit={handleSubmit}
       noValidate
       className="rounded-[22px] border border-white/15 bg-white/[0.07] p-5 backdrop-blur-sm sm:p-6"
@@ -299,7 +306,7 @@ export function BetaSignupForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-brand-coral px-6 font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-coral-dark disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0"
+        className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-brand-coral px-6 font-semibold text-brand-ink transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ff806f] disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0"
       >
         {submitting ? (
           <>

@@ -9,8 +9,6 @@ export const nav = {
     { label: "활용 결과", href: "#result" },
   ],
   launchDate: "9. 4. CLOSED BETA",
-  cta: "클로즈베타 사전등록",
-  ctaHref: "#beta",
 };
 
 export const hero = {

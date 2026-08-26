@@ -283,9 +283,9 @@ export function HeroPoseReveal() {
       ) : (
         <>
           <div className="hero-pose__frame">
-            <h1 className="hero-pose__wordmark" aria-label="Stand in">
+            <h1 className="hero-pose__wordmark" aria-label="Standin">
               <span>Stand</span>
-              <em>in</em>
+              <em>in.</em>
             </h1>
 
             <button

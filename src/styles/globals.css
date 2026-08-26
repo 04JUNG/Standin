@@ -168,12 +168,12 @@ body {
   margin: 0;
   transform: translateX(-50%);
   color: var(--color-brand-ink);
-  font-family: "Kalam", "Segoe Print", cursive;
+  font-family: var(--font-sans);
   font-size: clamp(10.2rem, 21.6vw, 21.6rem);
-  font-weight: 700;
+  font-weight: 800;
   font-style: normal;
-  letter-spacing: -0.04em;
-  line-height: 0.9;
+  letter-spacing: -0.065em;
+  line-height: 0.84;
   white-space: nowrap;
   pointer-events: none;
   user-select: none;
@@ -1572,10 +1572,6 @@ body {
 }
 
 @media (max-width: 767px) {
-  .landing-shell {
-    padding-bottom: 70px;
-  }
-
   .sticky-beta {
     right: 10px;
     bottom: 9px;
