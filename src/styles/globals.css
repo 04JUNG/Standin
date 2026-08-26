@@ -1201,12 +1201,12 @@ body {
   display: flex;
   align-items: baseline;
   transform: translateX(-50%);
-  font-family: "Kalam", "Segoe Print", cursive;
+  font-family: var(--font-sans);
   font-size: clamp(10.2rem, 21.6vw, 21.6rem);
-  font-weight: 700;
+  font-weight: 800;
   font-style: normal;
-  letter-spacing: -0.04em;
-  line-height: 0.9;
+  letter-spacing: -0.065em;
+  line-height: 0.84;
   animation: standin-wordmark-in 1.15s var(--ease-out-standin) both;
 }
 
