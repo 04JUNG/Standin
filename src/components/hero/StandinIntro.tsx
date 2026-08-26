@@ -20,7 +20,7 @@ export function StandinIntro() {
       <span className="standin-intro__grid" aria-hidden="true" />
       <strong className="standin-intro__wordmark" aria-label="Stand in">
         <span>Stand</span>
-        <em>in</em>
+        <em>in.</em>
       </strong>
       <small>ROUGH POSE TO 3D</small>
     </button>

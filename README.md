@@ -104,6 +104,6 @@ BFF의 `CORS_ORIGINS`에 이 개발 서버 출처(`http://localhost:5173`)가 �
 
 ## 남은 TODO
 
-- [ ] 실제 3D/이미지 포즈 에셋 및 OG 이미지(1200×630) 제작 후 교체
+- [x] 최신 포즈 에셋 기반 OG·X 카드 이미지(1200×630) 적용
 - [ ] Formspree 폼 ID 발급·주입 및 개인정보 처리방침 문서 링크
-- [ ] canonical / og:url / og:image 실제 도메인 확정 후 추가
+- [ ] canonical / og:url 및 소셜 이미지의 절대 URL을 실제 도메인 확정 후 추가

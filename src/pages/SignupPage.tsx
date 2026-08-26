@@ -1,6 +1,7 @@
 import { Container } from "../components/common/Container";
 import { Footer } from "../components/layout/Footer";
 import { SignupForm } from "../components/forms/SignupForm";
+import { BrandMark } from "../components/common/BrandMark";
 import { signup } from "../data/content";
 
 /**
@@ -18,14 +19,14 @@ export function SignupPage() {
       </a>
 
       <header className="border-b border-neutral-250/70 bg-brand-paper">
-        <Container>
+        <Container wide>
           <div className="flex h-[72px] items-center">
             <a
               href="/"
-              className="text-xl font-bold tracking-tight text-brand-ink"
+              className="rounded-lg"
               aria-label="Standin 홈으로"
             >
-              Standin<span className="text-brand-coral">.</span>
+              <BrandMark className="text-xl" />
             </a>
           </div>
         </Container>
