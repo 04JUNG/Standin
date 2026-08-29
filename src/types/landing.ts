@@ -27,6 +27,24 @@ export type BetaRole = "" | "artist" | "studio" | "assistant" | "other";
 export type BetaFormValues = {
   email: string;
   role: BetaRole;
+  workStatus: "" | "active" | "occasional" | "not-now";
+  clipStudioEdition: "" | "pro" | "ex" | "other" | "none";
+  clipStudioVersion: "" | "1" | "2" | "3" | "4" | "5" | "unknown" | "none";
+  mannequinExperience: "" | "often" | "sometimes" | "tried" | "none";
+  source:
+    | ""
+    | "pd-network"
+    | "ahart"
+    | "webtoon-academy"
+    | "bansa"
+    | "x"
+    | "postype"
+    | "kakao"
+    | "discord"
+    | "tumblbug"
+    | "bipa"
+    | "pinterest"
+    | "other";
   consent: boolean;
 };
 
@@ -38,4 +56,29 @@ export type SignupFormValues = {
   passwordConfirm: string;
   displayName: string;
   consent: boolean;
+};
+
+export type GuideStepId =
+  | "install"
+  | "input"
+  | "candidates"
+  | "review"
+  | "save";
+
+export type GuideStep = {
+  id: GuideStepId;
+  step: number;
+  title: string;
+  description: string;
+  /** 화면 재현 목업 아래 캡션. "재현 예시"임을 여기서 밝힌다. */
+  caption: string;
+  /** 화면에 드러나지 않는 보충 정보(단축키·제한·전제). */
+  notes?: string[];
+};
+
+/** 푸터 링크. external이면 새 탭으로 연다. href가 null이면 준비 중 표시. */
+export type FooterLink = {
+  label: string;
+  href: string | null;
+  external?: boolean;
 };

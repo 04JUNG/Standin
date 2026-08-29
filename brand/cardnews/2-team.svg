@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <pattern id="gridL" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0 H0 V60" fill="none" stroke="#152238" stroke-opacity="0.035" stroke-width="1" />
+    </pattern>
+  </defs>
+
+  <rect width="1080" height="1080" fill="#F8F5EF" />
+  <rect width="1080" height="1080" fill="url(#gridL)" />
+
+  <g font-family="'Pretendard Variable', 'Malgun Gothic', 'Segoe UI', sans-serif">
+    <text x="96" y="170" font-size="24" font-weight="700" letter-spacing="5" fill="#FF6B57">TEAM · 팀 소개</text>
+    <rect x="98" y="194" width="64" height="5" rx="2.5" fill="#FF6B57" />
+
+    <text x="92" y="300" font-size="62" font-weight="800" letter-spacing="-2.5" fill="#152238">완성은 작가가.</text>
+    <text x="92" y="378" font-size="62" font-weight="800" letter-spacing="-2.5" fill="#152238">시작점은 <tspan fill="#FF6B57">Standin</tspan>이.</text>
+
+    <!-- 소개 문구 패널 -->
+    <rect x="96" y="440" width="888" height="252" rx="28" fill="#FFFFFF" stroke="#D8DDE5" />
+    <text x="140" y="524" font-size="32" font-weight="600" letter-spacing="-0.5" fill="#293446">Standin은 웹툰 창작의 반복적인 3D 배치 작업을</text>
+    <text x="140" y="574" font-size="32" font-weight="600" letter-spacing="-0.5" fill="#293446">줄이는 <tspan fill="#152238" font-weight="800">3D 포즈 어시스턴트</tspan>를 만드는 팀입니다.</text>
+    <text x="140" y="636" font-size="27" font-weight="500" letter-spacing="-0.3" fill="#667085">작가의 판단은 그대로 두고, 콘티와 밑그림 사이의</text>
+    <text x="140" y="674" font-size="27" font-weight="500" letter-spacing="-0.3" fill="#667085">포즈 배치 단계를 더 빠른 시작점으로 바꿉니다.</text>
+
+    <!-- 소속 로고 바 -->
+    <text x="96" y="756" font-size="22" font-weight="700" letter-spacing="4" fill="#FF6B57">AFFILIATION · 소속</text>
+    <rect x="96" y="776" width="888" height="222" rx="28" fill="#FFFFFF" stroke="#D8DDE5" />
+
+    <!-- SW Maestro 락업 -->
+    <rect x="140" y="806" width="70" height="70" rx="18" fill="#152238" />
+    <text x="175" y="842" text-anchor="middle" font-size="27" font-weight="800" letter-spacing="0.5" fill="#FFFFFF">SW<tspan fill="#FF6B57">M</tspan></text>
+    <text x="232" y="836" font-size="31" font-weight="800" letter-spacing="-0.8" fill="#152238">소프트웨어 마에스트로</text>
+    <text x="232" y="868" font-size="20" font-weight="600" letter-spacing="0.5" fill="#667085">AI · SW Maestro</text>
+
+    <line x1="140" y1="902" x2="940" y2="902" stroke="#D8DDE5" stroke-width="1" />
+
+    <!-- 지원기관 로고 3종 (스타일 목업) -->
+    <!-- 과학기술정보통신부 : 무궁화형 엠블럼 -->
+    <g>
+      <circle cx="164" cy="952" r="23" fill="#1f4e9b" />
+      <g fill="#FFFFFF">
+        <circle cx="164" cy="940" r="5.4" />
+        <circle cx="175.4" cy="948.3" r="5.4" />
+        <circle cx="171" cy="961.6" r="5.4" />
+        <circle cx="157" cy="961.6" r="5.4" />
+        <circle cx="152.6" cy="948.3" r="5.4" />
+      </g>
+      <circle cx="164" cy="952" r="3.2" fill="#1f4e9b" />
+      <text x="198" y="960" font-size="20" font-weight="600" letter-spacing="-0.4" fill="#293446">과학기술정보통신부</text>
+    </g>
+
+    <!-- 정보통신기획평가원 (IITP) -->
+    <g>
+      <rect x="452" y="930" width="46" height="46" rx="11" fill="#1b6fb3" />
+      <text x="475" y="960" text-anchor="middle" font-size="17" font-weight="800" letter-spacing="0.3" fill="#FFFFFF">IITP</text>
+      <text x="512" y="960" font-size="20" font-weight="600" letter-spacing="-0.4" fill="#293446">정보통신기획평가원</text>
+    </g>
+
+    <!-- 한국정보산업연합회 (FKII) -->
+    <g>
+      <rect x="726" y="930" width="46" height="46" rx="11" fill="#2e9b73" />
+      <text x="749" y="960" text-anchor="middle" font-size="17" font-weight="800" letter-spacing="0.3" fill="#FFFFFF">FKII</text>
+      <text x="786" y="960" font-size="20" font-weight="600" letter-spacing="-0.4" fill="#293446">한국정보산업연합회</text>
+    </g>
+
+    <!-- footer -->
+    <text x="984" y="1046" text-anchor="end" font-size="24" font-weight="600" letter-spacing="1" fill="#A7AFBD">02 / 06</text>
+  </g>
+</svg>

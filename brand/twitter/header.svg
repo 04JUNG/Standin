@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="500" viewBox="0 0 1500 500">
+  <defs>
+    <pattern id="gridH" width="44" height="44" patternUnits="userSpaceOnUse">
+      <path d="M44 0 H0 V44" fill="none" stroke="#F8F5EF" stroke-opacity="0.045" stroke-width="1" />
+    </pattern>
+    <radialGradient id="glowH" cx="62%" cy="30%" r="55%">
+      <stop offset="0%" stop-color="#8ED8E8" stop-opacity="0.10" />
+      <stop offset="100%" stop-color="#8ED8E8" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- 배경 -->
+  <rect width="1500" height="500" fill="#152238" />
+  <rect width="1500" height="500" fill="url(#gridH)" />
+  <rect width="1500" height="500" fill="url(#glowH)" />
+  <rect x="0" y="497" width="1500" height="3" fill="#FF6B57" fill-opacity="0.8" />
+
+  <!-- 좌측 브랜드 클러스터 (프로필 아바타가 겹치는 좌하단은 피함) -->
+  <text x="110" y="205"
+        font-family="'Pretendard Variable', 'Malgun Gothic', 'Segoe UI', sans-serif"
+        font-size="16" font-weight="700" letter-spacing="2.8" fill="#FF6B57">WEBTOON 3D POSE ASSISTANT</text>
+  <text x="108" y="282"
+        font-family="'Pretendard Variable', 'Malgun Gothic', 'Segoe UI', sans-serif"
+        font-size="72" font-weight="800" letter-spacing="-2" fill="#FFFFFF">Standin<tspan fill="#FF6B57">.</tspan></text>
+
+  <!-- 구분 코랄 바 -->
+  <rect x="512" y="168" width="3" height="196" rx="1.5" fill="#FF6B57" fill-opacity="0.7" />
+
+  <!-- 우측 태그라인 -->
+  <text x="558" y="232"
+        font-family="'Pretendard Variable', 'Malgun Gothic', 'Segoe UI', sans-serif"
+        font-size="48" font-weight="800" letter-spacing="-1" fill="#FFFFFF">완성은 작가가.</text>
+  <text x="558" y="298"
+        font-family="'Pretendard Variable', 'Malgun Gothic', 'Segoe UI', sans-serif"
+        font-size="48" font-weight="800" letter-spacing="-1" fill="#FFFFFF">시작점은 <tspan fill="#FF6B57">Standin</tspan>이.</text>
+  <text x="560" y="350"
+        font-family="'Pretendard Variable', 'Malgun Gothic', 'Segoe UI', sans-serif"
+        font-size="23" font-weight="500" letter-spacing="-0.3" fill="#D8DDE5">러프 콘티에서 찾는, 웹툰 3D 포즈의 시작점.</text>
+</svg>

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Container } from "../common/Container";
-import { Button } from "../common/Button";
+import { BrandMark } from "../common/BrandMark";
 import { nav } from "../../data/content";
 import { useActiveSection } from "../../hooks/useActiveSection";
 
-const sectionIds = ["workflow", "benefits", "clip-studio", "faq"];
+const sectionIds = nav.links.map((link) => link.href.replace("#", ""));
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -35,16 +35,20 @@ export function Header() {
           : "border-b border-transparent"
       }`}
     >
-      <Container>
-        <div className="flex h-[72px] items-center justify-between gap-4">
+      <Container wide>
+        <div className="relative flex h-[72px] items-center justify-between gap-4">
           <a
             href="#main-content"
-            className="text-xl font-bold tracking-tight text-brand-ink"
+            aria-label="Standin 홈"
+            className="relative z-10 rounded-lg"
           >
-            Standin<span className="text-brand-coral">.</span>
+            <BrandMark className="text-xl" />
           </a>
 
-          <nav aria-label="주요 메뉴" className="hidden items-center gap-1 lg:flex">
+          <nav
+            aria-label="주요 메뉴"
+            className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 lg:flex"
+          >
             {nav.links.map((link) => {
               const id = link.href.replace("#", "");
               const isActive = active === id;
@@ -65,10 +69,10 @@ export function Header() {
             })}
           </nav>
 
-          <div className="flex items-center gap-2">
-            <Button as="a" href={nav.ctaHref} className="hidden sm:inline-flex">
-              {nav.cta}
-            </Button>
+          <div className="relative z-10 flex items-center gap-2">
+            <span className="hidden items-center rounded-full border border-brand-coral/30 bg-brand-coral/12 px-3 py-1 text-[13px] font-semibold whitespace-nowrap text-brand-coral-dark md:inline-flex">
+              {nav.launchDate}
+            </span>
             <button
               type="button"
               className="inline-flex h-11 w-11 items-center justify-center rounded-full text-brand-ink lg:hidden"
@@ -88,7 +92,7 @@ export function Header() {
           id="mobile-menu"
           className="border-t border-neutral-250/70 bg-brand-paper/95 backdrop-blur-md lg:hidden"
         >
-          <Container>
+          <Container wide>
             <nav aria-label="모바일 메뉴" className="flex flex-col py-3">
               {nav.links.map((link) => (
                 <a
@@ -100,14 +104,9 @@ export function Header() {
                   {link.label}
                 </a>
               ))}
-              <Button
-                as="a"
-                href={nav.ctaHref}
-                onClick={() => setMenuOpen(false)}
-                className="mt-2"
-              >
-                {nav.cta}
-              </Button>
+              <span className="mt-2 inline-flex items-center self-start rounded-full border border-brand-coral/30 bg-brand-coral/12 px-3 py-1 text-[13px] font-semibold text-brand-coral-dark">
+                {nav.launchDate}
+              </span>
             </nav>
           </Container>
         </div>

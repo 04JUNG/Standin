@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <pattern id="gridD" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0 H0 V60" fill="none" stroke="#FFFFFF" stroke-opacity="0.05" stroke-width="1" />
+    </pattern>
+    <radialGradient id="glowD" cx="30%" cy="24%" r="55%">
+      <stop offset="0%" stop-color="#8ED8E8" stop-opacity="0.10" />
+      <stop offset="100%" stop-color="#8ED8E8" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="1080" height="1080" fill="#202B3C" />
+  <rect width="1080" height="1080" fill="url(#gridD)" />
+  <rect width="1080" height="1080" fill="url(#glowD)" />
+
+  <g font-family="'Pretendard Variable', 'Malgun Gothic', 'Segoe UI', sans-serif">
+    <text x="96" y="176" font-size="24" font-weight="700" letter-spacing="5" fill="#8ED8E8">SOLUTION · 해결 방식</text>
+    <rect x="98" y="200" width="64" height="5" rx="2.5" fill="#FF6B57" />
+
+    <text x="92" y="308" font-size="58" font-weight="800" letter-spacing="-2.5" fill="#FFFFFF">Standin이 콘티에서 <tspan fill="#FF6B57">3D 포즈</tspan></text>
+    <text x="92" y="384" font-size="58" font-weight="800" letter-spacing="-2.5" fill="#FFFFFF">후보를 찾아 제안합니다</text>
+
+    <!-- 4단계 2x2 -->
+    <g>
+      <rect x="96" y="446" width="432" height="150" rx="22" fill="#FFFFFF" fill-opacity="0.06" stroke="#FFFFFF" stroke-opacity="0.14" />
+      <text x="132" y="512" font-size="26" font-weight="800" fill="#FF6B57">STEP 1</text>
+      <text x="132" y="558" font-size="30" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF">콘티 업로드</text>
+    </g>
+    <g>
+      <rect x="552" y="446" width="432" height="150" rx="22" fill="#FFFFFF" fill-opacity="0.06" stroke="#FFFFFF" stroke-opacity="0.14" />
+      <text x="588" y="512" font-size="26" font-weight="800" fill="#FF6B57">STEP 2</text>
+      <text x="588" y="558" font-size="30" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF">컷·포즈 분석</text>
+    </g>
+    <g>
+      <rect x="96" y="616" width="432" height="150" rx="22" fill="#FFFFFF" fill-opacity="0.06" stroke="#FFFFFF" stroke-opacity="0.14" />
+      <text x="132" y="682" font-size="26" font-weight="800" fill="#FF6B57">STEP 3</text>
+      <text x="132" y="728" font-size="30" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF">가까운 후보 선택</text>
+    </g>
+    <g>
+      <rect x="552" y="616" width="432" height="150" rx="22" fill="#FFFFFF" fill-opacity="0.06" stroke="#FFFFFF" stroke-opacity="0.14" />
+      <text x="588" y="682" font-size="26" font-weight="800" fill="#FF6B57">STEP 4</text>
+      <text x="588" y="728" font-size="30" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF">조정하고 이어 그리기</text>
+    </g>
+
+    <!-- 핵심 메시지 -->
+    <rect x="96" y="812" width="888" height="128" rx="24" fill="#FF6B57" fill-opacity="0.12" stroke="#FF6B57" stroke-opacity="0.4" />
+    <text x="140" y="868" font-size="32" font-weight="800" letter-spacing="-0.5" fill="#FFFFFF">AI가 포즈를 확정하지 않습니다.</text>
+    <text x="140" y="912" font-size="27" font-weight="500" letter-spacing="-0.3" fill="#D8DDE5">가까운 후보를 제안하고, 최종 선택은 작가가 합니다.</text>
+
+    <!-- footer -->
+    <text x="96" y="1010" font-size="30" font-weight="800" letter-spacing="-1" fill="#FFFFFF">Standin<tspan fill="#FF6B57">.</tspan></text>
+    <text x="984" y="1010" text-anchor="end" font-size="24" font-weight="600" letter-spacing="1" fill="#A7AFBD">05 / 06</text>
+  </g>
+</svg>
