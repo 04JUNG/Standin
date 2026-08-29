@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { Download } from "lucide-react";
 import { Container } from "../common/Container";
 import { Button } from "../common/Button";
 import { Badge } from "../common/Badge";
@@ -20,11 +20,11 @@ export function HeroSection() {
           </div>
 
           <div className="flex flex-col justify-center gap-3 sm:flex-row sm:items-center">
-            <Button as="a" href="#beta" size="lg">
+            <Button as="a" href="#download" size="lg">
+              <Download size={18} aria-hidden="true" />
               {hero.primaryCta}
-              <ArrowRight size={18} />
             </Button>
-            <Button as="a" href="#input" variant="secondary" size="lg">
+            <Button as="a" href="#guide" variant="secondary" size="lg">
               {hero.secondaryCta}
             </Button>
           </div>

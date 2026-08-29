@@ -1,5 +1,6 @@
 // 랜딩페이지 카피 (docs/04_CONTENT_COPY.md) — JSX에 흩지 않고 한곳에서 관리
-import type { WorkflowStep } from "../types/landing";
+import type { FooterLink, GuideStep, WorkflowStep } from "../types/landing";
+import { RELEASES_PAGE } from "./download";
 
 export const nav = {
   logo: "Standin",
@@ -7,17 +8,20 @@ export const nav = {
     { label: "이미지 입력", href: "#input" },
     { label: "처리 과정", href: "#process" },
     { label: "활용 결과", href: "#result" },
+    { label: "사용 방법", href: "#guide" },
+    { label: "다운로드", href: "#download" },
   ],
-  launchDate: "9. 4. CLOSED BETA",
+  // 9월 4일에 머지하므로 미래형 날짜 대신 현재 상태로 적는다.
+  launchDate: "CLOSED BETA",
 };
 
 export const hero = {
   eyebrow: "WEBTOON 3D POSE TOOL",
   title: "러프 이미지에서\n원하는 3D 포즈를 찾아보세요.",
   body: "그림 위에 마우스를 올려 Standin이 찾은 같은 자세의 3D 인형을 직접 비교해 보세요.",
-  launchBadge: "2026. 9. 4. CLOSED BETA",
-  primaryCta: "클로즈베타 사전등록",
-  secondaryCta: "사용 과정 보기",
+  launchBadge: "CLOSED BETA 진행 중",
+  primaryCta: "무료 다운로드",
+  secondaryCta: "사용 방법 보기",
   assistiveLine: "스포츠·액션·공중 동작까지 네 가지 포즈 예시를 직접 확인할 수 있습니다.",
   mediaLabel: "실제 Standin 사용 영상 · 추후 삽입",
   demoLabel: "제품 사용 장면",
@@ -182,6 +186,11 @@ export const clipStudio = {
     "Standin은 클립스튜디오의 공식 플러그인 또는 공식 제휴 서비스가 아닙니다.",
 };
 
+/**
+ * 사전등록 폼 카피.
+ * 2026-09 다운로드 CTA로 교체되면서 랜딩에서 언마운트됐다.
+ * 정식 출시 알림 폼으로 되살릴 수 있어 파일과 카피를 함께 남겨 둔다.
+ */
 export const beta = {
   eyebrow: "CLOSED BETA",
   launchDate: "2026. 9. 4. 시작",
@@ -264,9 +273,12 @@ export const footer = {
     { label: "이미지 입력", href: "/#input" },
     { label: "처리 과정", href: "/#process" },
     { label: "활용 결과", href: "/#result" },
+    { label: "사용 방법", href: "/#guide" },
+    { label: "다운로드", href: "/#download" },
+    { label: "릴리스 노트", href: RELEASES_PAGE, external: true },
     // 개인정보 처리방침: 실제 문서 준비 전까지 비활성 처리
     { label: "개인정보 처리방침", href: null },
-  ],
+  ] satisfies FooterLink[],
   copyright: "© 2026 Standin. All rights reserved.",
 };
 
@@ -311,4 +323,152 @@ export const signup = {
   // 백엔드 미연결 시
   demoNotice:
     "현재 서버가 연결되어 있지 않아 실제 가입은 진행되지 않습니다. VITE_API_BASE_URL을 설정한 뒤 다시 시도해 주세요.",
+};
+
+/**
+ * 다운로드 섹션 카피.
+ *
+ * 설치 전에 알아야 막히지 않는 정보(클립스튜디오 버전, 베타 동의, 설치 파일 서명)는
+ * 접기 안에 숨기지 않고 요구사항 목록에 그대로 노출한다. 받고 나서 알게 되면 늦다.
+ */
+export const download = {
+  eyebrow: "DOWNLOAD",
+  title: "Standin 데스크톱 앱 내려받기",
+  body: "Windows와 macOS에서 사용할 수 있습니다. 클로즈베타 기간에는 무료입니다.",
+  badge: "클로즈베타 · 무료",
+
+  windowsLabel: "Windows용 내려받기",
+  macLabel: "macOS용 내려받기",
+  recommendedBadge: "이 기기에 맞는 버전",
+  otherOsNote: "Windows 또는 macOS에서 설치할 수 있습니다.",
+  mobileNote: "설치 파일은 Windows·macOS 데스크톱에서 실행됩니다.",
+
+  checkingVersion: "최신 버전 확인 중",
+  releasedSuffix: "배포",
+  staleNotice:
+    "최신 버전 정보를 불러오지 못해 마지막으로 확인된 버전을 안내합니다.",
+  allReleases: "모든 릴리스 보기",
+
+  requirementsTitle: "설치 전 확인",
+  requirements: [
+    {
+      term: "운영체제",
+      desc: "Windows 10 이상(64비트) 또는 macOS. macOS는 Apple Silicon과 Intel을 함께 지원하는 하나의 파일입니다.",
+    },
+    {
+      term: "Clip Studio Paint",
+      desc: "저장한 포즈 파일(BVH)을 가져오려면 Ver 3.1 이상이 필요합니다. 파일 저장 자체는 클립스튜디오 없이도 됩니다.",
+    },
+    {
+      term: "첫 실행",
+      desc: "클로즈베타에는 로그인이 없습니다. 대신 첫 실행에서 베타 데이터 수집 동의를 거칩니다.",
+    },
+    {
+      term: "업데이트",
+      desc: "새 버전이 나오면 이 페이지에서 다시 내려받아 설치해 주세요.",
+    },
+  ],
+
+  windowsInlineNote:
+    "설치 파일에 아직 코드 서명이 없어 Windows 경고 화면이 뜰 수 있습니다.",
+  macInlineNote: "설치 후 앱을 응용 프로그램 폴더로 옮겨 주세요.",
+
+  windowsHelpTitle: "Windows에서 “알 수 없는 게시자” 경고가 뜬다면",
+  windowsHelpSteps: [
+    "경고 창에서 “추가 정보”를 누릅니다.",
+    "아래에 나타나는 “실행” 버튼을 누릅니다.",
+    "설치가 평소처럼 이어집니다.",
+  ],
+  windowsHelpNote:
+    "코드 서명 인증서를 준비하는 중입니다. 서명이 적용되면 이 경고는 사라집니다.",
+
+  macHelpTitle: "macOS 설치 순서",
+  macHelpSteps: [
+    "내려받은 dmg 파일을 엽니다.",
+    "Standin을 응용 프로그램 폴더로 끌어다 놓습니다.",
+    "응용 프로그램 폴더에서 Standin을 실행합니다.",
+  ],
+  macHelpNote:
+    "dmg 안이나 다운로드 폴더에서 바로 실행하면 화면 기록 권한이 유지되지 않아 캡처가 엉뚱한 화면을 담습니다. 화면 캡처를 쓰려면 시스템 설정에서 화면 기록 권한을 허용해 주세요.",
+
+  betaNotice:
+    "클로즈베타 단계의 앱입니다. 기능과 화면이 업데이트마다 바뀔 수 있습니다.",
+};
+
+/**
+ * 사용 방법 섹션 카피.
+ *
+ * 각 단계의 화면은 실제 앱 UI를 HTML·CSS로 재현한 목업이다(스크린샷이 아니다).
+ * 화면 안 문구는 전부 앱 소스에서 그대로 가져왔고, caption에서 재현본임을 밝힌다.
+ */
+export const guide = {
+  eyebrow: "HOW IT WORKS",
+  title: "설치하고 나면 이렇게 씁니다.",
+  description:
+    "러프 한 장에서 포즈 파일까지 다섯 단계입니다. 아래 화면은 실제 앱 화면을 HTML·CSS로 재현한 예시로, 실제 화면과 다를 수 있습니다.",
+  steps: [
+    {
+      id: "install",
+      step: 1,
+      title: "설치하고 베타 동의하기",
+      description:
+        "앱을 처음 열면 어떤 데이터를 왜 모으는지 먼저 확인합니다. 동의해야 베타를 시작할 수 있고, 동의는 설정에서 언제든 철회할 수 있습니다.",
+      caption: "베타 데이터 수집 동의 화면 재현 예시",
+      notes: [
+        "클로즈베타에는 로그인이 없습니다. 계정을 만들지 않아도 됩니다.",
+        "macOS는 이어서 화면 기록 권한을 물어봅니다. 권한 없이도 파일 업로드로 분석할 수 있습니다.",
+      ],
+    },
+    {
+      id: "input",
+      step: 2,
+      title: "러프를 넣거나 화면에서 캡처하기",
+      description:
+        "이미지 파일을 끌어다 놓거나, 작업 중인 화면에서 필요한 영역만 바로 캡처합니다. 인물의 자세가 보이는 러프면 됩니다.",
+      caption: "홈 화면 재현 예시",
+      notes: [
+        "PNG · JPG · WEBP, 최대 20 MB까지 넣을 수 있습니다.",
+        "넣은 이미지는 파일명과 크기를 확인하는 미리보기를 거쳐 Ctrl+Enter로 분석을 시작합니다.",
+        "Ctrl+Alt+S를 누르면 다른 프로그램 위에 뜨는 작은 바에서 클립스튜디오를 벗어나지 않고 캡처할 수 있습니다.",
+      ],
+    },
+    {
+      id: "candidates",
+      step: 3,
+      title: "포즈 후보를 비교하고 직접 고르기",
+      description:
+        "인물마다 가까운 3D 포즈 후보를 나란히 보여줍니다. Standin은 하나로 확정하지 않습니다. 다섯 개를 비교해 쓸 만한 것을 직접 고릅니다.",
+      caption: "포즈 후보 화면 재현 예시",
+      notes: [
+        "인물이 여럿이면 인물마다 따로 고릅니다. 모두 고르기 전까지는 다음 단계로 넘어가지 않습니다.",
+        "“보정 필요”로 표시된 후보는 자세가 덜 맞는다는 뜻으로, 참고용으로만 쓰는 편이 좋습니다.",
+      ],
+    },
+    {
+      id: "review",
+      step: 4,
+      title: "저장할 포즈 확인하기",
+      description:
+        "고른 포즈를 러프에 맞춰 조정한 뒤 무엇이 저장될지 보여줍니다. 결과가 마음에 들지 않으면 후보 선택으로 돌아갈 수 있습니다.",
+      caption: "저장할 포즈 확인 화면 재현 예시",
+      notes: [
+        "이 단계에서 되돌리면 앞서 고른 후보를 다시 선택할 수 있습니다.",
+      ],
+    },
+    {
+      id: "save",
+      step: 5,
+      title: "저장한 파일을 클립스튜디오로 옮기기",
+      description:
+        "포즈는 BVH 파일로 저장됩니다. 저장 화면의 파일을 클립스튜디오 캔버스로 끌어다 놓으면 데생 인형이 만들어집니다.",
+      caption: "저장 완료 화면 재현 예시",
+      notes: [
+        "후보를 고르면 저장 대화상자 없이 설정된 폴더로 바로 저장됩니다. 폴더는 설정에서 바꿉니다.",
+        "BVH를 가져오려면 Clip Studio Paint Ver 3.1 이상이 필요합니다.",
+        "드래그가 잘 안 되면 폴더 열기로 탐색기에서 끌어다 놓거나, 경로를 복사해 파일 > 가져오기로 불러옵니다.",
+      ],
+    },
+  ] satisfies GuideStep[],
+  closing:
+    "Standin은 작가의 연출을 대신하지 않습니다. 3D 인형을 세우는 반복 작업만 줄입니다.",
 };

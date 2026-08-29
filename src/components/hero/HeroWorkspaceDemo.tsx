@@ -102,7 +102,7 @@ export function HeroWorkspaceDemo({ pose, onBack }: HeroWorkspaceDemoProps) {
           )}
           {isImported && (
             <div className="clip-reference-canvas__success" role="status">
-              <Check size={15} /> 3D 포즈 레이어 생성 완료
+              <Check size={15} /> 데생 인형 생성
             </div>
           )}
         </div>
@@ -144,7 +144,7 @@ export function HeroWorkspaceDemo({ pose, onBack }: HeroWorkspaceDemoProps) {
               className="standin-float__import"
               aria-disabled="true"
             >
-              FBX로 저장
+              BVH로 저장
             </button>
           </div>
         </aside>

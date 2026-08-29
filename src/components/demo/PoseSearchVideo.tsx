@@ -6,10 +6,10 @@ type PoseSearchVideoProps = {
 };
 
 const candidates = [
-  { variant: "variant-1", match: "유사 91%" },
-  { variant: "variant-2", match: "유사 93%" },
-  { variant: "variant-3", match: "유사 94%" },
-  { variant: "variant-4", match: "유사 96%" },
+  { variant: "variant-1", match: "보정 필요" },
+  { variant: "variant-2", match: "유사" },
+  { variant: "variant-3", match: "유사" },
+  { variant: "variant-4", match: "유사" },
 ] as const;
 
 export function PoseSearchVideo({ label, ariaLabel }: PoseSearchVideoProps) {
@@ -84,7 +84,7 @@ export function PoseSearchVideo({ label, ariaLabel }: PoseSearchVideoProps) {
                 </span>
               </div>
               <div className="pose-reference-card__info">
-                <span>가장 유사 98%</span>
+                <span>높은 일치</span>
                 <small>3D 인체 · 추천 포즈</small>
               </div>
             </article>

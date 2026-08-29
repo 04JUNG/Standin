@@ -2513,3 +2513,542 @@ body {
     transform: none;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   사용 방법 — 앱 화면 재현 목업
+
+   실제 데스크톱 앱 UI를 HTML·CSS로 다시 그린 것이다(스크린샷이 아니다).
+   화면 다섯 개가 세로로 쌓이므로 여기에는 반복 애니메이션을 두지 않는다.
+
+   크기는 뷰포트가 아니라 컨테이너 폭(cqw)에 맞춘다. 같은 목업이 데스크톱의
+   7/12 컬럼과 모바일 전체 폭 양쪽에서 같은 비율로 보여야 하고, 그래야
+   360px에서도 가로 스크롤 없이 들어간다.
+   ══════════════════════════════════════════════════════════════════ */
+
+.app-screen {
+  /* 앱 색 토큰 중 랜딩에 대응이 없는 두 개만 로컬로 둔다. */
+  --mock-surface-0: #ffffff;
+  --mock-surface-1: #f5f7f9;
+
+  container-type: inline-size;
+  /* 앱 권장 창 1280×800. 높이가 렌더 전에 확정되어 CLS가 생기지 않는다. */
+  aspect-ratio: 16 / 10;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--color-neutral-250);
+  border-radius: 20px;
+  background: var(--mock-surface-1);
+  box-shadow: var(--shadow-float);
+  color: var(--color-neutral-950);
+  font-size: clamp(9px, 2.2cqw, 13px);
+  line-height: 1.5;
+}
+
+.app-screen__chrome {
+  display: grid;
+  grid-template-columns: clamp(52px, 15cqw, 132px) minmax(0, 1fr);
+  height: 100%;
+}
+
+.app-screen__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  padding: 1.2em 0.9em;
+  background: var(--color-brand-ink);
+  color: #fff;
+}
+
+.app-screen__brand {
+  margin-bottom: 0.8em;
+  font-size: 1.15em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.app-screen__brand i {
+  color: var(--color-brand-coral);
+  font-style: normal;
+}
+
+.app-screen__nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.5em 0.6em;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.72);
+  white-space: nowrap;
+}
+
+.app-screen__nav-item.is-active {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-weight: 600;
+}
+
+.app-screen__nav-item.is-disabled {
+  color: rgba(255, 255, 255, 0.36);
+}
+
+.app-screen__main {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  background: var(--mock-surface-1);
+}
+
+.app-screen__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  padding: 0.85em 1.2em;
+  border-bottom: 1px solid var(--color-neutral-250);
+  background: var(--mock-surface-0);
+}
+
+.app-screen__topbar-title {
+  font-size: 1.1em;
+  font-weight: 700;
+}
+
+.app-screen__topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  color: var(--color-neutral-600);
+}
+
+.app-screen__body {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.9em;
+  padding: 1.2em;
+}
+
+/* 온보딩 화면은 실제 앱도 사이드바 셸을 쓰지 않는다. */
+.app-screen.is-plain {
+  display: grid;
+  place-items: center;
+  padding: 1.6em;
+  background: var(--color-brand-paper);
+}
+
+/* ── 목업 공용 조각 ── */
+
+.mock-card {
+  border: 1px solid var(--color-neutral-250);
+  border-radius: 12px;
+  background: var(--mock-surface-0);
+  padding: 1em;
+}
+
+.mock-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  border: 1px solid var(--color-neutral-250);
+  border-radius: 999px;
+  padding: 0.5em 1em;
+  background: var(--mock-surface-0);
+  color: var(--color-neutral-800);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.mock-button.is-primary {
+  border-color: transparent;
+  background: var(--color-brand-coral);
+  color: #fff;
+}
+
+.mock-button.is-ghost {
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-neutral-600);
+}
+
+.mock-kbd {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2em;
+  border: 1px solid var(--color-neutral-250);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  padding: 0.1em 0.4em;
+  background: var(--mock-surface-1);
+  color: var(--color-neutral-600);
+  font-size: 0.85em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.mock-checkbox {
+  display: inline-grid;
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+  place-items: center;
+  border-radius: 4px;
+  background: var(--color-brand-coral);
+  color: #fff;
+}
+
+.mock-note {
+  color: var(--color-neutral-600);
+}
+
+.mock-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+}
+
+.mock-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.6em;
+  margin-top: auto;
+  padding-top: 0.8em;
+  border-top: 1px solid var(--color-neutral-250);
+}
+
+/* ── 2. 홈 화면 ── */
+
+.mock-dropzone {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  border: 1.5px dashed var(--color-neutral-250);
+  border-radius: 14px;
+  background: var(--mock-surface-0);
+  color: var(--color-neutral-600);
+  text-align: center;
+}
+
+.mock-dropzone__title {
+  color: var(--color-neutral-950);
+  font-weight: 600;
+}
+
+.mock-dropzone__formats {
+  font-size: 0.9em;
+}
+
+.mock-actions {
+  display: grid;
+  gap: 0.7em;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mock-action {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.25em;
+  border: 1px solid var(--color-neutral-250);
+  border-radius: 12px;
+  padding: 0.8em;
+  background: var(--mock-surface-0);
+}
+
+.mock-action.is-primary {
+  border-color: rgba(255, 107, 87, 0.45);
+  background: rgba(255, 107, 87, 0.06);
+}
+
+.mock-action.is-muted {
+  color: var(--color-neutral-400);
+}
+
+.mock-action__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5em;
+  font-weight: 600;
+}
+
+.mock-action__desc {
+  font-size: 0.9em;
+}
+
+.mock-action.is-muted .mock-action__desc {
+  color: var(--color-neutral-400);
+}
+
+/* ── 3. 포즈 후보 화면 ── */
+
+.mock-source {
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+}
+
+.mock-source__thumb {
+  display: grid;
+  width: 4.4em;
+  height: 3.3em;
+  flex: none;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--color-neutral-250);
+  border-radius: 8px;
+  background: var(--mock-surface-0);
+}
+
+.mock-person-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6em;
+}
+
+.mock-person-head strong {
+  font-size: 1.05em;
+}
+
+.mock-candidates {
+  display: grid;
+  gap: 0.55em;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.mock-candidate {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.35em;
+  overflow: hidden;
+  border: 1px solid var(--color-neutral-250);
+  border-radius: 10px;
+  padding: 0.5em;
+  background: var(--mock-surface-0);
+}
+
+.mock-candidate.is-selected {
+  border-color: var(--color-brand-coral);
+  box-shadow: 0 0 0 1px var(--color-brand-coral);
+}
+
+.mock-candidate__figure {
+  display: grid;
+  aspect-ratio: 3 / 4;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--mock-surface-1);
+}
+
+.mock-candidate__figure svg {
+  width: 100%;
+  height: 100%;
+}
+
+.mock-candidate__rank {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mock-candidate__badge {
+  align-self: flex-start;
+  border-radius: 999px;
+  padding: 0.1em 0.5em;
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-600);
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.mock-candidate__badge.is-high {
+  background: rgba(46, 155, 115, 0.14);
+  color: #217a58;
+}
+
+.mock-candidate__badge.is-warning {
+  background: rgba(213, 138, 33, 0.14);
+  color: #a76a15;
+}
+
+.mock-candidate__check {
+  position: absolute;
+  top: 0.4em;
+  right: 0.4em;
+  display: grid;
+  width: 1.4em;
+  height: 1.4em;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--color-brand-coral);
+  color: #fff;
+}
+
+/* ── 4·5. 확인 / 저장 화면 ── */
+
+.mock-list-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  border: 1px solid var(--color-neutral-250);
+  border-radius: 10px;
+  padding: 0.65em 0.8em;
+  background: var(--mock-surface-0);
+}
+
+.mock-saved-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  color: #217a58;
+  font-weight: 700;
+}
+
+.mock-file-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  border: 1px solid var(--color-neutral-250);
+  border-radius: 10px;
+  padding: 0.65em 0.8em;
+  background: var(--mock-surface-0);
+}
+
+.mock-file-row__grip {
+  flex: none;
+  color: var(--color-neutral-400);
+  cursor: grab;
+}
+
+.mock-file-row__body {
+  min-width: 0;
+  flex: 1;
+}
+
+.mock-file-row__name {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mock-file-row__path {
+  overflow: hidden;
+  color: var(--color-neutral-600);
+  font-size: 0.9em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mock-file-row__copy {
+  flex: none;
+  color: var(--color-neutral-600);
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+/* ── 1. 베타 동의 화면 ── */
+
+.mock-consent {
+  width: min(100%, 30em);
+  border: 1px solid var(--color-neutral-250);
+  border-radius: 14px;
+  padding: 1.4em;
+  background: var(--mock-surface-0);
+  box-shadow: var(--shadow-card);
+}
+
+.mock-consent__title {
+  font-size: 1.25em;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.mock-consent__list {
+  margin: 0.9em 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-neutral-600);
+}
+
+.mock-consent__list li {
+  display: flex;
+  gap: 0.5em;
+  margin-top: 0.35em;
+}
+
+.mock-consent__list li::before {
+  color: var(--color-brand-coral);
+  content: "·";
+  font-weight: 700;
+}
+
+.mock-consent__agree {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5em;
+  margin-top: 1.1em;
+  padding-top: 1em;
+  border-top: 1px solid var(--color-neutral-250);
+}
+
+.mock-consent__buttons {
+  display: flex;
+  gap: 0.6em;
+  margin-top: 1.1em;
+}
+
+/* ── 컨테이너가 좁아지면 크롬을 줄여 본문에 자리를 준다 ── */
+@container (max-width: 420px) {
+  .app-screen__sidebar {
+    display: none;
+  }
+
+  /* 사이드바를 숨겨도 열은 남는다. 본문이 그 폭에 갇히지 않도록 1열로 되돌린다. */
+  .app-screen__chrome {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mock-candidates {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* 긴 절대경로는 이 폭을 견디지 못한다. 파일명만 남긴다. */
+  .mock-file-row__path {
+    display: none;
+  }
+}
+
+/* ── 가이드 단계 레이아웃 ── */
+
+.guide-mock {
+  margin: 0;
+}
+
+.guide-mock__caption {
+  margin-top: 0.9rem;
+  color: var(--color-neutral-600);
+  font-size: 14px;
+  text-align: center;
+}
+
+.guide-step__index {
+  display: inline-grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--color-brand-coral);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+}

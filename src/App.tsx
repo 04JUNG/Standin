@@ -4,7 +4,8 @@ import { HeroSection } from "./components/hero/HeroSection";
 import { InputSection } from "./components/sections/InputSection";
 import { ProcessSection } from "./components/sections/ProcessSection";
 import { ResultSection } from "./components/sections/ResultSection";
-import { BetaSection } from "./components/sections/BetaSection";
+import { GuideSection } from "./components/sections/GuideSection";
+import { DownloadSection } from "./components/sections/DownloadSection";
 import { StandinIntro } from "./components/hero/StandinIntro";
 
 export function App() {
@@ -20,7 +21,9 @@ export function App() {
         <InputSection />
         <ProcessSection />
         <ResultSection />
-        <BetaSection />
+        {/* 무엇을 하는가(위) → 설치하면 이렇게 쓴다 → 지금 받는다. */}
+        <GuideSection />
+        <DownloadSection />
       </main>
       <Footer />
     </div>

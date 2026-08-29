@@ -1,3 +1,4 @@
+import { ExternalLink } from "lucide-react";
 import { Container } from "../common/Container";
 import { BrandMark } from "../common/BrandMark";
 import { footer } from "../../data/content";
@@ -16,7 +17,19 @@ export function Footer() {
 
           <nav aria-label="푸터 메뉴" className="flex flex-wrap gap-x-8 gap-y-3">
             {footer.links.map((link) =>
-              link.href ? (
+              link.href && link.external ? (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 text-[15px] text-neutral-800 hover:text-brand-coral-dark"
+                >
+                  {link.label}
+                  <ExternalLink size={14} aria-hidden="true" />
+                  <span className="sr-only">(새 창에서 열림)</span>
+                </a>
+              ) : link.href ? (
                 <a
                   key={link.label}
                   href={link.href}

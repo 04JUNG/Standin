@@ -2,6 +2,13 @@ import { Container } from "../common/Container";
 import { BetaSignupForm } from "../forms/BetaSignupForm";
 import { beta } from "../../data/content";
 
+/**
+ * 사전등록 CTA 섹션.
+ *
+ * 2026-09 앱이 실제로 배포되면서 주 전환 목표가 이메일 등록에서 다운로드로
+ * 바뀌어 App.tsx에서 내렸다(자리는 DownloadSection이 이어받았다).
+ * 정식 출시 알림 폼으로 되살릴 수 있어 파일과 카피를 함께 남겨 둔다.
+ */
 export function BetaSection() {
   return (
     <section id="beta" className="bg-brand-ink py-20 sm:py-28 lg:py-32">
