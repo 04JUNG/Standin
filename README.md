@@ -1,9 +1,7 @@
 # Standin — 웹툰 3D 포즈 어시스턴트 랜딩페이지
 
-러프 콘티에서 가까운 3D 인체 포즈 후보를 제안하고, 작가가 선택·조정해 클립스튜디오
-작업으로 이어가는 **작가 보조 도구 Standin**의 반응형 랜딩페이지입니다.
-
-> 완성은 작가가. 시작점은 Standin이.
+러프나 참고 이미지를 입력하면 비슷한 3D 자세를 찾고, 결과를 Clip Studio 작업에
+활용할 수 있도록 돕는 **웹툰 작업 보조 도구 Standin**의 반응형 랜딩페이지입니다.
 
 ## 기술 스택
 
@@ -28,8 +26,8 @@ npm run lint     # ESLint 검사
 SPA rewrite 설정이 필요 없다.
 
 - `/` (`index.html`) — 랜딩
-  `Header → Hero → Product Demo → Problem → Workflow → Core Benefits →
-  Product Principles → Clip Studio → Beta CTA → FAQ → Footer`
+  `Header → Hero → 이미지 입력 → Standin 처리 → Clip Studio 활용 결과 →
+  오픈베타 사전등록 → Footer`
 - `/signup` (`signup/index.html`) — 계정 만들기. 데스크톱 앱의 "웹에서 계정
   만들기" 버튼이 이 페이지를 외부 브라우저로 연다.
 
@@ -48,12 +46,12 @@ src/
 
 ## 구현 노트 (문서 지침 준수)
 
-- **가짜 처리 없음**: 파일 업로드/서버 분석/가짜 로딩을 넣지 않고, 데모는
-  "제품 흐름 예시"로 명시합니다. 후보를 누르면 3D 프리뷰만 교체됩니다.
-- **작가 선택 중심**: "AI가 확정"이 아니라 "후보 제안 → 작가 선택" 구조를
-  선택 상태·체크 아이콘·카피로 드러냅니다.
-- **3D 에셋 대체**: 실제 3D/이미지 에셋 확정 전까지 중립 회색 SVG 관절
-  마네킹(`components/demo/Mannequin.tsx`)으로 포즈 5종을 표현합니다.
+- **단순한 고객 흐름**: 무엇을 넣는지 → Standin이 무엇을 하는지 → 어디에
+  활용하는지 → 사전등록 순서로 안내합니다.
+- **미디어 슬롯**: 실제 제품 사진·GIF·영상이 준비되기 전까지 빈 비율 영역만
+  확보합니다. `MediaPlaceholder.tsx` 내부를 실제 미디어로 교체하면 됩니다.
+- **색상 변경**: 브랜드·중립·상태 색상은 `src/styles/globals.css`의 `@theme`
+  토큰에서 한 번에 변경할 수 있습니다.
 - **베타 폼**: [Formspree](https://formspree.io) 연동을 지원합니다. 폼 ID를
   환경변수(`VITE_FORMSPREE_ID`)로 주입하면 실제 제출 모드로, 없으면 검증만
   수행하는 데모 모드로 동작합니다. 데모 모드에서는 등록 성공을 위조하지 않고
@@ -105,6 +103,6 @@ BFF의 `CORS_ORIGINS`에 이 개발 서버 출처(`http://localhost:5173`)가 �
 
 ## 남은 TODO
 
-- [ ] 실제 3D/이미지 포즈 에셋 및 OG 이미지(1200×630) 제작 후 교체
+- [x] 최신 포즈 에셋 기반 OG·X 카드 이미지(1200×630) 적용
 - [ ] Formspree 폼 ID 발급·주입 및 개인정보 처리방침 문서 링크
-- [ ] canonical / og:url / og:image 실제 도메인 확정 후 추가
+- [ ] canonical / og:url 및 소셜 이미지의 절대 URL을 실제 도메인 확정 후 추가

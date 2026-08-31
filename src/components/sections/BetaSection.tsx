@@ -8,14 +8,22 @@ export function BetaSection() {
       <Container>
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
           <div>
-            <span className="text-xs font-semibold tracking-[0.12em] text-brand-coral uppercase">
-              {beta.eyebrow}
-            </span>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+              <span className="text-xs font-semibold tracking-[0.12em] text-brand-coral uppercase">
+                {beta.eyebrow}
+              </span>
+              <span className="rounded-full border border-brand-coral/40 bg-brand-coral/15 px-3 py-1 text-[13px] font-semibold text-white">
+                {beta.launchDate}
+              </span>
+            </div>
             <h2 className="mt-4 text-3xl leading-tight font-bold tracking-tight text-white sm:text-4xl">
               {beta.title}
             </h2>
-            <p className="mt-5 max-w-md text-lg leading-relaxed text-neutral-250">
+            <p className="mt-5 max-w-lg text-lg leading-relaxed text-neutral-250">
               {beta.body}
+            </p>
+            <p className="mt-5 text-sm leading-relaxed text-neutral-400">
+              {beta.note}
             </p>
           </div>
 

@@ -4,27 +4,49 @@ import type { WorkflowStep } from "../types/landing";
 export const nav = {
   logo: "Standin",
   links: [
-    { label: "작동 방식", href: "#workflow" },
-    { label: "왜 Standin인가", href: "#benefits" },
-    { label: "클립스튜디오 연결", href: "#clip-studio" },
-    { label: "FAQ", href: "#faq" },
+    { label: "이미지 입력", href: "#input" },
+    { label: "처리 과정", href: "#process" },
+    { label: "활용 결과", href: "#result" },
   ],
-  cta: "베타 대기 등록",
-  ctaHref: "#beta",
+  launchDate: "9. 4. CLOSED BETA",
 };
 
 export const hero = {
-  eyebrow: "WEBTOON 3D POSE ASSISTANT",
-  title: "콘티 속 포즈를,\n그릴 수 있는 3D 시작점으로",
-  body: "Standin은 러프 콘티에서 인물과 포즈의 단서를 읽고, 가까운 3D 인체 후보를 제안합니다. 원하는 후보를 직접 선택하고 조정한 뒤, 익숙한 클립스튜디오 작업으로 이어가세요.",
-  primaryCta: "베타 대기 등록",
-  secondaryCta: "작동 방식 보기",
-  assistiveLine: "완성은 작가가. 시작점은 Standin이.",
-  demoLabel: "제품 흐름 예시",
+  eyebrow: "WEBTOON 3D POSE TOOL",
+  title: "러프 이미지에서\n원하는 3D 포즈를 찾아보세요.",
+  body: "그림 위에 마우스를 올려 Standin이 찾은 같은 자세의 3D 인형을 직접 비교해 보세요.",
+  launchBadge: "2026. 9. 4. CLOSED BETA",
+  primaryCta: "클로즈베타 사전등록",
+  secondaryCta: "사용 과정 보기",
+  assistiveLine: "스포츠·액션·공중 동작까지 네 가지 포즈 예시를 직접 확인할 수 있습니다.",
+  mediaLabel: "실제 Standin 사용 영상 · 추후 삽입",
+  demoLabel: "제품 사용 장면",
+};
+
+export const flow = {
+  input: {
+    eyebrow: "01 · INPUT",
+    title: "러프나 참고 이미지를 넣으세요.",
+    body: "인물의 자세가 보이는 콘티, 러프 또는 참고 이미지를 입력합니다. 별도의 복잡한 설정 없이 이미지 한 장으로 시작합니다.",
+    mediaLabel: "이미지 입력 장면 · GIF 또는 짧은 영상 삽입 예정",
+  },
+  process: {
+    eyebrow: "02 · STANDIN",
+    title: "Standin이 비슷한 3D 자세를 찾습니다.",
+    body: "이미지 속 인물의 자세를 바탕으로 가까운 3D 포즈를 찾아 보여줍니다. 결과를 하나로 확정하지 않고 직접 비교할 수 있게 제공합니다.",
+    steps: ["이미지 확인", "비슷한 자세 검색", "결과 비교"],
+    mediaLabel: "배구 러프와 3D 포즈 후보 5개를 비교하는 약 5초 데모",
+  },
+  result: {
+    eyebrow: "03 · RESULT",
+    title: "원하는 결과를 골라 Clip Studio에서 이어서 작업하세요.",
+    body: "가까운 3D 인형을 선택하고 필요한 부분을 조정한 뒤, 내보낸 결과를 기존 작화 작업에 활용합니다.",
+    mediaLabel: "Standin 결과와 Clip Studio 적용 장면 · 영상 또는 이미지 삽입 예정",
+  },
 };
 
 export const demo = {
-  title: "정답 하나가 아니라, 고쳐 쓸 수 있는 후보부터",
+  title: "이미지에서 찾은 3D 자세를 직접 비교하세요.",
   description:
     "Standin은 포즈를 임의로 확정하지 않습니다. 콘티와 가까운 후보를 보여주고, 작가가 연출에 맞는 시작점을 고릅니다.",
   steps: ["러프 콘티", "인물·포즈 분석", "후보 검색", "작가 선택", "3D 조정"],
@@ -161,9 +183,11 @@ export const clipStudio = {
 };
 
 export const beta = {
-  eyebrow: "EARLY ACCESS",
-  title: "다음 컷은, 빈 인형이 아니라 가까운 포즈에서 시작하세요.",
-  body: "Standin의 초기 테스트에 참여하고, 실제 웹툰 작업에 필요한 포즈와 기능을 함께 만들어 주세요.",
+  eyebrow: "CLOSED BETA",
+  launchDate: "2026. 9. 4. 시작",
+  title: "Standin 클로즈베타를 먼저 사용해 보세요.",
+  body: "2026년 9월 4일 클로즈베타를 시작합니다. 사전등록한 이메일로 참여 방법을 안내드립니다.",
+  note: "가격이나 결제 정보는 받지 않습니다. 등록 정보는 클로즈베타 참여 안내에만 사용합니다.",
   emailLabel: "이메일",
   emailPlaceholder: "artist@example.com",
   roleLabel: "작업 형태",
@@ -174,21 +198,72 @@ export const beta = {
     { value: "assistant", label: "어시스턴트" },
     { value: "other", label: "기타" },
   ],
-  consent: "베타 소식과 테스트 안내를 이메일로 받는 데 동의합니다.",
-  cta: "베타 대기 등록",
-  success: "등록되었습니다. 테스트 소식이 준비되면 안내드릴게요.",
+  workStatusLabel: "현재 웹툰·그림 작업 여부",
+  workStatusOptions: [
+    { value: "", label: "선택해 주세요" },
+    { value: "active", label: "현재 작업 중" },
+    { value: "occasional", label: "가끔 작업함" },
+    { value: "not-now", label: "현재는 작업하지 않음" },
+  ],
+  clipStudioEditionLabel: "Clip Studio 제품",
+  clipStudioEditionOptions: [
+    { value: "", label: "선택해 주세요" },
+    { value: "pro", label: "Clip Studio Paint PRO" },
+    { value: "ex", label: "Clip Studio Paint EX" },
+    { value: "other", label: "기타·제품 모름" },
+    { value: "none", label: "사용하지 않음" },
+  ],
+  clipStudioVersionLabel: "Clip Studio 버전",
+  clipStudioVersionOptions: [
+    { value: "", label: "선택해 주세요" },
+    { value: "1", label: "Ver. 1" },
+    { value: "2", label: "Ver. 2" },
+    { value: "3", label: "Ver. 3" },
+    { value: "4", label: "Ver. 4" },
+    { value: "5", label: "Ver. 5" },
+    { value: "unknown", label: "버전 모름" },
+    { value: "none", label: "사용하지 않음" },
+  ],
+  mannequinExperienceLabel: "3D 인형 사용 경험",
+  mannequinExperienceOptions: [
+    { value: "", label: "선택해 주세요" },
+    { value: "often", label: "자주 사용함" },
+    { value: "sometimes", label: "가끔 사용함" },
+    { value: "tried", label: "사용해 본 적 있음" },
+    { value: "none", label: "사용 경험 없음" },
+  ],
+  sourceLabel: "Standin을 알게 된 경로",
+  sourceOptions: [
+    { value: "", label: "선택해 주세요" },
+    { value: "pd-network", label: "작가·PD 소개" },
+    { value: "ahart", label: "에이하트" },
+    { value: "webtoon-academy", label: "웹툰 학원" },
+    { value: "bansa", label: "방사 네이버 카페" },
+    { value: "x", label: "X(트위터)" },
+    { value: "postype", label: "포스타입" },
+    { value: "kakao", label: "카카오 오픈채팅" },
+    { value: "discord", label: "디스코드" },
+    { value: "tumblbug", label: "텀블벅" },
+    { value: "bipa", label: "부산글로벌웹툰센터" },
+    { value: "pinterest", label: "Pinterest" },
+    { value: "other", label: "기타" },
+  ],
+  consent: "클로즈베타 일정과 참여 방법을 이메일로 받는 데 동의합니다.",
+  cta: "클로즈베타 사전등록",
+  success: "사전등록되었습니다. 클로즈베타 일정과 참여 방법을 이메일로 안내드릴게요.",
+  demoSuccess: "입력 형식이 확인되었습니다. 실제 사전등록 수집 기능은 아직 연결되지 않았습니다.",
   demoNotice:
     "현재 폼은 화면 시연용입니다. 실제 신청 수집 기능을 연결한 뒤 공개해 주세요.",
 };
 
 export const footer = {
-  tagline: "콘티와 밑그림 사이, 더 나은 3D 시작점.",
+  tagline: "원하는 자세를 찾고 3D 인형으로 만드는 웹툰 작업 보조 도구.",
   // 푸터는 /signup 에서도 렌더되므로 hash를 루트 기준(`/#`)으로 둔다.
   // 인덱스에서는 같은 문서 안의 hash 이동이라 동작이 그대로다.
   links: [
-    { label: "작동 방식", href: "/#workflow" },
-    { label: "제품 원칙", href: "/#principles" },
-    { label: "FAQ", href: "/#faq" },
+    { label: "이미지 입력", href: "/#input" },
+    { label: "처리 과정", href: "/#process" },
+    { label: "활용 결과", href: "/#result" },
     // 개인정보 처리방침: 실제 문서 준비 전까지 비활성 처리
     { label: "개인정보 처리방침", href: null },
   ],

@@ -27,6 +27,24 @@ export type BetaRole = "" | "artist" | "studio" | "assistant" | "other";
 export type BetaFormValues = {
   email: string;
   role: BetaRole;
+  workStatus: "" | "active" | "occasional" | "not-now";
+  clipStudioEdition: "" | "pro" | "ex" | "other" | "none";
+  clipStudioVersion: "" | "1" | "2" | "3" | "4" | "5" | "unknown" | "none";
+  mannequinExperience: "" | "often" | "sometimes" | "tried" | "none";
+  source:
+    | ""
+    | "pd-network"
+    | "ahart"
+    | "webtoon-academy"
+    | "bansa"
+    | "x"
+    | "postype"
+    | "kakao"
+    | "discord"
+    | "tumblbug"
+    | "bipa"
+    | "pinterest"
+    | "other";
   consent: boolean;
 };
 

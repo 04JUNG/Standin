@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0 H0 V60" fill="none" stroke="#F8F5EF" stroke-opacity="0.05" stroke-width="1" />
+    </pattern>
+    <radialGradient id="glow" cx="70%" cy="26%" r="60%">
+      <stop offset="0%" stop-color="#8ED8E8" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#8ED8E8" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="1080" height="1080" fill="#152238" />
+  <rect width="1080" height="1080" fill="url(#grid)" />
+  <rect width="1080" height="1080" fill="url(#glow)" />
+
+  <g font-family="'Pretendard Variable', 'Malgun Gothic', 'Segoe UI', sans-serif">
+    <text x="96" y="392" font-size="26" font-weight="700" letter-spacing="6" fill="#FF6B57">WEBTOON 3D POSE ASSISTANT</text>
+    <rect x="98" y="418" width="72" height="5" rx="2.5" fill="#FF6B57" />
+
+    <text x="92" y="532" font-size="72" font-weight="800" letter-spacing="-2.5" fill="#FFFFFF">콘티 속 포즈를,</text>
+    <text x="92" y="626" font-size="72" font-weight="800" letter-spacing="-2.5" fill="#FFFFFF">그릴 수 있는 <tspan fill="#FF6B57">3D 시작점</tspan>으로</text>
+
+    <text x="96" y="712" font-size="33" font-weight="500" letter-spacing="-0.5" fill="#D8DDE5">웹툰 작가를 위한 3D 포즈 어시스턴트, Standin</text>
+
+    <!-- footer -->
+    <text x="96" y="1004" font-size="30" font-weight="800" letter-spacing="-1" fill="#FFFFFF">Standin<tspan fill="#FF6B57">.</tspan></text>
+    <text x="984" y="1004" text-anchor="end" font-size="24" font-weight="600" letter-spacing="1" fill="#A7AFBD">01 / 06</text>
+  </g>
+</svg>
