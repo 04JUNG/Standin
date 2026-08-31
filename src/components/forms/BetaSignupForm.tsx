@@ -74,10 +74,9 @@ function validate(values: BetaFormValues) {
   return errors;
 }
 
-const FORMSPREE_ID = import.meta.env.VITE_FORMSPREE_ID;
-const ENDPOINT = FORMSPREE_ID
-  ? `https://formspree.io/f/${FORMSPREE_ID}`
-  : undefined;
+// 수신 엔드포인트(Apps Script 웹앱)가 있으면 실제 제출 모드,
+// 없으면 데모(검증만) 모드로 동작한다. 설정은 server/beta-form/README.md 참고.
+const ENDPOINT = import.meta.env.VITE_BETA_ENDPOINT;
 const HAS_BACKEND = Boolean(ENDPOINT);
 
 export function BetaSignupForm() {
@@ -87,6 +86,8 @@ export function BetaSignupForm() {
     ...initialValues,
     source: campaign.source,
   }));
+  // 허니팟. 사람에게는 보이지 않으므로 값이 차 있으면 봇이다.
+  const [website, setWebsite] = useState("");
   const [errors, setErrors] = useState<
     Partial<Record<keyof BetaFormValues, string>>
   >({});
@@ -117,30 +118,36 @@ export function BetaSignupForm() {
       setState("submitting");
       const res = await fetch(ENDPOINT, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+        // Apps Script 웹앱은 preflight(OPTIONS)를 처리하지 못한다.
+        // text/plain으로 보내 브라우저가 preflight를 띄우지 않는 "단순 요청"으로 만든다.
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify({
           ...values,
           utm_source: campaign.utmSource,
           utm_medium: campaign.utmMedium,
           utm_campaign: campaign.utmCampaign,
           utm_content: campaign.utmContent,
-          _subject: "Standin 클로즈베타 사전등록",
+          // 폼의 `source`(알게 된 경로)와 겹치지 않도록 페이지 주소는 pageUrl로 보낸다.
+          pageUrl: window.location.href,
+          userAgent: navigator.userAgent,
+          website,
         }),
       });
 
-      if (res.ok) {
+      const data = (await res.json().catch(() => null)) as {
+        ok?: boolean;
+        error?: string;
+      } | null;
+
+      if (res.ok && data?.ok) {
         setState("success");
         setValues(initialValues);
       } else {
-        const data = await res.json().catch(() => null);
-        console.error("[Formspree] 제출 실패", res.status, data);
+        console.error("[사전등록 폼] 제출 실패", res.status, data);
         setState("error");
       }
     } catch (err) {
-      console.error("[Formspree] 네트워크 오류", err);
+      console.error("[사전등록 폼] 네트워크 오류", err);
       setState("error");
     }
   }
@@ -175,6 +182,23 @@ export function BetaSignupForm() {
       noValidate
       className="rounded-[22px] border border-white/15 bg-white/[0.07] p-5 backdrop-blur-sm sm:p-6"
     >
+      {/* 허니팟: 화면과 보조기기 모두에서 감춘다. 봇만 채우는 필드다. */}
+      <div
+        aria-hidden="true"
+        className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden"
+      >
+        <label htmlFor="beta-website">회사 웹사이트</label>
+        <input
+          id="beta-website"
+          type="text"
+          name="website"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
+
       <div>
         <FieldLabel htmlFor="beta-email">{beta.emailLabel}</FieldLabel>
         <input
