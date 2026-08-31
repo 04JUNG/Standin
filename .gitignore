@@ -12,3 +12,8 @@ dist-ssr
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# 이관용 내보내기 — 개인정보가 들어 있으므로 커밋하지 않는다
+formspree-legacy.csv
+formspree-*.txt
+formspree-*.tsv

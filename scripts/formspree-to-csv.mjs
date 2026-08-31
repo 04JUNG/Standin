@@ -146,13 +146,31 @@ const CODE_BY_LABEL = new Map(
 
 const MIGRATION_NOTE = "Formspree 이관";
 
+/** `--year`로 지정한 연도. 연도 없는 날짜(`Aug 30, 04:00`)에만 쓴다. */
+let assumedYear = null;
+/** 연도를 추정해 쓴 건수. 끝에 한 번 알린다. */
+let yearGuesses = 0;
+
 main();
 
 function main() {
-  const [inputPath, outputPath = "formspree-legacy.csv"] = process.argv.slice(2);
+  const args = process.argv.slice(2);
+  const yearFlag = args.find((a) => a.startsWith("--year="));
+  const [inputPath, outputPath = "formspree-legacy.csv"] = args.filter(
+    (a) => !a.startsWith("--"),
+  );
   if (!inputPath) {
-    console.error("사용법: node scripts/formspree-to-csv.mjs <입력파일> [출력파일]");
+    console.error(
+      "사용법: node scripts/formspree-to-csv.mjs <입력파일> [출력파일] [--year=YYYY]",
+    );
     process.exit(1);
+  }
+  if (yearFlag) {
+    assumedYear = Number(yearFlag.slice("--year=".length));
+    if (!Number.isInteger(assumedYear)) {
+      console.error("--year 값은 네 자리 연도여야 한다. 예: --year=2026");
+      process.exit(1);
+    }
   }
 
   const raw = readFileSync(inputPath, "utf8").replace(/^﻿/, "");
@@ -173,6 +191,12 @@ function main() {
   writeFileSync(outputPath, "﻿" + csv + "\r\n", "utf8");
 
   console.log(`${records.length}건 변환 → ${outputPath}`);
+  if (yearGuesses > 0) {
+    console.warn(
+      `\n연도 없는 날짜 ${yearGuesses}건의 연도를 추정했다. ` +
+        `확실히 하려면 --year=YYYY 로 지정해라.`,
+    );
+  }
   if (problems.length > 0) {
     console.warn(`\n확인이 필요한 ${problems.length}건:`);
     for (const { row, problems: list } of problems) {
@@ -209,12 +233,15 @@ function parse(raw) {
   });
 }
 
-/** 입력 열 이름을 우리 필드명으로 바꾼다. 모르는 열은 원래 이름으로 남긴다. */
+/**
+ * 입력 열 이름을 우리 필드명으로 바꾼다. 모르는 열은 원래 이름으로 남긴다.
+ * Formspree는 메타 열에 밑줄을 붙이므로(`_date`, `_subject`) 떼고 맞춘다.
+ */
 function mapKeys(item) {
   const mapped = {};
   for (const [key, value] of Object.entries(item)) {
-    const alias = FIELD_ALIASES[String(key).trim().toLowerCase()];
-    mapped[alias ?? key] = value;
+    const name = String(key).trim().replace(/^_+/, "").toLowerCase();
+    mapped[FIELD_ALIASES[name] ?? key] = value;
   }
   return mapped;
 }
@@ -331,6 +358,22 @@ function normalizeDate(value) {
     return `${y}-${pad(mo)}-${pad(d)} ${pad(h)}:${mi}:${sec ?? "00"}`;
   }
 
+  // Formspree 대시보드는 연도를 빼고 보여준다("Aug 30, 04:00").
+  // 이런 문자열을 그냥 Date에 넣으면 오류가 아니라 2001년으로 조용히 읽히므로
+  // 연도를 직접 붙인다.
+  const yearless = s.match(/^([A-Za-z]{3,9})\s+(\d{1,2}),?\s+(\d{1,2}):(\d{2})/);
+  if (yearless && !/\d{4}/.test(s)) {
+    const [, month, day, h, mi] = yearless;
+    const year = assumedYear ?? guessYear(month, day);
+    if (assumedYear === null) yearGuesses++;
+    const withYear = new Date(`${month} ${day}, ${year} ${h}:${mi}`);
+    if (Number.isNaN(withYear.getTime())) return s;
+    return (
+      `${year}-${pad(withYear.getMonth() + 1)}-${pad(withYear.getDate())} ` +
+      `${pad(h)}:${mi}:00`
+    );
+  }
+
   const parsed = new Date(s);
   if (Number.isNaN(parsed.getTime())) return s;
 
@@ -354,6 +397,17 @@ function normalizeDate(value) {
   })
     .format(parsed)
     .replace("T", " ");
+}
+
+/**
+ * 연도 없는 날짜의 연도를 고른다. 제출은 미래일 수 없으므로, 올해로 봤을 때
+ * 아직 오지 않은 날짜면 작년으로 본다. `--year`로 직접 지정하는 쪽이 확실하다.
+ */
+function guessYear(month, day) {
+  const today = new Date();
+  const thisYear = today.getFullYear();
+  const candidate = new Date(`${month} ${day}, ${thisYear} 23:59`);
+  return candidate > today ? thisYear - 1 : thisYear;
 }
 
 function pad(n) {
