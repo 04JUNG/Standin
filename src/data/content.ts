@@ -238,6 +238,7 @@ export const beta = {
     { value: "pd-network", label: "작가·PD 소개" },
     { value: "ahart", label: "에이하트" },
     { value: "webtoon-academy", label: "웹툰 학원" },
+    { value: "studio", label: "스튜디오" },
     { value: "bansa", label: "방사 네이버 카페" },
     { value: "x", label: "X(트위터)" },
     { value: "postype", label: "포스타입" },
