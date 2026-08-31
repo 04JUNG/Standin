@@ -42,6 +42,9 @@ src/
 ├─ hooks/        useReveal, useActiveSection
 ├─ types/        landing.ts
 └─ styles/       globals.css (디자인 토큰 + 기본 스타일)
+
+server/beta-form/  사전등록 폼 수신 웹앱 (Google Apps Script)
+scripts/           Formspree → 구글 시트 이관 도구
 ```
 
 ## 구현 노트 (문서 지침 준수)
@@ -52,10 +55,10 @@ src/
   확보합니다. `MediaPlaceholder.tsx` 내부를 실제 미디어로 교체하면 됩니다.
 - **색상 변경**: 브랜드·중립·상태 색상은 `src/styles/globals.css`의 `@theme`
   토큰에서 한 번에 변경할 수 있습니다.
-- **베타 폼**: [Formspree](https://formspree.io) 연동을 지원합니다. 폼 ID를
-  환경변수(`VITE_FORMSPREE_ID`)로 주입하면 실제 제출 모드로, 없으면 검증만
-  수행하는 데모 모드로 동작합니다. 데모 모드에서는 등록 성공을 위조하지 않고
-  "화면 시연용"임을 명시합니다.
+- **사전등록 폼**: 자체 수신 엔드포인트(Google Apps Script 웹앱,
+  `server/beta-form/`)로 제출합니다. URL을 환경변수(`VITE_BETA_ENDPOINT`)로
+  주입하면 실제 제출 모드로, 없으면 검증만 수행하는 데모 모드로 동작합니다.
+  데모 모드에서는 등록 성공을 위조하지 않고 "화면 시연용"임을 명시합니다.
 - **접근성**: skip link, `focus-visible` 링, `prefers-reduced-motion` 대응,
   키보드 접근(후보 버튼·네이티브 `<details>` FAQ), 색+아이콘 병행 표기.
 
@@ -85,24 +88,30 @@ BFF의 `CORS_ORIGINS`에 이 개발 서버 출처(`http://localhost:5173`)가 �
 `VITE_API_BASE_URL`도 이 값으로 설정해야 한다. 인증 라우트 레이트리밋과 개인정보
 처리방침 문서는 가입 링크 공개 전 선행 조건이다.
 
-## 베타 폼(Formspree) 연동
+## 사전등록 폼 수신 (자체 엔드포인트)
 
-1. [formspree.io](https://formspree.io)에 가입하고 새 폼을 생성합니다.
-2. 발급된 엔드포인트(`https://formspree.io/f/xxxxxxxx`)에서 **폼 ID**(`xxxxxxxx`)를 복사합니다.
-3. 프로젝트 루트에 `.env.local`을 만들고 아래처럼 넣습니다(커밋하지 않음):
-   ```env
-   VITE_FORMSPREE_ID=xxxxxxxx
-   ```
-4. 개발 서버를 재시작(`npm run dev`)하면 폼이 실제 제출 모드로 바뀝니다.
-5. 첫 제출 후 Formspree 대시보드에서 등록 내역을 확인하고,
-   이메일 알림을 받으려면 폼 설정에서 알림 주소를 지정하세요.
+Formspree 무료 플랜의 월 50건 한도와 구글 시트 연동 유료화 때문에, 수신을
+직접 만든 Apps Script 웹앱으로 옮겼습니다. **시트 기록 → 디스코드 웹훅 →
+Gmail 알림**을 한 스크립트에서 처리하며 서버 비용과 서비스 계정 키가 없습니다.
 
-> 배포 환경(Vercel/Netlify 등)에서는 해당 플랫폼의 환경변수 설정에
-> `VITE_FORMSPREE_ID`를 등록합니다. Formspree 무료 플랜은 도메인 등록/월 제출
-> 한도가 있으니 공개 전 플랜과 스팸 필터(reCAPTCHA 등)를 확인하세요.
+- 코드와 배포 절차: [`server/beta-form/README.md`](server/beta-form/README.md)
+- 기존 Formspree 데이터 이관: [`scripts/README.md`](scripts/README.md)
+
+배포로 발급된 웹앱 URL을 환경변수에 넣으면 폼이 실제 제출 모드로 바뀝니다.
+
+```env
+# .env.local (커밋하지 않음)
+VITE_BETA_ENDPOINT=https://script.google.com/macros/s/AKfy.../exec
+```
+
+배포 환경(Vercel/Netlify 등)에서는 해당 플랫폼의 환경변수 설정에 같은 값을
+등록합니다. 스팸 대응으로 폼에 허니팟 필드가 들어 있고, 웹앱이 이를 걸러냅니다.
+
+> 폼 항목(`src/data/content.ts`의 `beta` 옵션)을 고치면 웹앱의 `FIELDS`와
+> 이관 스크립트의 컬럼도 함께 고쳐야 시트 열이 어긋나지 않습니다.
 
 ## 남은 TODO
 
 - [x] 최신 포즈 에셋 기반 OG·X 카드 이미지(1200×630) 적용
-- [ ] Formspree 폼 ID 발급·주입 및 개인정보 처리방침 문서 링크
+- [ ] 사전등록 웹앱 배포·`VITE_BETA_ENDPOINT` 주입 및 개인정보 처리방침 문서 링크
 - [ ] canonical / og:url 및 소셜 이미지의 절대 URL을 실제 도메인 확정 후 추가
