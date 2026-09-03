@@ -8,15 +8,17 @@ export const nav = {
     { label: "처리 과정", href: "#process" },
     { label: "활용 결과", href: "#result" },
   ],
-  launchDate: "9. 4. CLOSED BETA",
+  launchDate: "CLOSED BETA · OPEN",
+  launchHref: "/closed-beta/",
 };
 
 export const hero = {
   eyebrow: "WEBTOON 3D POSE TOOL",
   title: "러프 이미지에서\n원하는 3D 포즈를 찾아보세요.",
   body: "그림 위에 마우스를 올려 Standin이 찾은 같은 자세의 3D 인형을 직접 비교해 보세요.",
-  launchBadge: "2026. 9. 4. CLOSED BETA",
-  primaryCta: "클로즈베타 사전등록",
+  launchBadge: "CLOSED BETA · OPEN",
+  primaryCta: "클로즈베타 시작하기",
+  primaryHref: "/closed-beta/",
   secondaryCta: "사용 과정 보기",
   assistiveLine: "스포츠·액션·공중 동작까지 네 가지 포즈 예시를 직접 확인할 수 있습니다.",
   mediaLabel: "실제 Standin 사용 영상 · 추후 삽입",
@@ -184,10 +186,10 @@ export const clipStudio = {
 
 export const beta = {
   eyebrow: "CLOSED BETA",
-  launchDate: "2026. 9. 4. 시작",
-  title: "Standin 클로즈베타를 먼저 사용해 보세요.",
-  body: "2026년 9월 4일 클로즈베타를 시작합니다. 사전등록한 이메일로 참여 방법을 안내드립니다.",
-  note: "가격이나 결제 정보는 받지 않습니다. 등록 정보는 클로즈베타 참여 안내에만 사용합니다.",
+  launchDate: "NOW OPEN",
+  title: "다운로드하고, 바로 테스트해 보세요.",
+  body: "설치 파일과 짧은 사용 순서, 피드백 설문을 한 페이지에 준비했습니다.",
+  note: "앱을 사용한 뒤 같은 페이지로 돌아오면 입력 내용이 임시 저장되는 설문을 바로 작성할 수 있습니다.",
   emailLabel: "이메일",
   emailPlaceholder: "artist@example.com",
   roleLabel: "작업 형태",
