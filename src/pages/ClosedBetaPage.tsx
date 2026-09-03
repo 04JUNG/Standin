@@ -12,6 +12,7 @@ import {
   Layers,
   MessageSquareText,
   Monitor,
+  ShieldAlert,
   type LucideIcon,
 } from "lucide-react";
 import { BrandMark } from "../components/common/BrandMark";
@@ -226,6 +227,24 @@ export function ClosedBetaPage() {
                 fileMeta={`v${release.version} · ${(release.macos.sizeBytes / 1_000_000).toFixed(1)} MB`}
                 recommended={preferredOs === "macos"}
               />
+            </div>
+            <div className="mx-auto mt-5 flex max-w-4xl flex-col gap-4 rounded-[20px] border border-brand-coral/30 bg-brand-coral/[0.06] p-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+              <div className="flex items-start gap-3">
+                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-[13px] bg-white text-brand-coral-dark shadow-sm">
+                  <ShieldAlert size={20} aria-hidden="true" />
+                </span>
+                <div>
+                  <p className="font-bold text-brand-ink">Windows의 PC 보호 화면이 나타나도 정상입니다.</p>
+                  <p className="mt-1 text-sm leading-relaxed text-neutral-600">
+                    아직 배포 초기라 Windows에서 경고가 표시될 수 있습니다. 아래 순서로 설치를 계속해 주세요.
+                  </p>
+                </div>
+              </div>
+              <ol className="flex shrink-0 items-center gap-2 text-sm font-bold text-brand-ink" aria-label="Windows 보호 화면 실행 순서">
+                <li className="rounded-full border border-brand-coral/25 bg-white px-3.5 py-2">1. 추가 정보</li>
+                <li className="text-brand-coral-dark" aria-hidden="true">→</li>
+                <li className="rounded-full bg-brand-ink px-3.5 py-2 text-white">2. 실행</li>
+              </ol>
             </div>
             {releaseState === "stale" && (
               <p className="mx-auto mt-5 max-w-2xl text-center text-sm leading-relaxed text-neutral-600">
