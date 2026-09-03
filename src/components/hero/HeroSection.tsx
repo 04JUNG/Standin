@@ -20,7 +20,7 @@ export function HeroSection() {
           </div>
 
           <div className="flex flex-col justify-center gap-3 sm:flex-row sm:items-center">
-            <Button as="a" href="#beta" size="lg">
+            <Button as="a" href={hero.primaryHref} size="lg">
               {hero.primaryCta}
               <ArrowRight size={18} />
             </Button>

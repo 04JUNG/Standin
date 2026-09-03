@@ -13,6 +13,8 @@ export default defineConfig({
       input: {
         main: "index.html",
         signup: "signup/index.html",
+        feedback: "feedback/index.html",
+        closedBeta: "closed-beta/index.html",
       },
     },
   },

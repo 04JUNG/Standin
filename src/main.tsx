@@ -8,6 +8,10 @@ import { App } from "./App";
 // 랜딩이 뜨는 조용한 오작동이 된다. 여기서 한 번 정규화한다.
 if (window.location.pathname === "/signup") {
   window.location.replace(`/signup/${window.location.search}${window.location.hash}`);
+} else if (window.location.pathname === "/feedback") {
+  window.location.replace(`/feedback/${window.location.search}${window.location.hash}`);
+} else if (window.location.pathname === "/closed-beta") {
+  window.location.replace(`/closed-beta/${window.location.search}${window.location.hash}`);
 } else {
   createRoot(document.getElementById("root")!).render(
     <StrictMode>

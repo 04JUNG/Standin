@@ -70,9 +70,12 @@ export function Header() {
           </nav>
 
           <div className="relative z-10 flex items-center gap-2">
-            <span className="hidden items-center rounded-full border border-brand-coral/30 bg-brand-coral/12 px-3 py-1 text-[13px] font-semibold whitespace-nowrap text-brand-coral-dark md:inline-flex">
+            <a
+              href={nav.launchHref}
+              className="hidden items-center rounded-full border border-brand-coral/30 bg-brand-coral/12 px-3 py-1 text-[13px] font-semibold whitespace-nowrap text-brand-coral-dark transition-colors hover:border-brand-coral hover:bg-brand-coral hover:text-white md:inline-flex"
+            >
               {nav.launchDate}
-            </span>
+            </a>
             <button
               type="button"
               className="inline-flex h-11 w-11 items-center justify-center rounded-full text-brand-ink lg:hidden"
@@ -104,9 +107,13 @@ export function Header() {
                   {link.label}
                 </a>
               ))}
-              <span className="mt-2 inline-flex items-center self-start rounded-full border border-brand-coral/30 bg-brand-coral/12 px-3 py-1 text-[13px] font-semibold text-brand-coral-dark">
+              <a
+                href={nav.launchHref}
+                onClick={() => setMenuOpen(false)}
+                className="mt-2 inline-flex items-center self-start rounded-full border border-brand-coral/30 bg-brand-coral/12 px-3 py-1 text-[13px] font-semibold text-brand-coral-dark"
+              >
                 {nav.launchDate}
-              </span>
+              </a>
             </nav>
           </Container>
         </div>
