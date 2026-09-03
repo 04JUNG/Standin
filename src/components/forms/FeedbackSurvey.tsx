@@ -631,6 +631,39 @@ export function FeedbackSurvey({ embedded = false }: FeedbackSurveyProps) {
       setMessage("설문 수집 주소가 아직 연결되지 않았습니다. 잠시 후 다시 시도해 주세요.");
       return;
     }
+
+    const requiredAnswerIds = ["email", "role", "production"];
+    const missingAnswerId = requiredAnswerIds.find((id) => {
+      const value = answers[id];
+      return id === "email"
+        ? !isAnswered(value) || !emailPattern.test(String(value))
+        : !isAnswered(value);
+    });
+    if (missingAnswerId) {
+      const missingIndex = questions.findIndex((question) => question.id === missingAnswerId);
+      if (missingIndex >= 0) setQuestionIndex(missingIndex);
+      setSubmitState("error");
+      setMessage("저장되지 않은 필수 답변이 있습니다. 이 질문을 다시 입력해 주세요.");
+      return;
+    }
+
+    if (activeMode === "complete") {
+      const missingUsageScreen = ["q8_screen_first", "q9_screen_second"].some(
+        (id) => !files[id],
+      );
+      if (missingUsageScreen) {
+        const uploadIndex = questions.findIndex(
+          (question) => question.id === "q8_usage_screens",
+        );
+        if (uploadIndex >= 0) setQuestionIndex(uploadIndex);
+        setSubmitState("error");
+        setMessage(
+          "첨부 이미지는 새로고침 후 다시 선택해야 합니다. 사용 화면 2장을 다시 첨부해 주세요.",
+        );
+        return;
+      }
+    }
+
     try {
       setSubmitState("submitting");
       setMessage("");
@@ -685,8 +718,34 @@ export function FeedbackSurvey({ embedded = false }: FeedbackSurveyProps) {
       const data = (await response.json().catch(() => null)) as {
         ok?: boolean;
         error?: string;
+        fields?: string[];
       } | null;
-      if (!response.ok || !data?.ok) throw new Error(data?.error ?? "SUBMIT_FAILED");
+      if (!response.ok || !data?.ok) {
+        if (data?.error === "INVALID_INPUT") {
+          const questionIdByServerField: Record<string, string> = {
+            email: "email",
+            role: "role",
+            production: "production",
+            q8_screen_first: "q8_usage_screens",
+            q9_screen_second: "q8_usage_screens",
+          };
+          const targetQuestionId = data.fields
+            ?.map((field) => questionIdByServerField[field])
+            .find(Boolean);
+          const targetIndex = targetQuestionId
+            ? questions.findIndex((question) => question.id === targetQuestionId)
+            : -1;
+          if (targetIndex >= 0) setQuestionIndex(targetIndex);
+          setSubmitState("error");
+          setMessage(
+            targetQuestionId === "q8_usage_screens"
+              ? "첨부 이미지가 전송되지 않았습니다. 사용 화면 2장을 다시 첨부해 주세요."
+              : "저장되지 않은 필수 답변이 있습니다. 이동한 질문을 다시 입력해 주세요.",
+          );
+          return;
+        }
+        throw new Error(data?.error ?? "SUBMIT_FAILED");
+      }
       window.localStorage.removeItem(STORAGE_KEY);
       setSubmitState("idle");
       if (embedded) embeddedScrollRef.current = window.scrollY;
