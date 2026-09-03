@@ -80,6 +80,7 @@ var FIELDS = [
       'pd-network': '작가·PD 소개',
       ahart: '에이하트',
       'webtoon-academy': '웹툰 학원',
+      studio: '스튜디오',
       bansa: '방사 네이버 카페',
       x: 'X(트위터)',
       postype: '포스타입',
@@ -113,6 +114,60 @@ var TIMEZONE = 'Asia/Seoul';
 var EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 var DISCORD_COLOR = 16739159; // #ff6b57 (brand coral)
 
+/** 피드백 시트는 질문 하나를 열 하나로 저장한다. 분기 밖 질문은 빈칸으로 남는다. */
+var FEEDBACK_FIELDS = [
+  { key: 'role', label: '역할' },
+  { key: 'production', label: '현재 작품 제작 여부' },
+  { key: 'q4_usage_stage', label: '사용 완료 단계' },
+  { key: 'q5_use_case', label: '사용한 작업' },
+  { key: 'q6_previous_method', label: '기존 포즈 준비 방식' },
+  { key: 'q7_previous_pain', label: '기존 방식 불편점' },
+  { key: 'q7_outsource_experience', label: '3D 인체 외주 의뢰·수행 경험' },
+  { key: 'q8_top5_match', label: 'TOP 5 중 활용 가능 후보 수' },
+  { key: 'q8_public_case_consent', label: '사용 화면 활용 사례 소개 동의' },
+  { key: 'q12_usability', label: '실제 작화 활용도' },
+  { key: 'q14_time_change', label: '포즈 준비 시간 변화' },
+  { key: 'q15_work_ready', label: '실제 작업 도움 정도' },
+  { key: 'q17_improvements', label: '유료 사용 의향 기능(최대 3)' },
+  { key: 'q18_workflow_need', label: '기능이 필요한 실제 작업·문제' },
+  { key: 'q22_payment_model', label: '선호 이용 방식' },
+  { key: 'q23_monthly_price', label: '개인 월 구독 최대 지불 의향' },
+  { key: 'q23_plugin_price', label: '1회 구매 최대 지불 의향' },
+  { key: 'q24_finished_work', label: '완성 작업물 여부' },
+  { key: 'q25_artifact_link', label: '완성 작업물 링크' },
+  { key: 'q25_public_case_consent', label: '완성 작업물 활용 사례 소개 동의' },
+  { key: 'q26_artifact_usage', label: '작업물 활용 설명' },
+  { key: 'q27_internal_consent', label: '내부 검토 동의' },
+  { key: 'exit_q6_reason', label: '중단 이유' },
+  { key: 'exit_q6_reason_other', label: '중단 이유 기타 직접 입력' },
+  { key: 'exit_q7_detail', label: '문제 상세' },
+  { key: 'exit_q9_retry', label: '지원 후 재시도 의향' },
+  { key: 'exit_q10_support', label: '선호 지원 방법' },
+  { key: 'q31_launch_interest', label: '정식 출시 사용 의향·메일 수신 동의' },
+  { key: 'q29_interview', label: '10만원 전문가 인터뷰 대상·참여 의향' },
+  { key: 'q30_comment', label: '추가 의견' },
+];
+
+var FEEDBACK_FILE_FIELDS = [
+  { key: 'q8_screen_first', label: '사용한 러프 또는 사용 과정' },
+  { key: 'q9_screen_second', label: '3D 인체 적용 결과' },
+  { key: 'exit_q8_screen', label: '문제 화면' },
+  { key: 'q25_artifact', label: '완성 작업물 파일' },
+];
+
+var FEEDBACK_HEADER = ['접수시각(KST)', '설문 경로', '이메일']
+  .concat(
+    FEEDBACK_FIELDS.map(function (field) {
+      return field.label;
+    }),
+  )
+  .concat(
+    FEEDBACK_FILE_FIELDS.map(function (field) {
+      return field.label;
+    }),
+  )
+  .concat(['유입 페이지', '브라우저']);
+
 // ── 엔드포인트 ────────────────────────────────────────────────────────────
 
 /** 헬스 체크. 브라우저로 열었을 때 배포가 살아있는지만 확인한다. */
@@ -134,6 +189,10 @@ function doPost(e) {
     return jsonResponse_({ ok: true });
   }
 
+  if (payload.formType === 'feedback') {
+    return handleFeedbackPost_(payload);
+  }
+
   var invalid = validate_(payload);
   if (invalid.length > 0) {
     return jsonResponse_({ ok: false, error: 'INVALID_INPUT', fields: invalid });
@@ -153,7 +212,7 @@ function doPost(e) {
   notifySafely_('discord', function () {
     sendDiscord_(buildDiscordPayload_(appended.record, appended.row));
   });
-  notifySafely_('email', function () {
+  notifyEmailIfConfigured_('email', function () {
     sendEmail_(appended.record, appended.row);
   });
 
@@ -170,6 +229,270 @@ function doPost(e) {
 function parseBody_(e) {
   if (!e || !e.postData || !e.postData.contents) return {};
   return JSON.parse(e.postData.contents);
+}
+
+// ── 클로즈베타 피드백 ───────────────────────────────────────────────────
+
+function handleFeedbackPost_(payload) {
+  var invalid = validateFeedback_(payload);
+  if (invalid.length > 0) {
+    return jsonResponse_({ ok: false, error: 'INVALID_INPUT', fields: invalid });
+  }
+
+  var uploads;
+  try {
+    uploads = saveFeedbackFiles_(payload.files || [], payload.email);
+  } catch (err) {
+    console.error('피드백 파일 저장 실패: ' + err);
+    return jsonResponse_({ ok: false, error: 'UPLOAD_ERROR' });
+  }
+
+  var record = buildFeedbackRecord_(payload, uploads);
+  var row;
+  try {
+    row = appendFeedbackRecord_(record);
+  } catch (err) {
+    console.error('피드백 시트 기록 실패: ' + err);
+    return jsonResponse_({ ok: false, error: 'SERVER_ERROR' });
+  }
+
+  notifySafely_('feedback-discord', function () {
+    sendDiscord_(buildFeedbackDiscordPayload_(record, row));
+  });
+  notifyEmailIfConfigured_('feedback-email', function () {
+    sendFeedbackEmail_(record, row);
+  });
+
+  return jsonResponse_({ ok: true });
+}
+
+function validateFeedback_(payload) {
+  var invalid = [];
+  if (!payload.email || !EMAIL_PATTERN.test(String(payload.email).trim())) {
+    invalid.push('email');
+  }
+  if (payload.branch !== 'complete' && payload.branch !== 'dropoff') {
+    invalid.push('branch');
+  }
+  if (!payload.usageStage) invalid.push('usageStage');
+  if (!payload.answers || typeof payload.answers !== 'object') invalid.push('answers');
+  if (!payload.role) invalid.push('role');
+  if (!payload.production) invalid.push('production');
+
+  var surveyPath = payload.surveyPath || payload.branch;
+  if (surveyPath === 'complete') {
+    var fileKeys = (payload.files || []).map(function (file) {
+      return file.key;
+    });
+    if (fileKeys.indexOf('q8_screen_first') === -1) invalid.push('q8_screen_first');
+    if (fileKeys.indexOf('q9_screen_second') === -1) invalid.push('q9_screen_second');
+  }
+  return invalid;
+}
+
+function buildFeedbackRecord_(payload, uploads) {
+  var answers = payload.answers || {};
+  answers.role = payload.roleLabel || payload.role;
+  answers.production = payload.productionLabel || payload.production;
+  answers.q4_usage_stage = payload.usageStageLabel || payload.usageStage;
+  return {
+    receivedAt: Utilities.formatDate(new Date(), TIMEZONE, 'yyyy-MM-dd HH:mm:ss'),
+    branch: payload.surveyPath || payload.branch,
+    email: String(payload.email).trim().toLowerCase(),
+    answers: answers,
+    uploads: uploads,
+    pageUrl: trim_(payload.pageUrl),
+    userAgent: trim_(payload.userAgent),
+  };
+}
+
+function safeFileName_(name) {
+  return String(name || 'image')
+    .replace(/[\\/:*?"<>|]/g, '_')
+    .slice(0, 120);
+}
+
+function saveFeedbackFiles_(files, email) {
+  if (!files || files.length === 0) return {};
+  var folderId = PropertiesService.getScriptProperties().getProperty(
+    'FEEDBACK_UPLOAD_FOLDER_ID',
+  );
+  if (!folderId) throw new Error('FEEDBACK_UPLOAD_FOLDER_ID가 비어 있다.');
+
+  var allowed = {
+    'image/jpeg': true,
+    'image/png': true,
+    'image/webp': true,
+  };
+  var root = DriveApp.getFolderById(folderId);
+  var stamp = Utilities.formatDate(new Date(), TIMEZONE, 'yyyyMMdd-HHmmss');
+  var respondent = root.createFolder(
+    stamp + '-' + safeFileName_(String(email).split('@')[0]),
+  );
+  var uploads = {};
+
+  files.forEach(function (file) {
+    var known =
+      file &&
+      FEEDBACK_FILE_FIELDS.some(function (field) {
+        return field.key === file.key;
+      });
+    var isClip =
+      file &&
+      file.key === 'q25_artifact' &&
+      /\.clip$/i.test(String(file.name || ''));
+    var maxDataLength = isClip ? 30000000 : 12000000;
+    if (!file || !known) throw new Error('허용되지 않은 파일 항목');
+    if (!allowed[file.type] && !isClip) throw new Error('허용되지 않은 파일 형식');
+    if (!file.data || String(file.data).length > maxDataLength) {
+      throw new Error('파일이 비어 있거나 너무 크다.');
+    }
+    var blob = Utilities.newBlob(
+      Utilities.base64Decode(String(file.data)),
+      file.type || 'application/octet-stream',
+      safeFileName_(file.name),
+    );
+    var saved = respondent.createFile(blob);
+    uploads[file.key] = saved.getUrl();
+  });
+  return uploads;
+}
+
+function getFeedbackSheet_() {
+  var props = PropertiesService.getScriptProperties();
+  var sheetId = props.getProperty('SHEET_ID');
+  var book = sheetId
+    ? SpreadsheetApp.openById(sheetId)
+    : SpreadsheetApp.getActiveSpreadsheet();
+  if (!book) throw new Error('피드백을 기록할 시트를 찾을 수 없다.');
+
+  var name = props.getProperty('FEEDBACK_SHEET_NAME') || '클로즈베타 피드백';
+  var sheet = book.getSheetByName(name) || book.insertSheet(name);
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(FEEDBACK_HEADER);
+    sheet.setFrozenRows(1);
+  } else {
+    syncFeedbackHeader_(sheet);
+  }
+  sheet.getRange(1, 1, 1, FEEDBACK_HEADER.length).setFontWeight('bold');
+  sheet
+    .getRange(1, 1, 1, FEEDBACK_HEADER.length)
+    .setBackground('#152238')
+    .setFontColor('#ffffff');
+  return sheet;
+}
+
+/** 새 질문이 추가되면 기존 응답 열을 보존하면서 빠진 열만 정확한 위치에 삽입한다. */
+function syncFeedbackHeader_(sheet) {
+  var width = Math.max(sheet.getLastColumn(), 1);
+  var current = sheet
+    .getRange(1, 1, 1, width)
+    .getValues()[0]
+    .map(function (value) {
+      return String(value || '');
+    });
+
+  FEEDBACK_HEADER.forEach(function (label, index) {
+    if (current[index] === label) return;
+    var column = index + 1;
+    if (column <= sheet.getMaxColumns()) {
+      sheet.insertColumnBefore(column);
+    } else {
+      sheet.insertColumnAfter(sheet.getMaxColumns());
+    }
+    sheet.getRange(1, column).setValue(label);
+    current.splice(index, 0, label);
+  });
+}
+
+function feedbackValue_(value) {
+  if (Array.isArray(value)) return value.join(' · ');
+  return value === undefined || value === null ? '' : String(value);
+}
+
+function feedbackToRow_(record) {
+  var row = [
+    record.receivedAt,
+    record.branch === 'complete' ? '내보내기 완료' : '중단·이탈',
+    record.email,
+  ];
+  FEEDBACK_FIELDS.forEach(function (field) {
+    row.push(feedbackValue_(record.answers[field.key]));
+  });
+  FEEDBACK_FILE_FIELDS.forEach(function (field) {
+    row.push(record.uploads[field.key] || '');
+  });
+  row.push(record.pageUrl, record.userAgent);
+  return row;
+}
+
+function appendFeedbackRecord_(record) {
+  var lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    var sheet = getFeedbackSheet_();
+    sheet.appendRow(feedbackToRow_(record));
+    return sheet.getLastRow();
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function buildFeedbackDiscordPayload_(record, row) {
+  return {
+    username: 'Standin 피드백',
+    embeds: [
+      {
+        title: '클로즈베타 피드백 도착',
+        color: DISCORD_COLOR,
+        fields: [
+          { name: '이메일', value: record.email, inline: false },
+          {
+            name: '사용 경로',
+            value: record.branch === 'complete' ? '내보내기 완료' : '중단·이탈',
+            inline: true,
+          },
+          {
+            name: '도달 단계',
+            value: feedbackValue_(record.answers.q4_usage_stage) || '—',
+            inline: true,
+          },
+          {
+            name: '정식 출시 안내',
+            value: feedbackValue_(record.answers.q31_launch_interest) || '—',
+            inline: false,
+          },
+          {
+            name: '후속 인터뷰',
+            value: feedbackValue_(record.answers.q29_interview) || '—',
+            inline: false,
+          },
+        ],
+        footer: { text: '피드백 시트 ' + row + '행' },
+      },
+    ],
+  };
+}
+
+function sendFeedbackEmail_(record, row) {
+  var to = PropertiesService.getScriptProperties().getProperty('NOTIFY_EMAIL');
+  if (!to) throw new Error('스크립트 속성 NOTIFY_EMAIL이 비어 있다.');
+  MailApp.sendEmail({
+    to: to,
+    subject: '[Standin] 클로즈베타 피드백 — ' + record.email,
+    body: [
+      '새 클로즈베타 피드백이 접수되었습니다.',
+      '',
+      '이메일: ' + record.email,
+      '경로: ' + (record.branch === 'complete' ? '내보내기 완료' : '중단·이탈'),
+      '도달 단계: ' + feedbackValue_(record.answers.q4_usage_stage),
+      '정식 출시 안내: ' + feedbackValue_(record.answers.q31_launch_interest),
+      '후속 인터뷰: ' + feedbackValue_(record.answers.q29_interview),
+      '',
+      '구글 시트 ' + row + '행에서 전체 답변과 첨부 링크를 확인하세요.',
+    ].join('\n'),
+    name: 'Standin 피드백',
+  });
 }
 
 /** 랜딩 폼과 같은 항목을 필수로 본다. 통과하지 못한 필드 이름을 돌려준다. */
@@ -332,6 +655,16 @@ function notifySafely_(label, fn) {
   }
 }
 
+/** NOTIFY_EMAIL을 설정한 경우에만 이메일 알림을 보낸다. */
+function notifyEmailIfConfigured_(label, fn) {
+  var to = PropertiesService.getScriptProperties().getProperty('NOTIFY_EMAIL');
+  if (!String(to || '').trim()) {
+    console.log(label + ' 알림 건너뜀: NOTIFY_EMAIL 미설정');
+    return;
+  }
+  notifySafely_(label, fn);
+}
+
 function buildDiscordPayload_(record, row, options) {
   var opts = options || {};
   var fields = [{ name: '이메일', value: String(record.email), inline: false }];
@@ -383,6 +716,12 @@ function describeUtm_(utm) {
 function sendDiscord_(payload) {
   var url = PropertiesService.getScriptProperties().getProperty('DISCORD_WEBHOOK_URL');
   if (!url) throw new Error('스크립트 속성 DISCORD_WEBHOOK_URL이 비어 있다.');
+  url = String(url).trim();
+  if (!/^https:\/\/(?:canary\.|ptb\.)?discord(?:app)?\.com\/api\/webhooks\//i.test(url)) {
+    throw new Error(
+      'DISCORD_WEBHOOK_URL에는 채널 주소가 아니라 https://discord.com/api/webhooks/... 형식의 웹후크 URL을 넣어야 한다.'
+    );
+  }
 
   var res = UrlFetchApp.fetch(url, {
     method: 'post',
@@ -441,7 +780,13 @@ function setupSheet() {
   console.log('시트 준비 완료: ' + sheet.getName() + ' (' + sheet.getLastRow() + '행)');
 }
 
-/** 디스코드·메일 설정이 실제로 나가는지 확인한다. 시트에는 기록하지 않는다. */
+/** 피드백 탭과 질문별 열을 만든다. 피드백 수집 전에 한 번 실행한다. */
+function setupFeedbackSheet() {
+  var sheet = getFeedbackSheet_();
+  console.log('피드백 시트 준비 완료: ' + sheet.getName() + ' (' + sheet.getLastRow() + '행)');
+}
+
+/** 디스코드 웹후크가 실제로 동작하는지 확인한다. 시트에는 기록하지 않는다. */
 function sendTestNotification() {
   var record = buildRecord_({
     email: 'test@example.com',
@@ -457,8 +802,7 @@ function sendTestNotification() {
   record.note = '연결 테스트 — 실제 등록 아님';
 
   sendDiscord_(buildDiscordPayload_(record, 0, { title: '연결 테스트' }));
-  sendEmail_(record, 0);
-  console.log('테스트 알림 발송 완료');
+  console.log('디스코드 테스트 알림 발송 완료');
 }
 
 /**
