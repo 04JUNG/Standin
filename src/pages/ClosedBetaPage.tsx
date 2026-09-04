@@ -3,6 +3,7 @@ import {
   ArrowDown,
   ArrowLeft,
   ArrowRight,
+  CalendarDays,
   Camera,
   Clock3,
   Download,
@@ -141,6 +142,9 @@ export function ClosedBetaPage() {
                 <div className="flex flex-wrap items-center gap-2.5">
                   <span className="inline-flex items-center rounded-full border border-brand-coral/35 bg-brand-coral/10 px-4 py-1.5 text-xs font-bold tracking-[0.1em] text-brand-coral-dark">
                     CLOSED BETA · OPEN
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-neutral-250 bg-white/75 px-3.5 py-1.5 text-xs font-bold text-neutral-600">
+                    <CalendarDays size={14} className="text-brand-coral-dark" aria-hidden="true" /> 2026. 09. 04 — 09. 17
                   </span>
                   <span className="inline-flex items-center gap-1.5 rounded-full border border-neutral-250 bg-white/75 px-3.5 py-1.5 text-xs font-bold text-neutral-600">
                     <Clock3 size={14} className="text-brand-coral-dark" aria-hidden="true" /> 약 20분 소요
