@@ -123,6 +123,7 @@ var FEEDBACK_FIELDS = [
   { key: 'q6_previous_method', label: '기존 포즈 준비 방식' },
   { key: 'q7_previous_pain', label: '기존 방식 불편점' },
   { key: 'q7_outsource_experience', label: '3D 인체 외주 의뢰·수행 경험' },
+  { key: 'q7_3d_usage_reason', label: '3D 인체 사용 이유' },
   { key: 'q8_top5_match', label: 'TOP 5 중 활용 가능 후보 수' },
   { key: 'q8_public_case_consent', label: '사용 화면 활용 사례 소개 동의' },
   { key: 'q12_usability', label: '실제 작화 활용도' },

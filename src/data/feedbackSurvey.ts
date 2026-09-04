@@ -144,6 +144,15 @@ export const completeQuestions: FeedbackQuestion[] = [
     ].map((label) => ({ value: label, label })),
   },
   {
+    id: "q7_3d_usage_reason",
+    eyebrow: "3D 인체 사용 이유",
+    title: "웹툰 작업에서 3D 인체를 사용하는 이유는 무엇인가요?",
+    description: "직접 그리는 대신 3D 인체를 선택하는 상황과, 이를 통해 해결하려는 문제를 자유롭게 적어주세요.",
+    type: "textarea",
+    required: true,
+    placeholder: "구체적인 작업 상황을 적어주세요.",
+  },
+  {
     id: "q8_top5_match",
     eyebrow: "추천 결과",
     title: "추천된 TOP 5 중 실제 작업에 활용할 수 있는 포즈는 몇 개였나요?",
