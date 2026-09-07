@@ -280,14 +280,6 @@ function validateFeedback_(payload) {
   if (!payload.role) invalid.push('role');
   if (!payload.production) invalid.push('production');
 
-  var surveyPath = payload.surveyPath || payload.branch;
-  if (surveyPath === 'complete') {
-    var fileKeys = (payload.files || []).map(function (file) {
-      return file.key;
-    });
-    if (fileKeys.indexOf('q8_screen_first') === -1) invalid.push('q8_screen_first');
-    if (fileKeys.indexOf('q9_screen_second') === -1) invalid.push('q9_screen_second');
-  }
   return invalid;
 }
 

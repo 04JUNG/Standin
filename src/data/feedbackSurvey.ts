@@ -171,10 +171,10 @@ export const completeQuestions: FeedbackQuestion[] = [
   {
     id: "q8_usage_screens",
     eyebrow: "사용 화면 제출",
-    title: "Standin을 사용한 화면 2장을 첨부해 주세요.",
-    description: "첫 번째에는 사용한 러프 또는 Standin 사용 과정을, 두 번째에는 3D 인체를 적용한 결과를 올려주세요.",
+    title: "Standin을 사용한 화면이 있다면 첨부해 주세요.",
+    description: "선택 항목입니다. 첫 번째에는 사용한 러프 또는 Standin 사용 과정을, 두 번째에는 3D 인체를 적용한 결과를 올려주세요. 사진은 한 장만 올려도 되고, 올리지 않아도 설문을 제출할 수 있습니다.",
     type: "images",
-    required: true,
+    required: false,
     publicConsentId: "q8_public_case_consent",
     fileSlots: [
       { id: "q8_screen_first", label: "1. 사용한 러프 또는 사용 과정" },

@@ -33,7 +33,7 @@ Formspree를 대체하는 자체 수신 엔드포인트다. 랜딩의 클로즈�
 | `SHEET_NAME` |  | 기록할 탭 이름. 기본값 `클로즈베타 사전등록` |
 | `SHEET_ID` |  | 시트에 바인딩하지 않은 독립 스크립트일 때만 필요 |
 | `FEEDBACK_SHEET_NAME` |  | 피드백 탭 이름. 기본값 `클로즈베타 피드백` |
-| `FEEDBACK_UPLOAD_FOLDER_ID` | ✅ | 피드백 이미지와 `.clip` 작업물이 저장될 비공개 Google Drive 폴더 ID |
+| `FEEDBACK_UPLOAD_FOLDER_ID` | 화면·작업물 첨부를 받을 때 필수 | 선택 첨부된 피드백 이미지와 `.clip` 작업물이 저장될 비공개 Google Drive 폴더 ID |
 
 ## 3. 준비 실행
 
