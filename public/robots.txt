@@ -1,0 +1,6 @@
+# Public product pages are available to search crawlers.
+# This file does not change model-training-specific bot policies.
+User-agent: *
+Allow: /
+
+Sitemap: https://www.standinpose.com/sitemap.xml

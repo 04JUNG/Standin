@@ -1,5 +1,5 @@
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot, hydrateRoot } from "react-dom/client";
 import "./styles/globals.css";
 import { App } from "./App";
 
@@ -13,9 +13,15 @@ if (window.location.pathname === "/signup") {
 } else if (window.location.pathname === "/closed-beta") {
   window.location.replace(`/closed-beta/${window.location.search}${window.location.hash}`);
 } else {
-  createRoot(document.getElementById("root")!).render(
+  const root = document.getElementById("root")!;
+  const app = (
     <StrictMode>
       <App />
-    </StrictMode>,
+    </StrictMode>
   );
+  if (root.hasChildNodes()) {
+    hydrateRoot(root, app);
+  } else {
+    createRoot(root).render(app);
+  }
 }
