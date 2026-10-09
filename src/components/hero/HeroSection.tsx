@@ -3,12 +3,18 @@ import { Container } from "../common/Container";
 import { Button } from "../common/Button";
 import { Badge } from "../common/Badge";
 import { HeroPoseReveal } from "./HeroPoseReveal";
-import { hero } from "../../data/content";
+import { footer, hero } from "../../data/content";
 
 export function HeroSection() {
   return (
     <section className="hero-showcase overflow-hidden pt-20 pb-16 sm:pt-24 lg:pt-28 lg:pb-24">
       <Container wide>
+        <div className="mx-auto mb-6 max-w-2xl text-center">
+          <h1 id="product-title" className="text-2xl font-bold tracking-tight text-brand-ink sm:text-3xl">
+            {hero.title.replace("\n", " ")}
+          </h1>
+          <p className="mt-3 text-base text-neutral-600">{footer.tagline}</p>
+        </div>
         <HeroPoseReveal />
 
         <div className="hero-showcase__footer text-center">

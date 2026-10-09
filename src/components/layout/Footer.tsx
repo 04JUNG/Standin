@@ -35,6 +35,8 @@ export function Footer() {
                 </span>
               ),
             )}
+            <a href="/#guides" className="text-[15px] text-neutral-800 hover:text-brand-coral-dark">사용 가이드</a>
+            <a href="/#faq" className="text-[15px] text-neutral-800 hover:text-brand-coral-dark">FAQ</a>
           </nav>
         </div>
 

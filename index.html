@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Standin — 원하는 자세를 3D 인형으로</title>
+    <title>Standin — 러프 이미지로 찾는 웹툰 3D 포즈</title>
     <meta
       name="description"
       content="러프나 참고 이미지를 넣으면 비슷한 3D 자세를 찾아 Clip Studio 작업에 활용할 수 있도록 돕는 웹툰 제작 도구입니다."
     />
-    <meta property="og:title" content="Standin — 원하는 자세를 3D 인형으로" />
+    <meta property="og:title" content="Standin — 러프 이미지로 찾는 웹툰 3D 포즈" />
     <meta
       property="og:description"
       content="러프나 참고 이미지를 넣고, 비슷한 3D 자세를 찾아 Clip Studio에 활용하세요."
@@ -17,7 +17,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ko_KR" />
     <meta property="og:site_name" content="Standin" />
-    <meta property="og:image" content="/standin-social-card.png" />
+    <meta property="og:image" content="https://www.standinpose.com/standin-social-card.png" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -26,17 +26,19 @@
       content="러프 인체 포즈가 3D 인형으로 전환되는 Standin 제품 소개"
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Standin — 원하는 자세를 3D 인형으로" />
+    <meta name="twitter:title" content="Standin — 러프 이미지로 찾는 웹툰 3D 포즈" />
     <meta
       name="twitter:description"
       content="러프나 참고 이미지를 넣고, 비슷한 3D 자세를 찾아 Clip Studio에 활용하세요."
     />
-    <meta name="twitter:image" content="/standin-social-card.png" />
+    <meta name="twitter:image" content="https://www.standinpose.com/standin-social-card.png" />
     <meta
       name="twitter:image:alt"
       content="러프 인체 포즈가 3D 인형으로 전환되는 Standin 제품 소개"
     />
-    <!-- canonical과 og:url은 실제 배포 도메인이 확정되면 추가 -->
+    <link rel="canonical" href="https://www.standinpose.com/" />
+    <meta property="og:url" content="https://www.standinpose.com/" />
+    <!--structured-data-->
     <link
       rel="stylesheet"
       as="style"
@@ -46,6 +48,10 @@
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <style>.standin-intro { display: none; } .reveal { opacity: 1; transform: none; }</style>
+      <p class="text-center p-4">제품 설명과 FAQ는 그대로 읽을 수 있습니다. 포즈 비교 조작에는 JavaScript가 필요합니다.</p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

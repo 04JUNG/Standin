@@ -22,12 +22,16 @@ npm run lint     # ESLint 검사
 
 ## 페이지 구조
 
-두 개의 독립 문서로 빌드된다(Vite MPA). 라우터는 쓰지 않으므로 정적 호스트에
+여섯 개의 독립 문서로 빌드된다(Vite MPA). 라우터는 쓰지 않으므로 정적 호스트에
 SPA rewrite 설정이 필요 없다.
 
 - `/` (`index.html`) — 랜딩
   `Header → Hero → 이미지 입력 → Standin 처리 → Clip Studio 활용 결과 →
-  오픈베타 사전등록 → Footer`
+  사용 가이드 → 클로즈베타 시작하기 → FAQ → Footer`
+- `/guides/rough-to-3d-pose/` — 러프 입력·포즈 후보 비교 가이드
+- `/guides/clip-studio-pose-import/` — 선택한 결과를 클립스튜디오에서 활용하는 가이드
+- `/closed-beta/` — 기존 클로즈베타 다운로드·사용 순서·피드백 동선
+- `/feedback/` — 기존 클로즈베타 피드백 설문
 - `/signup` (`signup/index.html`) — 계정 만들기. 데스크톱 앱의 "웹에서 계정
   만들기" 버튼이 이 페이지를 외부 브라우저로 연다.
 
@@ -114,4 +118,25 @@ VITE_BETA_ENDPOINT=https://script.google.com/macros/s/AKfy.../exec
 
 - [x] 최신 포즈 에셋 기반 OG·X 카드 이미지(1200×630) 적용
 - [ ] 사전등록 웹앱 배포·`VITE_BETA_ENDPOINT` 주입 및 개인정보 처리방침 문서 링크
-- [ ] canonical / og:url 및 소셜 이미지의 절대 URL을 실제 도메인 확정 후 추가
+- [x] `www.standinpose.com` 기준 canonical / og:url 및 소셜 이미지 절대 URL
+
+## 검색·AEO 빌드와 검증
+
+`npm run build`는 타입 검사, 브라우저 번들, 빌드 전용 SSR 번들,
+본문 사전 렌더링, SEO 회귀 검증을 순서대로 실행한다. **배포 디렉터리는 기존과 같은
+`dist/`**다. `dist-ssr/`는 빌드 중 사용하는 파일이며 배포하지 않는다.
+
+홈과 가이드 2개는 응답 HTML에 본문이 들어간다. 브라우저에서는 같은 React 트리를
+hydrate하므로 기존 포즈 데모와 폼이 동작한다. 개발 서버는 기존처럼 클라이언트에서
+렌더링하므로, 사전 렌더링 확인에는 `npm run build` 후 `npm run preview`를 사용한다.
+
+- 초기 HTML·JSON-LD·canonical·로컬 에셋/앵커·사이트맵: `npm run check:seo`
+- `/signup/`, `/closed-beta/`, `/feedback/`은 기존처럼 `noindex`이며 사이트맵에 포함하지 않는다.
+- FAQ 카피, 클로즈베타 일정·CTA·동의 목적은 변경하지 않았다.
+- `src/data/guides.ts`에 가이드 내용을 관리한다. 새 페이지를 추가하면 HTML 진입점,
+  Vite 입력 목록, `public/sitemap.xml`을 함께 추가한다. 누락은 빌드 검증에서 확인한다.
+- JavaScript가 없을 때도 공개 본문과 FAQ를 읽고 기존 베타 시작 페이지로 이동할 수 있다.
+  베타·계정·피드백 페이지는 기존 브라우저 렌더링과 운영 환경변수를 유지한다.
+- `robots.txt`는 공개 콘텐츠 수집을 허용한다. 모델 학습용 봇의 별도 정책은 추가하지 않는다.
+
+배포 뒤 확인할 운영 항목은 [AEO 운영 체크리스트](docs/08_AEO_OPERATIONS.md)에 있다.

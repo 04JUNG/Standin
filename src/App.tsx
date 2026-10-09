@@ -6,6 +6,8 @@ import { ProcessSection } from "./components/sections/ProcessSection";
 import { ResultSection } from "./components/sections/ResultSection";
 import { BetaSection } from "./components/sections/BetaSection";
 import { StandinIntro } from "./components/hero/StandinIntro";
+import { FaqSection } from "./components/sections/FaqSection";
+import { GuidesSection } from "./components/sections/GuidesSection";
 
 export function App() {
   return (
@@ -20,7 +22,9 @@ export function App() {
         <InputSection />
         <ProcessSection />
         <ResultSection />
+        <GuidesSection />
         <BetaSection />
+        <FaqSection />
       </main>
       <Footer />
     </div>

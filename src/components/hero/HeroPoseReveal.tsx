@@ -261,7 +261,7 @@ export function HeroPoseReveal() {
       : undefined;
 
   return (
-    <div className="hero-pose" aria-labelledby="hero-pose-title">
+    <div className="hero-pose" aria-labelledby={showWorkspace ? "hero-pose-title" : "product-title"}>
       {showWorkspace ? (
         <>
           <div className="hero-pose__topline">
@@ -283,10 +283,10 @@ export function HeroPoseReveal() {
       ) : (
         <>
           <div className="hero-pose__frame">
-            <h1 className="hero-pose__wordmark" aria-label="Standin">
+            <div className="hero-pose__wordmark" aria-label="Standin">
               <span>Stand</span>
               <em>in.</em>
-            </h1>
+            </div>
 
             <button
               type="button"
