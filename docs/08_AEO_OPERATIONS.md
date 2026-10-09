@@ -9,7 +9,7 @@
 
 - 홈과 가이드 2개를 빌드 시 사전 렌더링한다. 같은 React 컴포넌트를 사용해 본문과
   브라우저 화면의 내용이 일치한다.
-- 기존 제품 카피의 H1·설명을 보이게 하고, 제품 FAQ 5개를 연결한다.
+- 기존 제품 카피의 H1·설명을 보이게 하고, 첫 문장에서 답하는 제품 FAQ 8개를 연결한다.
   과거 사전등록을 안내하는 FAQ는 노출하지 않으며 참여 방법은 기존 `/closed-beta/` 동선을 유지한다.
 - 기존 사용 범위와 영상으로 러프→포즈, 클립스튜디오 활용 가이드를 작성한다.
 - 공개 페이지별 canonical·OG·JSON-LD, robots.txt, sitemap.xml을 제공한다.
@@ -24,7 +24,7 @@
    apex/이전 공개 호스트의 리디렉션은 호스팅에서 설정하고 가입·인증 경로와 쿼리를 보존한다.
 4. `robots.txt`, `sitemap.xml`, 필수 에셋의 실제 응답과 호스팅의 `noindex`·봇 차단을 확인한다.
 5. Search Console·Bing Webmaster Tools의 소유권을 확인한 뒤 사이트맵을 제출한다.
-6. Search Console의 Search generative AI 포함 설정과 OAI-SearchBot·PerplexityBot 접근을 확인한다.
+6. Search Console URL 검사로 색인·수집 상태를 확인하고 OAI-SearchBot·PerplexityBot 접근을 확인한다.
    필요할 때만 공식 IP와 User-Agent를 검증해 방화벽 예외를 적용한다.
 
 사이트맵 게시나 JSON-LD 추가만으로 검색 색인과 AI 인용이 보장되지는 않는다.
@@ -45,10 +45,10 @@ FAQPage 리치 결과나 llms.txt 추가를 성과 목표로 잡지 않는다.
 현재 분석 서비스나 외부 보고서 설정은 변경하지 않았다. 접근 가능한 기존 계측부터
 확인한 뒤 방문 출처·가이드→베타 시작 클릭·다운로드·피드백 접수 성공을 연결한다.
 
-- Google: 일반 검색과 Generative AI performance report의 노출 추이.
-- Bing/Copilot: AI Performance의 인용 페이지·질의 추이.
+- Google: Search Console의 검색 실적과 URL 검사. 실제 계정에서 확인한 지표만 기록한다.
+- Bing/Copilot: Bing Webmaster Tools에서 접근 가능한 검색·AI 인용 지표를 확인한다.
 - 웹: 확인 가능한 AI referrer/UTM과 서버 접수 성공 건수. 이메일은 분석 이벤트에 넣지 않는다.
-- 수동 관찰: 브랜드 4개·비브랜드 8개 질문을 같은 언어·검색 조건에서 반복해
+- 수동 관찰: 브랜드 5개·비브랜드 20개 질문을 같은 언어·검색 조건에서 반복해
   브랜드 언급·공식 URL 인용·제품 설명 정확성을 구분한다.
 
 4주 단위로 기준선을 비교한다. 인용 수와 방문 수만으로 성공을 판단하지 않고
@@ -58,7 +58,7 @@ FAQPage 리치 결과나 llms.txt 추가를 성과 목표로 잡지 않는다.
 
 - [Google AI 검색 최적화](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide)
 - [Google JavaScript SEO](https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics)
-- [Google AI 검색 포함 설정](https://support.google.com/webmasters/answer/16908024?hl=en)
+- [Google AI 검색과 측정](https://developers.google.com/search/docs/appearance/ai-features)
 - [OpenAI 크롤러](https://developers.openai.com/api/docs/bots)
 - [Perplexity 크롤러](https://docs.perplexity.ai/docs/resources/perplexity-crawlers)
-- [Bing AI Performance](https://www.bing.com/webmasters/help/ai-performance-9f8e7d6c)
+- [Bing Webmaster Tools](https://www.bing.com/webmasters/)

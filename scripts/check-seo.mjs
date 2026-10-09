@@ -38,7 +38,7 @@ for (const [path, html] of documents) {
 }
 
 const home = documents.get("/");
-assert.equal((home.match(/<details\b/g) ?? []).length, 5, "Product FAQ answers must be present before JavaScript runs");
+assert.equal((home.match(/<details\b/g) ?? []).length, 8, "Product FAQ answers must be present before JavaScript runs");
 assert.ok(!home.includes('id="faq-availability"'), "Do not surface the outdated preregistration FAQ");
 assert.match(home, /CLOSED BETA · OPEN/, "Keep the existing beta badge");
 for (const [path, html] of documents) {
