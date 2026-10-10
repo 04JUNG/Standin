@@ -3,7 +3,7 @@ import { renderToString } from "react-dom/server";
 import { App } from "./App";
 import { GuidePage } from "./pages/GuidePage";
 import { guidePath, guides } from "./data/guides";
-import { footer } from "./data/content";
+import { footer, hero } from "./data/content";
 
 const origin = "https://www.standinpose.com";
 export const publicPaths = ["/", ...guides.map(guidePath)];
@@ -34,12 +34,14 @@ export function render(path: string) {
     ],
   }] : [organization, website, {
     "@type": "WebPage", "@id": `${url}#page`, url,
-    name: "Standin — 러프 이미지로 찾는 웹툰 3D 포즈",
+    name: hero.title,
     description: footer.tagline,
     inLanguage: "ko", isPartOf: { "@id": website["@id"] },
   }];
 
   return {
+    title: guide ? `${guide.title} | Standin` : hero.title,
+    description: guide ? guide.description : footer.tagline,
     html: renderToString(<StrictMode>{guide ? <GuidePage guide={guide} /> : <App />}</StrictMode>),
     structuredData: JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c"),
   };
