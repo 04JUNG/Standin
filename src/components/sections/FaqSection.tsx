@@ -1,4 +1,5 @@
 import { Plus } from "lucide-react";
+import { useEffect } from "react";
 import { Container } from "../common/Container";
 import { SectionHeading } from "../common/SectionHeading";
 import { faqItems } from "../../data/faq";
@@ -7,6 +8,18 @@ import { faqItems } from "../../data/faq";
 const productFaqItems = faqItems.filter((item) => item.id !== "availability");
 
 export function FaqSection() {
+  useEffect(() => {
+    const openLinkedAnswer = () => {
+      const id = window.location.hash.slice(1);
+      if (!productFaqItems.some((item) => `faq-${item.id}` === id)) return;
+      const answer = document.getElementById(id);
+      if (answer instanceof HTMLDetailsElement) answer.open = true;
+    };
+    openLinkedAnswer();
+    window.addEventListener("hashchange", openLinkedAnswer);
+    return () => window.removeEventListener("hashchange", openLinkedAnswer);
+  }, []);
+
   return (
     <section id="faq" className="py-20 sm:py-28 lg:py-32">
       <Container>
@@ -19,7 +32,7 @@ export function FaqSection() {
 
           <div className="divide-y divide-neutral-250 border-t border-neutral-250">
             {productFaqItems.map((item) => (
-              <details key={item.id} id={`faq-${item.id}`} className="group py-1">
+              <details key={item.id} id={`faq-${item.id}`} className="group scroll-mt-24 py-1">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-lg font-semibold text-brand-ink [&::-webkit-details-marker]:hidden">
                   {item.question}
                   <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-brand-ink transition-transform duration-200 group-open:rotate-45">

@@ -14,7 +14,7 @@ export const nav = {
 
 export const hero = {
   eyebrow: "WEBTOON 3D POSE TOOL",
-  title: "러프 이미지에서\n원하는 3D 포즈를 찾아보세요.",
+  title: "Standin — 러프 이미지로 찾는 웹툰 3D 포즈",
   body: "그림 위에 마우스를 올려 Standin이 찾은 같은 자세의 3D 인형을 직접 비교해 보세요.",
   launchBadge: "CLOSED BETA · OPEN",
   primaryCta: "클로즈베타 시작하기",
@@ -260,7 +260,7 @@ export const beta = {
 };
 
 export const footer = {
-  tagline: "원하는 자세를 찾고 3D 인형으로 만드는 웹툰 작업 보조 도구.",
+  tagline: "Standin은 러프나 참고 이미지와 가까운 3D 인체 포즈 후보를 찾아주는 웹툰 작업 보조 도구입니다. 작가가 후보를 선택·조정하고 클립스튜디오에서 작화를 이어갑니다.",
   // 푸터는 /signup 에서도 렌더되므로 hash를 루트 기준(`/#`)으로 둔다.
   // 인덱스에서는 같은 문서 안의 hash 이동이라 동작이 그대로다.
   links: [

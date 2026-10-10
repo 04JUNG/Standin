@@ -22,6 +22,17 @@ for (const path of publicPaths) {
   const schema = JSON.parse(schemas[0][1]);
   assert.equal(schema["@context"], "https://schema.org");
   assert.ok(schema["@graph"].some((node) => node.url === `${origin}${path}`), `${path}: schema URL`);
+  const contentNode = schema["@graph"].find((node) => ["WebPage", "Article"].includes(node["@type"]));
+  const description = html.match(/name="description"\s+content="([^"]+)"/)[1];
+  assert.equal(description, contentNode.description, `${path}: metadata and schema must describe the visible content consistently`);
+  const paragraphs = [...html.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map((match) => match[1]);
+  assert.ok(paragraphs.includes(description), `${path}: description must be visible`);
+  const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
+  assert.equal(new Set(ids).size, ids.length, `${path}: unique link targets`);
+  if (path.startsWith("/guides/")) {
+    assert.match(html, /aria-label="이 가이드의 질문"/, `${path}: question navigation`);
+    assert.ok((html.match(/<section\b[^>]*id="/g) ?? []).length >= 6, `${path}: addressable guide answers`);
+  }
 }
 
 for (const [path, html] of documents) {
