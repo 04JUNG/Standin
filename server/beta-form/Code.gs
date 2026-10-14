@@ -1,7 +1,9 @@
 /**
- * Standin 클로즈베타 사전등록 수신기 (Google Apps Script 웹앱)
+ * Standin 베타 사전등록 수신기 (Google Apps Script 웹앱)
  *
- * Formspree를 대체한다. 랜딩의 사전등록 폼이 이 웹앱으로 POST하면
+ * Formspree를 대체한다. 클로즈베타 때 만든 사전등록 폼을 오픈베타에도 그대로
+ * 쓰며, 요청의 `program`(PROGRAMS)으로 기록할 탭과 알림 제목만 나눈다.
+ * 랜딩의 사전등록 폼이 이 웹앱으로 POST하면
  *   1) 구글 시트에 한 줄 기록  (원본 = 진실의 출처)
  *   2) 디스코드 웹훅 알림
  *   3) Gmail 알림 메일
@@ -114,6 +116,28 @@ var TIMEZONE = 'Asia/Seoul';
 var EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 var DISCORD_COLOR = 16739159; // #ff6b57 (brand coral)
 
+/**
+ * 사전등록 프로그램별 기록 탭과 알림 제목.
+ * 폼 항목이 같아 한 웹앱으로 받고, 클로즈베타 기록과 섞이지 않도록 탭만 나눈다.
+ * `program`이 없는 요청은 이전 폼(클로즈베타)으로 본다.
+ */
+var PROGRAMS = {
+  'closed-beta': {
+    title: '클로즈베타 사전등록',
+    sheetProperty: 'SHEET_NAME',
+    defaultSheetName: '클로즈베타 사전등록',
+  },
+  'open-beta': {
+    title: '오픈베타 사전등록',
+    sheetProperty: 'OPEN_BETA_SHEET_NAME',
+    defaultSheetName: '오픈베타 사전등록',
+  },
+};
+
+function programOf_(code) {
+  return PROGRAMS[String(code || '')] || PROGRAMS['closed-beta'];
+}
+
 /** 피드백 시트는 질문 하나를 열 하나로 저장한다. 분기 밖 질문은 빈칸으로 남는다. */
 var FEEDBACK_FIELDS = [
   { key: 'role', label: '역할' },
@@ -199,11 +223,12 @@ function doPost(e) {
     return jsonResponse_({ ok: false, error: 'INVALID_INPUT', fields: invalid });
   }
 
+  var program = programOf_(payload.program);
   var record = buildRecord_(payload);
 
   var appended;
   try {
-    appended = appendRecord_(record);
+    appended = appendRecord_(record, program);
   } catch (err) {
     console.error('시트 기록 실패: ' + err);
     return jsonResponse_({ ok: false, error: 'SERVER_ERROR' });
@@ -211,13 +236,15 @@ function doPost(e) {
 
   // 알림은 부가 작업이다. 실패해도 로그만 남기고 접수는 성공으로 응답한다.
   notifySafely_('discord', function () {
-    sendDiscord_(buildDiscordPayload_(appended.record, appended.row));
+    sendDiscord_(
+      buildDiscordPayload_(appended.record, appended.row, { title: program.title }),
+    );
   });
   notifyEmailIfConfigured_('email', function () {
-    sendEmail_(appended.record, appended.row);
+    sendEmail_(appended.record, appended.row, program);
   });
 
-  return jsonResponse_({ ok: true, duplicate: appended.record.note !== '' });
+  return jsonResponse_({ ok: true, duplicate: appended.duplicate });
 }
 
 // ── 입력 처리 ─────────────────────────────────────────────────────────────
@@ -537,7 +564,17 @@ function labelOf_(field, code) {
 
 // ── 시트 ──────────────────────────────────────────────────────────────────
 
-function getSheet_() {
+/** 프로그램의 기록 탭 이름. 스크립트 속성이 있으면 그 값을 쓴다. */
+function sheetNameOf_(program) {
+  return (
+    PropertiesService.getScriptProperties().getProperty(program.sheetProperty) ||
+    program.defaultSheetName
+  );
+}
+
+/** 프로그램의 기록 탭을 연다(없으면 만든다). 인자가 없으면 클로즈베타 탭이다. */
+function getSheet_(program) {
+  var target = program || PROGRAMS['closed-beta'];
   var props = PropertiesService.getScriptProperties();
   var sheetId = props.getProperty('SHEET_ID');
   var book = sheetId
@@ -549,7 +586,7 @@ function getSheet_() {
     );
   }
 
-  var name = props.getProperty('SHEET_NAME') || '클로즈베타 사전등록';
+  var name = sheetNameOf_(target);
   var sheet = book.getSheetByName(name);
   if (!sheet) {
     sheet = book.insertSheet(name);
@@ -579,19 +616,34 @@ function toRow_(record) {
  * 한 줄 추가하고 기록된 행 번호를 돌려준다.
  * 동시 제출이 같은 행을 덮어쓰지 않도록 스크립트 락을 잡는다.
  */
-function appendRecord_(record) {
+function appendRecord_(record, program) {
   var lock = LockService.getScriptLock();
   lock.waitLock(20000);
   try {
-    var sheet = getSheet_();
-    if (isDuplicateEmail_(sheet, record.email)) {
-      record.note = '중복(재등록)';
+    var sheet = getSheet_(program);
+    // 중복은 같은 프로그램 탭 안에서만 본다. 클로즈베타 등록자가 오픈베타에
+    // 다시 등록하는 것은 중복이 아니라 비고로 구분해 둔다.
+    var duplicate = isDuplicateEmail_(sheet, record.email);
+    var notes = [];
+    if (duplicate) notes.push('중복(재등록)');
+    if (
+      program !== PROGRAMS['closed-beta'] &&
+      isClosedBetaRegistrant_(sheet.getParent(), record.email)
+    ) {
+      notes.push('클로즈베타 사전등록자');
     }
+    record.note = notes.join(' · ');
     sheet.appendRow(toRow_(record));
-    return { record: record, row: sheet.getLastRow() };
+    return { record: record, row: sheet.getLastRow(), duplicate: duplicate };
   } finally {
     lock.releaseLock();
   }
+}
+
+/** 클로즈베타 사전등록 탭에 같은 이메일이 있는지. 탭이 없으면 false(새로 만들지 않는다). */
+function isClosedBetaRegistrant_(book, email) {
+  var sheet = book.getSheetByName(sheetNameOf_(PROGRAMS['closed-beta']));
+  return Boolean(sheet) && isDuplicateEmail_(sheet, email);
 }
 
 function isDuplicateEmail_(sheet, email) {
@@ -728,12 +780,13 @@ function sendDiscord_(payload) {
   }
 }
 
-function sendEmail_(record, row) {
+function sendEmail_(record, row, program) {
   var to = PropertiesService.getScriptProperties().getProperty('NOTIFY_EMAIL');
   if (!to) throw new Error('스크립트 속성 NOTIFY_EMAIL이 비어 있다.');
+  var title = (program || PROGRAMS['closed-beta']).title;
 
   var lines = [
-    '새 클로즈베타 사전등록이 접수되었습니다.',
+    '새 ' + title + '이 접수되었습니다.',
     '',
     '이메일: ' + record.email,
   ];
@@ -751,7 +804,7 @@ function sendEmail_(record, row) {
 
   MailApp.sendEmail({
     to: to,
-    subject: '[Standin] 클로즈베타 사전등록 — ' + record.email,
+    subject: '[Standin] ' + title + ' — ' + record.email,
     body: lines.join('\n'),
     name: 'Standin 사전등록',
   });
@@ -767,10 +820,16 @@ function jsonResponse_(body) {
 
 // ── 수동 실행용 도구 ──────────────────────────────────────────────────────
 
-/** 시트와 헤더를 만든다. 배포 전에 한 번 실행한다. */
+/** 클로즈베타 사전등록 탭과 헤더를 만든다. 최초 배포 전에 한 번 실행한다. */
 function setupSheet() {
   var sheet = getSheet_();
   console.log('시트 준비 완료: ' + sheet.getName() + ' (' + sheet.getLastRow() + '행)');
+}
+
+/** 오픈베타 사전등록 탭과 헤더를 만든다. 오픈베타 폼을 공개하기 전에 한 번 실행한다. */
+function setupOpenBetaSheet() {
+  var sheet = getSheet_(PROGRAMS['open-beta']);
+  console.log('오픈베타 시트 준비 완료: ' + sheet.getName() + ' (' + sheet.getLastRow() + '행)');
 }
 
 /** 피드백 탭과 질문별 열을 만든다. 피드백 수집 전에 한 번 실행한다. */

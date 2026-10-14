@@ -49,16 +49,23 @@ for (const [path, html] of documents) {
 }
 
 const home = documents.get("/");
-assert.equal((home.match(/<details\b/g) ?? []).length, 8, "Product FAQ answers must be present before JavaScript runs");
-assert.ok(!home.includes('id="faq-availability"'), "Do not surface the outdated preregistration FAQ");
-assert.match(home, /CLOSED BETA · OPEN/, "Keep the existing beta badge");
+assert.equal((home.match(/<details\b/g) ?? []).length, 9, "Product FAQ answers must be present before JavaScript runs");
+assert.ok(home.includes('id="faq-availability"'), "Answer the availability question with the open beta status");
+assert.match(home, /오픈베타 준비 중/, "Show the open beta status");
+assert.ok(!/클로즈베타|CLOSED BETA/i.test(home), "Closed beta copy must not remain on the landing");
+assert.match(home, /오픈베타 일정과 참여 방법을 이메일로 받는 데 동의합니다/, "Open beta preregistration consent purpose");
+assert.match(home, /<button type="submit" disabled=""/, "Preregistration submit stays disabled until hydration");
 for (const [path, html] of documents) {
-  assert.match(html, /href="\/closed-beta\/"[^>]*>클로즈베타 시작하기/, `${path}: preserve the active beta entry point`);
+  assert.match(html, /href="\/#beta"[^>]*>오픈베타 사전등록/, `${path}: link to open beta preregistration`);
+  assert.ok(!html.includes('href="/closed-beta/"') && !html.includes('href="/feedback/"'), `${path}: retired closed beta links`);
 }
-for (const path of ["signup", "feedback", "closed-beta"]) {
+const signupHtml = await readFile(new URL("signup/index.html", dist), "utf8");
+assert.match(signupHtml, /name="robots" content="noindex"/, "signup: existing private-flow indexing policy");
+assert.match(signupHtml, /<script type="module"[^>]*src="\/assets\//, "signup: preserve the browser entry point");
+for (const path of ["feedback", "closed-beta"]) {
   const html = await readFile(new URL(`${path}/index.html`, dist), "utf8");
-  assert.match(html, /name="robots" content="noindex"/, `${path}: existing private-flow indexing policy`);
-  assert.match(html, /<script type="module"[^>]*src="\/assets\//, `${path}: preserve the browser entry point`);
+  assert.match(html, /name="robots" content="noindex"/, `${path}: retired path stays out of the index`);
+  assert.match(html, /http-equiv="refresh" content="0; url=\/#beta"/, `${path}: old links redirect to the open beta status`);
 }
 const sitemap = await readFile(new URL("sitemap.xml", dist), "utf8");
 const locations = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
@@ -66,4 +73,4 @@ assert.deepEqual(locations.sort(), publicPaths.map((path) => `${origin}${path}`)
 const robots = await readFile(new URL("robots.txt", dist), "utf8");
 assert.ok(robots.includes(`Sitemap: ${origin}/sitemap.xml`));
 assert.ok(!/^Disallow:\s*\/\s*$/m.test(robots), "Public pages must remain crawlable");
-console.log(`SEO checks passed: ${publicPaths.length} prerendered pages, metadata, links, FAQ, beta CTA and sitemap.`);
+console.log(`SEO checks passed: ${publicPaths.length} prerendered pages, metadata, links, FAQ, open beta preregistration and sitemap.`);

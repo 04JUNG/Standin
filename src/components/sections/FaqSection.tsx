@@ -4,14 +4,11 @@ import { Container } from "../common/Container";
 import { SectionHeading } from "../common/SectionHeading";
 import { faqItems } from "../../data/faq";
 
-// 모집 상태와 참여 방법은 기존 클로즈베타 페이지에서 안내한다.
-const productFaqItems = faqItems.filter((item) => item.id !== "availability");
-
 export function FaqSection() {
   useEffect(() => {
     const openLinkedAnswer = () => {
       const id = window.location.hash.slice(1);
-      if (!productFaqItems.some((item) => `faq-${item.id}` === id)) return;
+      if (!faqItems.some((item) => `faq-${item.id}` === id)) return;
       const answer = document.getElementById(id);
       if (answer instanceof HTMLDetailsElement) answer.open = true;
     };
@@ -31,7 +28,7 @@ export function FaqSection() {
           />
 
           <div className="divide-y divide-neutral-250 border-t border-neutral-250">
-            {productFaqItems.map((item) => (
+            {faqItems.map((item) => (
               <details key={item.id} id={`faq-${item.id}`} className="group scroll-mt-24 py-1">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-lg font-semibold text-brand-ink [&::-webkit-details-marker]:hidden">
                   {item.question}

@@ -91,9 +91,12 @@ draw.text((66, 224), "3D 인형으로.", font=font(56, True), fill=INK)
 draw.text((68, 324), "러프 한 장에서 찾는", font=font(23, True), fill=INK)
 draw.text((68, 360), "웹툰 3D 포즈의 시작점", font=font(23, True), fill=INK)
 
-draw.rounded_rectangle((66, 426, 280, 472), radius=23, fill="#ffffff", outline="#d8dde5")
+status_text = "오픈베타 준비 중"
+status_font = font(15, True)
+status_right = 108 + int(draw.textlength(status_text, font=status_font)) + 24
+draw.rounded_rectangle((66, 426, status_right, 472), radius=23, fill="#ffffff", outline="#d8dde5")
 draw.ellipse((84, 444, 94, 454), fill=CORAL)
-draw.text((108, 449), "2026. 9. 4. CLOSED BETA", font=font(14, True), fill=INK, anchor="lm")
+draw.text((108, 449), status_text, font=status_font, fill=INK, anchor="lm")
 
 draw.text((66, 548), "Stand", font=font(30, True), fill=INK)
 stand_width = draw.textlength("Stand", font=font(30, True))
