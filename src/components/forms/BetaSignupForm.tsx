@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ArrowRight, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { beta } from "../../data/content";
 import type { BetaFormValues, SubmitState } from "../../types/landing";
@@ -32,9 +32,17 @@ const allowedSources = new Set<BetaFormValues["source"]>([
   "other",
 ]);
 
+const emptyCampaign = {
+  source: "" as BetaFormValues["source"],
+  utmSource: "",
+  utmMedium: "",
+  utmCampaign: "",
+  utmContent: "",
+};
+
 function readCampaign() {
   if (typeof window === "undefined") {
-    return { source: "" as BetaFormValues["source"] };
+    return emptyCampaign;
   }
 
   const params = new URLSearchParams(window.location.search);
@@ -82,11 +90,16 @@ const HAS_BACKEND = Boolean(ENDPOINT);
 
 export function BetaSignupForm() {
   const formRef = useRef<HTMLFormElement>(null);
-  const [campaign] = useState(readCampaign);
-  const [values, setValues] = useState<BetaFormValues>(() => ({
-    ...initialValues,
-    source: campaign.source,
-  }));
+  // 사전 렌더링과 첫 클라이언트 렌더를 일치시킨 뒤 유입 경로를 적용한다.
+  const [campaign, setCampaign] = useState(emptyCampaign);
+  const [values, setValues] = useState<BetaFormValues>(initialValues);
+  const [interactive, setInteractive] = useState(false);
+  useEffect(() => {
+    const currentCampaign = readCampaign();
+    setCampaign(currentCampaign);
+    setValues((current) => ({ ...current, source: current.source || currentCampaign.source }));
+    setInteractive(true);
+  }, []);
   // 허니팟. 사람에게는 보이지 않으므로 값이 차 있으면 봇이다.
   const [website, setWebsite] = useState("");
   const [errors, setErrors] = useState<
@@ -124,6 +137,8 @@ export function BetaSignupForm() {
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify({
           ...values,
+          // 수신 웹앱이 클로즈베타 등록과 다른 탭에 기록하도록 프로그램을 밝힌다.
+          program: beta.program,
           utm_source: campaign.utmSource,
           utm_medium: campaign.utmMedium,
           utm_campaign: campaign.utmCampaign,
@@ -330,7 +345,7 @@ export function BetaSignupForm() {
 
       <button
         type="submit"
-        disabled={submitting}
+        disabled={!interactive || submitting}
         className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-brand-coral px-6 font-semibold text-brand-ink transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ff806f] disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0"
       >
         {submitting ? (

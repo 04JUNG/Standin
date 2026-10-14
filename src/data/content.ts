@@ -8,17 +8,18 @@ export const nav = {
     { label: "처리 과정", href: "#process" },
     { label: "활용 결과", href: "#result" },
   ],
-  launchDate: "CLOSED BETA · OPEN",
-  launchHref: "/closed-beta/",
+  launchStatus: "오픈베타 준비 중",
+  launchHref: "#beta",
 };
 
 export const hero = {
   eyebrow: "WEBTOON 3D POSE TOOL",
   title: "Standin — 러프 이미지로 찾는 웹툰 3D 포즈",
   body: "그림 위에 마우스를 올려 Standin이 찾은 같은 자세의 3D 인형을 직접 비교해 보세요.",
-  launchBadge: "CLOSED BETA · OPEN",
-  primaryCta: "클로즈베타 시작하기",
-  primaryHref: "/closed-beta/",
+  launchBadge: "오픈베타 준비 중",
+  primaryCta: "오픈베타 사전등록",
+  // 가이드 페이지에서도 쓰므로 루트 기준 hash로 둔다.
+  primaryHref: "/#beta",
   secondaryCta: "사용 과정 보기",
   assistiveLine: "스포츠·액션·공중 동작까지 네 가지 포즈 예시를 직접 확인할 수 있습니다.",
   mediaLabel: "실제 Standin 사용 영상 · 추후 삽입",
@@ -184,12 +185,20 @@ export const clipStudio = {
     "Standin은 클립스튜디오의 공식 플러그인 또는 공식 제휴 서비스가 아닙니다.",
 };
 
+// 오픈베타 사전등록. 폼 항목은 클로즈베타 사전등록과 같아서 같은 수신 웹앱
+// (server/beta-form)을 쓰고, `program`으로 기록할 탭만 나눈다.
+// 옵션을 고치면 Code.gs의 FIELDS와 scripts/formspree-to-csv.mjs도 함께 고친다.
 export const beta = {
-  eyebrow: "CLOSED BETA",
-  launchDate: "NOW OPEN",
-  title: "다운로드하고, 바로 테스트해 보세요.",
-  body: "설치 파일과 짧은 사용 순서, 피드백 설문을 한 페이지에 준비했습니다.",
-  note: "앱을 사용한 뒤 같은 페이지로 돌아오면 입력 내용이 임시 저장되는 설문을 바로 작성할 수 있습니다.",
+  program: "open-beta",
+  eyebrow: "OPEN BETA",
+  status: "준비 중",
+  title: "오픈베타 소식을 먼저 받아보세요.",
+  body: "더 많은 작가님이 Standin을 사용할 수 있도록 오픈베타를 준비하고 있습니다. 사전등록을 남기면 공개 일정과 참여 방법을 이메일로 안내합니다.",
+  items: [
+    { title: "공개 일정", body: "일정이 확정되면 사전등록한 이메일로 안내합니다." },
+    { title: "설치 파일", body: "오픈베타 공개와 함께 제공합니다." },
+  ],
+  note: "가격·결제 정보는 받지 않습니다.",
   emailLabel: "이메일",
   emailPlaceholder: "artist@example.com",
   roleLabel: "작업 형태",
@@ -251,9 +260,9 @@ export const beta = {
     { value: "pinterest", label: "Pinterest" },
     { value: "other", label: "기타" },
   ],
-  consent: "클로즈베타 일정과 참여 방법을 이메일로 받는 데 동의합니다.",
-  cta: "클로즈베타 사전등록",
-  success: "사전등록되었습니다. 클로즈베타 일정과 참여 방법을 이메일로 안내드릴게요.",
+  consent: "오픈베타 일정과 참여 방법을 이메일로 받는 데 동의합니다.",
+  cta: "오픈베타 사전등록",
+  success: "사전등록되었습니다. 오픈베타 일정과 참여 방법을 이메일로 안내드릴게요.",
   demoSuccess: "입력 형식이 확인되었습니다. 실제 사전등록 수집 기능은 아직 연결되지 않았습니다.",
   demoNotice:
     "현재 폼은 화면 시연용입니다. 실제 신청 수집 기능을 연결한 뒤 공개해 주세요.",

@@ -8,10 +8,9 @@ import { App } from "./App";
 // 랜딩이 뜨는 조용한 오작동이 된다. 여기서 한 번 정규화한다.
 if (window.location.pathname === "/signup") {
   window.location.replace(`/signup/${window.location.search}${window.location.hash}`);
-} else if (window.location.pathname === "/feedback") {
-  window.location.replace(`/feedback/${window.location.search}${window.location.hash}`);
-} else if (window.location.pathname === "/closed-beta") {
-  window.location.replace(`/closed-beta/${window.location.search}${window.location.hash}`);
+} else if (/^\/(closed-beta|feedback)\/?$/.test(window.location.pathname)) {
+  // 클로즈베타 종료로 없어진 경로. 예전 링크는 오픈베타 준비 안내로 보낸다.
+  window.location.replace("/#beta");
 } else {
   const root = document.getElementById("root")!;
   const app = (

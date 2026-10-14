@@ -1,5 +1,14 @@
 # 사전등록 폼 수신기 (Google Apps Script)
 
+> **2026-10-14 오픈베타 사전등록 전환.** 클로즈베타 사전등록 폼을 오픈베타에 그대로
+> 쓴다. 폼이 `"program": "open-beta"`를 보내면 `오픈베타 사전등록` 탭(속성
+> `OPEN_BETA_SHEET_NAME`)에 기록하고 알림 제목도 "오픈베타 사전등록"으로 바꾼다.
+> 클로즈베타 탭에 같은 이메일이 있으면 비고에 `클로즈베타 사전등록자`를 남긴다.
+> 피드백 설문은 랜딩에서 없앴다(피드백 처리 코드는 기존 데이터 보관용으로 남김).
+>
+> 전환 절차: 최신 `Code.gs` 붙여 넣기 → `setupOpenBetaSheet` 실행 → **배포 관리 →
+> 새 버전**으로 재배포(URL은 그대로라 `VITE_BETA_ENDPOINT` 변경 없음).
+
 Formspree를 대체하는 자체 수신 엔드포인트다. 랜딩의 클로즈베타 사전등록 폼과
 피드백 설문이 이 웹앱으로 POST하면 **구글 시트 기록 → 디스코드 알림 → Gmail
 알림** 순으로 처리한다. 피드백은 질문 하나당 열 하나로 정리되므로 시트에서
@@ -30,7 +39,8 @@ Formspree를 대체하는 자체 수신 엔드포인트다. 랜딩의 클로즈�
 | --- | --- | --- |
 | `DISCORD_WEBHOOK_URL` | ✅ | 디스코드 채널 → 편집 → 연동 → 웹후크에서 발급한 URL |
 | `NOTIFY_EMAIL` |  | 이메일 알림도 받을 때만 설정. 쉼표로 여러 개 가능 |
-| `SHEET_NAME` |  | 기록할 탭 이름. 기본값 `클로즈베타 사전등록` |
+| `SHEET_NAME` |  | 클로즈베타 사전등록 탭 이름. 기본값 `클로즈베타 사전등록` |
+| `OPEN_BETA_SHEET_NAME` |  | 오픈베타 사전등록 탭 이름. 기본값 `오픈베타 사전등록` |
 | `SHEET_ID` |  | 시트에 바인딩하지 않은 독립 스크립트일 때만 필요 |
 | `FEEDBACK_SHEET_NAME` |  | 피드백 탭 이름. 기본값 `클로즈베타 피드백` |
 | `FEEDBACK_UPLOAD_FOLDER_ID` | 화면·작업물 첨부를 받을 때 필수 | 선택 첨부된 피드백 이미지와 `.clip` 작업물이 저장될 비공개 Google Drive 폴더 ID |
@@ -112,6 +122,7 @@ Script 웹앱은 OPTIONS를 처리하지 못한다.
   "mannequinExperience": "sometimes",
   "source": "discord",
   "consent": true,
+  "program": "open-beta",
   "utm_source": "", "utm_medium": "", "utm_campaign": "", "utm_content": "",
   "pageUrl": "https://…/#beta",
   "userAgent": "…",
@@ -119,6 +130,8 @@ Script 웹앱은 OPTIONS를 처리하지 못한다.
 }
 ```
 
+- `program`은 기록할 탭을 고른다. `open-beta`면 오픈베타 탭, 없거나 모르는 값이면
+  클로즈베타 탭이다(이전 폼과의 호환).
 - `source`는 **알게 된 경로**(폼 항목)다. 방문 주소는 이름이 겹치지 않도록
   `pageUrl`로 보낸다.
 - `website`는 허니팟이다. 사람에게 보이지 않는 필드라 값이 차 있으면 봇으로
@@ -134,7 +147,7 @@ Script 웹앱은 OPTIONS를 처리하지 못한다.
 | 본문 | 뜻 |
 | --- | --- |
 | `{"ok":true}` | 시트 기록 완료 |
-| `{"ok":true,"duplicate":true}` | 기록했고, 같은 이메일이 이미 있었다 |
+| `{"ok":true,"duplicate":true}` | 기록했고, 같은 탭에 같은 이메일이 이미 있었다 |
 | `{"ok":false,"error":"INVALID_INPUT","fields":["role"]}` | 검증 실패 |
 | `{"ok":false,"error":"SERVER_ERROR"}` | 시트 기록 실패 |
 
