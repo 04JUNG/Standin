@@ -49,7 +49,10 @@ for (const [path, html] of documents) {
 }
 
 const home = documents.get("/");
-assert.equal((home.match(/<details\b/g) ?? []).length, 9, "Product FAQ answers must be present before JavaScript runs");
+assert.equal((home.match(/<details\b/g) ?? []).length, 11, "Product FAQ answers must be present before JavaScript runs");
+assert.ok(home.includes('id="faq-text-search"') && home.includes('id="faq-body-type"'), "Answer text search and body type questions");
+assert.match(home, /오픈베타 공개 예정/, "Features not yet released must be labeled as upcoming");
+assert.match(home, /정식 출시 후 1개월 무료 이용/, "Show the preregistration perk");
 assert.ok(home.includes('id="faq-availability"'), "Answer the availability question with the open beta status");
 assert.match(home, /오픈베타 준비 중/, "Show the open beta status");
 assert.ok(!/클로즈베타|CLOSED BETA/i.test(home), "Closed beta copy must not remain on the landing");

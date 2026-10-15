@@ -21,6 +21,16 @@ export function InputSection() {
             <p className="mt-6 text-lg leading-relaxed text-neutral-600 lg:text-xl">
               {flow.input.body}
             </p>
+            <ul className="mt-7 flex flex-wrap gap-2" aria-label="입력 방법">
+              {flow.input.modes.map((mode) => (
+                <li
+                  key={mode}
+                  className="rounded-full border border-neutral-250 bg-neutral-100 px-4 py-2 text-[15px] font-medium text-neutral-800 lg:px-5 lg:py-2.5 lg:text-base"
+                >
+                  {mode}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </Container>
