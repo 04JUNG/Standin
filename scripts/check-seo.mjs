@@ -29,9 +29,22 @@ for (const path of publicPaths) {
   assert.ok(paragraphs.includes(description), `${path}: description must be visible`);
   const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
   assert.equal(new Set(ids).size, ids.length, `${path}: unique link targets`);
+  const organization = schema["@graph"].find((node) => node["@type"] === "Organization");
+  assert.ok(html.includes(`href="mailto:${organization.contactPoint.email}"`), `${path}: public support contact matches schema`);
+  const visibleText = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, "");
+  assert.ok(visibleText.includes(organization.name), `${path}: organization is visible`);
   if (path.startsWith("/guides/")) {
     assert.match(html, /aria-label="이 가이드의 질문"/, `${path}: question navigation`);
     assert.ok((html.match(/<section\b[^>]*id="/g) ?? []).length >= 6, `${path}: addressable guide answers`);
+    for (const field of ["datePublished", "dateModified"]) {
+      const date = contentNode[field];
+      assert.match(date, /^\d{4}-\d{2}-\d{2}$/, `${path}: explicit editorial date`);
+      assert.ok(html.includes(`dateTime="${date}"`), `${path}: article dates must be visible`);
+    }
+    assert.ok(contentNode.datePublished <= contentNode.dateModified, `${path}: date order`);
+    for (const citation of contentNode.citation ?? []) {
+      assert.ok(html.includes(`href="${citation}"`), `${path}: citations must be visible links`);
+    }
   }
 }
 
@@ -49,6 +62,9 @@ for (const [path, html] of documents) {
 }
 
 const home = documents.get("/");
+const faq = home.match(/<section id="faq"[\s\S]*?<\/section>/)[0];
+assert.ok((faq.match(/href="\/guides\//g) ?? []).length >= 5, "FAQ answers link to relevant detailed guidance");
+assert.ok(documents.get("/guides/rough-to-3d-pose/").includes('id="text-search"'), "Text input has addressable usage guidance");
 assert.equal((home.match(/<details\b/g) ?? []).length, 11, "Product FAQ answers must be present before JavaScript runs");
 assert.ok(home.includes('id="faq-text-search"') && home.includes('id="faq-body-type"'), "Answer text search and body type questions");
 assert.match(home, /오픈베타 공개 예정/, "Features not yet released must be labeled as upcoming");
@@ -73,6 +89,12 @@ for (const path of ["feedback", "closed-beta"]) {
 const sitemap = await readFile(new URL("sitemap.xml", dist), "utf8");
 const locations = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
 assert.deepEqual(locations.sort(), publicPaths.map((path) => `${origin}${path}`).sort(), "Only public canonical pages belong in the sitemap");
+for (const [, url, lastmod] of sitemap.matchAll(/<url><loc>(.*?)<\/loc><lastmod>(.*?)<\/lastmod><\/url>/g)) {
+  const html = documents.get(new URL(url).pathname);
+  const graph = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])["@graph"];
+  const article = graph.find((node) => node["@type"] === "Article");
+  if (article) assert.equal(lastmod, article.dateModified, `${url}: sitemap and article dates agree`);
+}
 const robots = await readFile(new URL("robots.txt", dist), "utf8");
 assert.ok(robots.includes(`Sitemap: ${origin}/sitemap.xml`));
 assert.ok(!/^Disallow:\s*\/\s*$/m.test(robots), "Public pages must remain crawlable");

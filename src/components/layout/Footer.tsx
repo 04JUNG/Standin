@@ -1,6 +1,7 @@
 import { Container } from "../common/Container";
 import { BrandMark } from "../common/BrandMark";
 import { footer } from "../../data/content";
+import { site } from "../../data/site";
 
 export function Footer() {
   return (
@@ -11,6 +12,10 @@ export function Footer() {
             <BrandMark className="text-xl" />
             <p className="mt-3 text-[15px] leading-relaxed text-neutral-600">
               {footer.tagline}
+            </p>
+            <p className="mt-4 text-sm leading-relaxed text-neutral-600">
+              운영: {site.team}<br />
+              <a href={`mailto:${site.supportEmail}`} className="break-all underline underline-offset-4">문의: {site.supportEmail}</a>
             </p>
           </div>
 
