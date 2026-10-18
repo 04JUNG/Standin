@@ -39,6 +39,11 @@ export function FaqSection() {
                 <p className="pb-5 pr-12 leading-relaxed text-neutral-600">
                   {item.answer}
                 </p>
+                {item.relatedLink && (
+                  <a href={item.relatedLink.href} className="mb-5 inline-block text-sm font-semibold text-brand-coral-dark underline underline-offset-4">
+                    {item.relatedLink.label}
+                  </a>
+                )}
               </details>
             ))}
           </div>

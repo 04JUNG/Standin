@@ -4,14 +4,19 @@ export type Guide = {
   slug: string;
   title: string;
   description: string;
+  publishedAt: string;
+  modifiedAt: string;
   sections: { id: string; title: string; body: string; checks?: string[] }[];
   video: { src: string; poster: string; label: string };
+  references?: { label: string; url: string }[];
 };
 
 // 현재 랜딩에서 안내하는 사용 범위만 설명한다. 출시 일정·새 기능은 추가하지 않는다.
 export const guides: Guide[] = [
   {
     slug: "rough-to-3d-pose",
+    publishedAt: "2026-10-09",
+    modifiedAt: "2026-10-19",
     title: "러프 이미지에서 웹툰용 3D 포즈를 찾는 방법",
     description: "Standin에 인물의 자세가 보이는 러프나 참고 이미지를 입력하면 가까운 3D 인체 포즈 후보를 비교할 수 있습니다. 몸통과 팔다리 방향이 컷의 연출에 가까운 후보를 선택하고, 필요한 부분을 조정해 작화의 시작점으로 사용하세요.",
     sections: [
@@ -29,6 +34,16 @@ export const guides: Guide[] = [
         id: "find-candidates",
         title: "입력한 이미지로 무엇을 찾나요?",
         body: flow.process.body,
+      },
+      {
+        id: "text-search",
+        title: "이미지 대신 문장으로 포즈를 찾으려면 어떻게 쓰나요?",
+        body: "Standin에서 원하는 자세를 문장으로 입력하면 가까운 3D 포즈 후보를 찾을 수 있습니다. 예를 들어 ‘의자에 앉아 한쪽 팔을 앞으로 뻗은 자세’처럼 몸통과 팔다리의 동작을 적고, 나온 후보를 러프의 연출과 비교하세요. 문장은 찾을 자세를 설명하는 입력이며, 최종 포즈와 구도는 작가가 선택하고 조정합니다.",
+        checks: [
+          "서기·앉기처럼 자세의 큰 형태부터 적어 보세요.",
+          "팔을 뻗는 방향이나 다리를 굽히는 동작 등 필요한 특징을 덧붙이세요.",
+          "원하는 후보가 없으면 설명을 바꾸거나 이미지 입력과 수동 조정을 함께 고려하세요.",
+        ],
       },
       {
         id: "compare-candidates",
@@ -64,6 +79,8 @@ export const guides: Guide[] = [
   },
   {
     slug: "clip-studio-pose-import",
+    publishedAt: "2026-10-09",
+    modifiedAt: "2026-10-19",
     title: "Standin에서 선택한 3D 포즈를 클립스튜디오 작업에 활용하는 방법",
     description: "Standin에서 선택한 포즈의 결과를 내보낸 뒤 클립스튜디오에서 러프와 크기·방향·구도를 비교하고 작화를 이어갑니다. Standin은 포즈 후보 선택을 돕고, 최종 선화와 연출은 작가가 결정합니다.",
     sections: [
@@ -123,6 +140,10 @@ export const guides: Guide[] = [
       poster: "/assets/videos/result-demo-rough-v3-poster.jpg",
       label: "Standin이 찾은 3D 포즈를 Clip Studio 캔버스에 배치하는 화면 녹화",
     },
+    references: [
+      { label: "CLIP STUDIO PAINT 공식 매뉴얼: 3D 인체 포즈 조정 (영문)", url: "https://help.clip-studio.com/en-us/manual_en/660_3d/Posing_3D_drawing_figures.htm" },
+      { label: "CLIP STUDIO PAINT 공식 매뉴얼: 카메라 각도 설정 (영문)", url: "https://help.clip-studio.com/en-us/manual_en/660_3d/Set_camera_angle.htm" },
+    ],
   },
 ];
 
