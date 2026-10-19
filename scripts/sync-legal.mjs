@@ -54,7 +54,7 @@ for (const [prefix, slug, label] of documents) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=s-20261019" />
     <title>${label} | Standin</title>
     <meta name="description" content="Standin ${label}" />
     <link rel="canonical" href="https://www.standinpose.com/legal/${slug}/" />
