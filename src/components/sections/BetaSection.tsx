@@ -2,6 +2,7 @@ import { Gift, ScanLine, SlidersHorizontal, TextSearch } from "lucide-react";
 import { Container } from "../common/Container";
 import { BetaSignupForm } from "../forms/BetaSignupForm";
 import { beta } from "../../data/content";
+import { LaunchCountdown } from "../common/LaunchCountdown";
 
 const updateIcons = [TextSearch, ScanLine, SlidersHorizontal];
 
@@ -16,7 +17,7 @@ export function BetaSection() {
                 {beta.eyebrow}
               </span>
               <span className="rounded-full border border-brand-coral/40 bg-brand-coral/15 px-3 py-1 text-[13px] font-semibold text-white">
-                {beta.status}
+                <LaunchCountdown />
               </span>
             </div>
             <h2 className="mt-4 text-3xl leading-tight font-bold tracking-tight text-white sm:text-4xl">
@@ -25,13 +26,32 @@ export function BetaSection() {
             <p className="mt-5 max-w-lg text-lg leading-relaxed text-neutral-250">
               {beta.body}
             </p>
-            <div className="mt-6 inline-flex max-w-lg items-center gap-3 rounded-2xl border border-brand-coral/35 bg-brand-coral/12 px-4 py-3">
+            <div className="mt-6 flex max-w-lg items-center gap-3 rounded-2xl border border-brand-coral/35 bg-brand-coral/12 px-4 py-4">
               <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-coral text-brand-ink">
                 <Gift size={18} aria-hidden="true" />
               </span>
-              <p className="text-[15px] leading-snug text-neutral-250">
-                {beta.perkLabel} · <strong className="font-bold text-white">{beta.perk}</strong>
-              </p>
+              <div>
+                <p className="text-sm font-semibold text-brand-coral">{beta.perkLabel}</p>
+                <p className="mt-1 text-lg font-bold text-white">{beta.perk}</p>
+                <p className="mt-1 text-xs text-neutral-250">사전등록·설문 참여 여부와 관계없이 드려요.</p>
+              </div>
+            </div>
+            <div className="survey-reward mt-4 max-w-lg">
+              <div className="survey-reward__heading">
+                <span>별도 설문 이벤트</span><span>추첨 5명</span>
+              </div>
+              <div className="survey-reward__main">
+                <img src="/assets/open-beta/baemin-giftcard-10000.jpg" width="400" height="400" loading="lazy" alt="배달의민족 모바일 상품권 1만원권" />
+                <div>
+                  <h3>써본 이야기를 들려주세요.</h3>
+                  <p className="survey-reward__prize">배달의민족 상품권<br /><strong>10,000원 × 5명</strong></p>
+                </div>
+              </div>
+              <dl className="survey-reward__details">
+                <div><dt>응모 기간</dt><dd>2026.10.21–11.11<br /><small>오픈베타 공개일부터 · 10.21 공개 예정</small></dd></div>
+                <div><dt>참여 방법</dt><dd>설문 작성 + 사용 화면 스크린샷 제출</dd></div>
+              </dl>
+              <p className="survey-reward__notice">설문 링크와 추첨·당첨 발표 일정은 이 페이지에서 추후 안내합니다. 경품은 모바일 상품권으로 발송됩니다.</p>
             </div>
             <p className="mt-8 text-sm font-semibold text-white">{beta.updatesLabel}</p>
             <ul className="mt-3 grid max-w-lg gap-3">

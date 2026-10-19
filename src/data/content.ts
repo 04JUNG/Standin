@@ -6,9 +6,9 @@ export const nav = {
   links: [
     { label: "이미지 입력", href: "#input" },
     { label: "처리 과정", href: "#process" },
+    { label: "문장 검색·체형", href: "#features" },
     { label: "활용 결과", href: "#result" },
   ],
-  launchStatus: "오픈베타 준비 중",
   launchHref: "#beta",
 };
 
@@ -16,7 +16,6 @@ export const hero = {
   eyebrow: "WEBTOON 3D POSE TOOL",
   title: "Standin — 러프 이미지로 찾는 웹툰 3D 포즈",
   body: "그림 위에 마우스를 올려 Standin이 찾은 같은 자세의 3D 인형을 직접 비교해 보세요.",
-  launchBadge: "오픈베타 준비 중",
   primaryCta: "오픈베타 사전등록",
   // 가이드 페이지에서도 쓰므로 루트 기준 hash로 둔다.
   primaryHref: "/#beta",
@@ -192,13 +191,12 @@ export const clipStudio = {
 export const beta = {
   program: "open-beta",
   eyebrow: "OPEN BETA",
-  status: "준비 중",
-  title: "오픈베타 소식을 먼저 받아보세요.",
-  body: "더 많은 작가님이 Standin을 사용할 수 있도록 오픈베타를 준비하고 있습니다. 사전등록을 남기면 공개 일정과 참여 방법을 이메일로 안내합니다.",
-  perkLabel: "사전등록 혜택",
+  title: "10월 21일, 함께 시작해요.",
+  body: "2026년 10월 21일 오픈베타를 공개할 예정입니다. 사전등록을 남기면 공개 소식과 참여 방법을 이메일로 안내합니다.",
+  perkLabel: "오픈베타 참여자 전원",
   perk: "정식 출시 후 1개월 무료 이용",
   updatesLabel: "오픈베타에서 달라지는 점",
-  // 아직 공개되지 않은 기능은 현재 기능처럼 보이지 않도록 upcoming으로 구분해 표시한다.
+  // 구현된 기능이며, 오픈베타 공개일부터 참여자가 사용할 수 있다.
   updates: [
     {
       title: "자연어 포즈 검색",
@@ -211,12 +209,12 @@ export const beta = {
       upcoming: false,
     },
     {
-      title: "체형 조절·다양한 3D 모델",
-      body: "체형을 조절해 저장하고, 사용하던 3D 모델도 불러와 쓸 수 있습니다.",
-      upcoming: true,
+      title: "직접 조절하는 체형 · 러프에 맞춘 자동 체형",
+      body: "키·등신·어깨·팔다리 비율을 직접 조절하거나, 러프에 맞춘 자동 체형에서 시작할 수 있습니다.",
+      upcoming: false,
     },
   ],
-  badges: { added: "추가됨", upcoming: "오픈베타 공개 예정" },
+  badges: { added: "구현 완료", upcoming: "오픈베타 공개 예정" },
   note: "설치 파일은 오픈베타 공개와 함께 제공합니다. 가격·결제 정보는 받지 않습니다.",
   emailLabel: "이메일",
   emailPlaceholder: "artist@example.com",

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./open-beta.css";
 
 /* Policy links and operator information shared by every page. */
 .site-footer {
