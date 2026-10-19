@@ -27,6 +27,9 @@ export function FeatureAnimation({ id, label, caption }: Props) {
       <div className="feature-animation__frame">
         <video ref={ref} src={`/assets/open-beta/${id}.mp4?v=${version}`} poster={`/assets/open-beta/${id}-poster.jpg?v=${version}`} width="1120" height="700" muted loop playsInline preload="none" aria-label={label}
           onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} />
+      </div>
+      <figcaption>
+        <span>{caption}</span>
         <button type="button" className="feature-animation__control" onClick={() => {
           manuallyPaused.current = playing;
           if (playing) ref.current?.pause();
@@ -35,8 +38,7 @@ export function FeatureAnimation({ id, label, caption }: Props) {
           {playing ? <Pause size={14} aria-hidden="true" /> : <Play size={14} aria-hidden="true" />}
           {playing ? "일시정지" : "재생"}
         </button>
-      </div>
-      <figcaption>{caption}</figcaption>
+      </figcaption>
     </figure>
   );
 }
