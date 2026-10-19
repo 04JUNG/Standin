@@ -1,233 +1,231 @@
-"""Render storyboard animations from the real library previews and existing CSP frame.
+"""Edit actual body-control footage and author labeled search/auto-fit storyboards.
 
-These are edited feature demonstrations, not recordings or measured search results.
-Requires Pillow, numpy and imageio-ffmpeg. Paths are authoring inputs, never production dependencies.
+Requires Pillow, numpy, imageio-ffmpeg, and Windows Malgun Gothic.
+Search candidates are curated examples, not measured search/inference results.
 """
 from pathlib import Path
 import argparse
 import json
+import subprocess
 import sys
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps
+from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tmp/media-tools.local"))
 import imageio_ffmpeg
 
-W, H, FPS, SECONDS = 1120, 700, 12, 10
+W, H, FPS = 1120, 700, 12
 OUT = ROOT / "public/assets/open-beta"
+SOURCE = OUT / "source"
 INK, CORAL, MUTED = "#152238", "#ff6b57", "#667085"
-FONT = Path("C:/Windows/Fonts/malgun.ttf")
-BOLD = Path("C:/Windows/Fonts/malgunbd.ttf")
 FONTS = {}
-ROUGH_CACHE = {}
+FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
+
 
 def font(size=18, bold=False):
     key = (size, bold)
     if key not in FONTS:
-        FONTS[key] = ImageFont.truetype(str(BOLD if bold else FONT), size)
+        FONTS[key] = ImageFont.truetype("C:/Windows/Fonts/malgunbd.ttf" if bold else "C:/Windows/Fonts/malgun.ttf", size)
     return FONTS[key]
+
 
 def text(im, xy, value, size=18, color=INK, bold=False):
     ImageDraw.Draw(im).text(xy, value, font=font(size, bold), fill=color)
 
+
 def box(im, bounds, fill="white", radius=12, outline=None, width=1):
     ImageDraw.Draw(im).rounded_rectangle(bounds, radius=radius, fill=fill, outline=outline, width=width)
+
 
 def ease(t):
     t = min(1, max(0, t))
     return t*t*(3-2*t)
 
+
 def cursor(im, x, y, press=False):
     d = ImageDraw.Draw(im)
-    if press: d.ellipse((x-13, y-13, x+13, y+13), outline=CORAL, width=3)
+    if press:
+        d.ellipse((x-13, y-13, x+13, y+13), outline=CORAL, width=3)
     d.polygon([(x,y),(x+5,y+26),(x+12,y+18),(x+22,y+20)], fill="white", outline=INK)
 
-def cutout(image):
-    im = image.convert("RGBA")
-    arr = np.array(im)
-    # Library thumbnails have a uniform gray background. Keep the actual rendered mesh.
-    bg = arr[0, 0, :3].astype(float)
-    dist = np.max(np.abs(arr[:,:,:3].astype(float)-bg), axis=2)
-    arr[:,:,3] = np.clip((dist-6)*30, 0, 255).astype(np.uint8)
-    result = Image.fromarray(arr)
-    bbox = result.getbbox()
-    return result.crop(bbox) if bbox else result
 
-def place(im, sprite, center, height, width_factor=1, opacity=1):
-    size = (int(sprite.width*height/sprite.height*width_factor), int(height))
-    spr = sprite.resize(size, Image.Resampling.LANCZOS)
-    if opacity < 1: spr.putalpha(spr.getchannel("A").point(lambda x:int(x*opacity)))
-    im.alpha_composite(spr, (int(center[0]-size[0]/2), int(center[1]-size[1]/2)))
+def place(im, sprite, bounds, opacity=1):
+    x,y,w,h = bounds
+    ratio = min(w/sprite.width, h/sprite.height)
+    spr = sprite.resize((round(sprite.width*ratio), round(sprite.height*ratio)), Image.Resampling.LANCZOS)
+    if opacity < 1:
+        spr.putalpha(spr.getchannel("A").point(lambda value: int(value*opacity)))
+    im.alpha_composite(spr,(round(x+(w-spr.width)/2),round(y+(h-spr.height)/2)))
 
-def silhouette(sprite):
-    key = (sprite.size, sprite.getchannel("A").tobytes())
-    if key in ROUGH_CACHE:
-        return ROUGH_CACHE[key]
-    # Fill mesh shading holes and draw an antialiased outline at larger resolution.
-    mask = ImageOps.expand(sprite.getchannel("A").point(lambda p: 255 if p > 30 else 0), border=2)
-    ImageDraw.floodfill(mask, (0, 0), 128)
-    mask = mask.point(lambda p: 0 if p == 128 else 255).crop((2,2,sprite.width+2,sprite.height+2))
-    mask = mask.resize((sprite.width*3,sprite.height*3),Image.Resampling.LANCZOS).filter(ImageFilter.GaussianBlur(2))
-    mask = mask.point(lambda p: 255 if p > 100 else 0)
-    edge = Image.fromarray(np.maximum(0, np.array(mask.filter(ImageFilter.MaxFilter(5))).astype(int)-np.array(mask.filter(ImageFilter.MinFilter(5))).astype(int)).astype(np.uint8))
-    edge = edge.filter(ImageFilter.GaussianBlur(.6)).point(lambda p:int(p*.72))
-    result = Image.new("RGBA", mask.size, (85,139,204,0))
-    result.putalpha(edge)
-    ROUGH_CACHE[key] = result
-    return result
-
-def shaped(sprite, value):
-    # Illustrative interpolation of body proportions, not a model-inference output.
-    split = int(sprite.height*.48)
-    top = sprite.crop((0,0,sprite.width,split))
-    legs = sprite.crop((0,split,sprite.width,sprite.height))
-    top = top.resize((int(top.width*(1-.12*value)), top.height),Image.Resampling.LANCZOS)
-    legs = legs.resize((int(legs.width*(1-.07*value)), int(legs.height*(1+.20*value))),Image.Resampling.LANCZOS)
-    canvas = Image.new("RGBA", (sprite.width,top.height+legs.height))
-    canvas.alpha_composite(top,((sprite.width-top.width)//2,0))
-    canvas.alpha_composite(legs,((sprite.width-legs.width)//2,top.height))
-    return canvas
 
 def base(background, step):
     im = background.copy()
-    # Replace only the drawing canvas with a storyboard example; preserve CSP chrome.
-    ImageDraw.Draw(im).rectangle((236,77,644,634),fill="#fffefa")
-    for y in range(110,630,46): ImageDraw.Draw(im).line((244,y,636,y),fill="#eff2f7")
-    box(im,(262,94,457,126),fill="#edf2fa",radius=8)
-    text(im,(275,100),"작업 중인 러프",15,MUTED,True)
     ImageDraw.Draw(im).rectangle((0,654,W,H),fill=INK)
-    text(im,(24,668),step,18,"white",True)
-    text(im,(864,671),"화면·동작 재구성 예시",13,"#bcc9da")
+    text(im,(22,667),step,18,"white",True)
+    text(im,(874,670),"화면·동작 연출 예시",13,"#bcc9da")
     return im
 
-def window(im, title, badge=""):
-    box(im,(505,75,1095,632),fill="#ffffff",radius=16,outline="#d5dce7",width=2)
-    box(im,(506,76,1094,119),fill="#f4f6fa",radius=15)
-    ImageDraw.Draw(im).rectangle((507,104,1093,119),fill="#f4f6fa")
-    box(im,(520,86,543,109),INK,7)
-    text(im,(526,85),"S",16,CORAL,True)
-    text(im,(553,87),"Standin",14,INK,True)
-    text(im,(651,86),title,17,INK,True)
-    text(im,(1055,85),"—",18,MUTED)
-    if badge: text(im,(524,600),badge,13,MUTED)
 
-def make_text(t, bg, photos, posed):
-    if t < 2.2: step="01  원하는 자세를 문장으로 검색"
-    elif t < 6.3: step="02  결과를 아래로 넘기며 포즈 비교"
-    else: step="03  원하는 포즈를 선택해 작화 화면으로"
-    im=base(bg,step)
-    place(im,silhouette(posed),(376,378),330)
-    window(im,"문장으로 포즈 찾기","검색 화면 개편 예정 · 상단 검색 + 스크롤 결과 예시")
-    box(im,(524,135,1076,188),fill="#f5f7fa",radius=12,outline="#d6dde7")
-    q="역동적으로 팔을 뻗은 스포츠 자세"
-    shown=q[:int(len(q)*ease(t/1.65))]
-    text(im,(540,150),shown,18,INK,True)
-    box(im,(1009,143,1068,180),CORAL,9)
-    text(im,(1021,149),"검색",16,"white",True)
-    if t > 1.8:
-        text(im,(528,201),"포즈 라이브러리에서 살펴보기",15,MUTED)
-        grid=Image.new("RGBA",(552,360),(255,255,255,255))
-        offset=int(194*ease((t-3.4)/1.5))
-        for n in range(12):
-            x=(n%4)*140;y=(n//4)*194-offset
-            # The selected fifth tile must match the pose placed on the canvas.
-            ph=photos[(n-4)%len(photos)].resize((130,148),Image.Resampling.LANCZOS)
-            grid.paste(ph,(x,y))
-            text(grid,(x+7,y+153),f"포즈 {n+1:02}",14,INK,True)
-            text(grid,(x+7,y+174),"스포츠 · 동작",11,MUTED)
-            if n==4 and t>5.9:
-                ImageDraw.Draw(grid).rectangle((x+1,y+1,x+128,y+147),outline=CORAL,width=4)
-        im.alpha_composite(grid,(524,227))
-        ImageDraw.Draw(im).rounded_rectangle((1082,234+int(98*ease((t-3.4)/1.5)),1086,324+int(98*ease((t-3.4)/1.5))),radius=2,fill="#bbc4d2")
-    if t<2.2: cursor(im,1039,161,1.8<t<2.2)
-    elif t<6.3: cursor(im,950,404)
+def window(im, title, x, y, w, h):
+    box(im,(x+3,y+5,x+w+4,y+h+7),fill="#69717e",radius=15)
+    box(im,(x,y,x+w,y+h),fill="white",radius=15,outline="#d5dce7",width=2)
+    box(im,(x+1,y+1,x+w-1,y+43),fill="#f4f6fa",radius=14)
+    ImageDraw.Draw(im).rectangle((x+2,y+28,x+w-2,y+43),fill="#f4f6fa")
+    box(im,(x+15,y+11,x+38,y+34),INK,7)
+    text(im,(x+21,y+10),"S",16,CORAL,True)
+    text(im,(x+49,y+11),"Standin",14,INK,True)
+    text(im,(x+155,y+10),title,17,INK,True)
+    text(im,(x+w-39,y+9),"—",18,MUTED)
+
+
+def make_text(t, bg, candidates):
+    step = "01  러프 없이, 원하는 자세를 문장으로" if t < 3 else "02  검을 든 전투 포즈를 스크롤하며 비교" if t < 8 else "03  마음에 드는 포즈 선택"
+    im = base(bg,step)
+    if t < .6:
+        return im.convert("RGB")
+    # Only this search window sits over the blank canvas, with no capture bar.
+    window(im,"문장으로 포즈 찾기",306,65,740,566)
+    box(im,(326,125,1026,176),fill="#f5f7fa",outline="#d6dde7")
+    query="검을 들고 싸우는 전투 자세"
+    typed=query[:int(len(query)*ease((t-.8)/1.5))]
+    text(im,(343,140),typed,20,INK,True)
+    box(im,(948,133,1018,168),CORAL,9)
+    text(im,(967,139),"검색",16,"white",True)
+    if t >= 2.6:
+        text(im,(329,188),"전투 · 검술 포즈",16,INK,True)
+        text(im,(838,190),"후보를 직접 비교하세요",13,MUTED)
+        grid=Image.new("RGBA",(700,359),"white")
+        offset=round(228*ease((t-5)/1.7))
+        for n,item in enumerate(candidates):
+            x=(n%3)*235
+            y=(n//3)*228-offset
+            grid.paste(item["image"],(x,y))
+            text(grid,(x+7,y+190),item["label"],14,INK,True)
+            text(grid,(x+7,y+211),item["angle"]+" · 전투",11,MUTED)
+            if n == 3 and t >= 8:
+                ImageDraw.Draw(grid).rounded_rectangle((x+1,y+1,x+223,y+185),radius=7,outline=CORAL,width=4)
+                box(grid,(x+157,y+9,x+215,y+33),CORAL,12)
+                text(grid,(x+168,y+13),"선택",12,"white",True)
+        im.alpha_composite(grid,(326,219))
+        box(im,(1033,223+round(offset*.4),1037,317+round(offset*.4)),"#bbc4d2",2)
+    text(im,(328,599),"개편 예정 화면 · 전투 포즈를 선별한 시연 예시",13,MUTED)
+    if t < 2.6:
+        cursor(im,984,155,2.3<t<2.6)
+    elif t < 8:
+        cursor(im,998,439)
     else:
-        p=ease((t-6.3)/1.3)
-        cursor(im,582+(376-582)*p,350+(400-350)*p,6.3<t<6.5)
-        if p>0: place(im,posed,(582+(376-582)*p,350+(378-350)*p),190+140*p,opacity=.35+.65*p)
-        if p>.95:
-            box(im,(270,550,474,589),fill="#e6f2ed",radius=9)
-            text(im,(287,559),"선택한 포즈로 시작",16,"#287052",True)
+        cursor(im,454,337,8<t<8.25)
     return im.convert("RGB")
 
-def make_manual(t,bg,body,posed):
-    value=ease((t-2)/3.3)
-    im=base(bg,"01  시작 체형 선택" if t<2 else "02  러프를 보며 비율 조절" if t<6.6 else "03  내 체형으로 저장하고 적용")
-    target=shaped(posed,1)
-    place(im,silhouette(target),(376,380),350)
-    if t>6.6: place(im,shaped(posed,value),(376,380),350,opacity=ease((t-6.6)/.8))
-    window(im,"새 체형 만들기","키·등신·어깨·팔다리 비율을 조절하는 시연 예시")
-    box(im,(526,140,758,546),fill="#eef1f4",radius=12)
-    text(im,(541,153),"미리보기",15,INK,True)
-    place(im,shaped(body,value),(641,351),310+value*22)
-    text(im,(779,144),"카드 이름",14,MUTED)
-    box(im,(779,174,1073,218),fill="white",radius=8,outline="#d6dde7")
-    text(im,(792,185),"주인공 A",17,INK,True)
-    text(im,(779,242),"체형 조절",19,INK,True)
-    params=[("키",178+8*value,"cm",.48+.22*value),("등신",7.2+.8*value,"",.43+.25*value),("어깨",.2*value,"",.48-.08*value),("다리 길이",.35*value,"",.5+.3*value)]
-    for i,(name,num,unit,progress) in enumerate(params):
-        y=287+i*63
-        text(im,(780,y),name,15,INK,True)
-        label=f"{num:.0f}{unit}" if unit else f"{num:.2f}"
-        text(im,(1018,y),label,14,MUTED)
-        ImageDraw.Draw(im).line((783,y+35,1062,y+35),fill="#d9dfe7",width=7)
-        ImageDraw.Draw(im).line((783,y+35,783+279*progress,y+35),fill=CORAL,width=7)
-        ImageDraw.Draw(im).ellipse((775+279*progress,y+27,791+279*progress,y+43),fill=CORAL)
-    box(im,(883,554,1074,588),fill=CORAL if t<7 else "#287052",radius=9)
-    text(im,(915,561),"내 체형 저장" if t<7 else "저장 완료",15,"white",True)
-    if t<6.6: cursor(im,783+279*(.43+.25*value),385,2<t<2.3)
-    else: cursor(im,976,573,6.6<t<7)
+
+def fit_variant(sprite, amount):
+    # Illustration only; final pose is the existing matched rough/3D concept pair.
+    split=round(sprite.height*.49)
+    top=sprite.crop((0,0,sprite.width,split))
+    bottom=sprite.crop((0,split,sprite.width,sprite.height))
+    top=top.resize((round(top.width*(1.16-.16*amount)),top.height),Image.Resampling.LANCZOS)
+    bottom=bottom.resize((round(bottom.width*(1.06-.06*amount)),round(bottom.height*(.82+.18*amount))),Image.Resampling.LANCZOS)
+    result=Image.new("RGBA",(top.width,top.height+bottom.height))
+    result.alpha_composite(top,(0,0))
+    result.alpha_composite(bottom,((top.width-bottom.width)//2,top.height))
+    return result
+
+
+def make_auto(t,bg,rough,mannequin):
+    amount=ease((t-2.5)/2.8)
+    step="01  웹툰 러프의 인물 확인" if t<2.5 else "02  러프에 맞춰 체형 변경" if t<6.8 else "03  비율을 비교하고 필요한 부분만 조절"
+    im=base(bg,step)
+    # Existing blue-pencil webtoon rough including anatomical construction lines.
+    place(im,rough,(246,112,345,501))
+    window(im,"러프에 맞춘 체형",606,76,488,556)
+    text(im,(626,137),"같은 포즈, 내 캐릭터의 비율로",20,INK,True)
+    box(im,(625,187,844,491),"#f3f5f8",12)
+    box(im,(857,187,1075,491),"#f3f5f8",12,outline=CORAL if t>4.7 else "#dce2e9",width=2)
+    text(im,(640,202),"기본 체형",14,MUTED,True)
+    text(im,(869,202),"러프에 맞춘 체형",14,INK,True)
+    place(im,fit_variant(mannequin,0),(636,243,198,226))
+    place(im,fit_variant(mannequin,amount),(866,243,198,226))
+    box(im,(626,514,1075,575),"#edf5f5",10)
+    text(im,(643,526),"러프의 비율을 살펴보는 중" if t<5.1 else "체형 확인 후, 직접 세부 조절",18,"#286f70",True)
+    text(im,(643,553),"러프 입력 → 체형 확인 → 작가의 최종 선택",12,MUTED)
+    text(im,(627,598),"러프·체형 비교 연출 예시",13,MUTED)
+    if t>6.8:
+        place(im,mannequin,(246,112,345,501),.78*ease((t-6.8)/.9))
+    cursor(im,993,545,6.8<t<7.1)
     return im.convert("RGB")
 
-def make_auto(t,bg,body,posed):
-    value=ease((t-2.5)/2.7)
-    target=shaped(posed,1)
-    im=base(bg,"01  러프의 인물 확인" if t<2.5 else "02  러프에 맞춘 체형으로 자동 변경" if t<6.8 else "03  결과를 확인하고 필요한 부분만 조절")
-    place(im,silhouette(target),(376,380),350)
-    window(im,"러프에 맞춘 체형","결과는 입력 이미지에 따라 달라집니다 · 기능 시연 예시")
-    text(im,(528,139),"러프와 맞춰보고, 직접 결정하세요.",20,INK,True)
-    box(im,(527,190,784,500),fill="#f1f3f6",radius=12)
-    box(im,(801,190,1075,500),fill="#f1f3f6",radius=12,outline=CORAL if t>4.7 else "#d9dfe7",width=2)
-    text(im,(548,203),"기본 체형",15,MUTED,True)
-    text(im,(820,203),"러프에 맞춘 체형",15,INK,True)
-    place(im,body,(654,365),235)
-    place(im,shaped(body,value),(935,365),235+20*value)
-    if t<5.2:
-        y=int(230+235*((t*.45)%1))
-        ImageDraw.Draw(im).line((811,y,1065,y),fill="#8ed8e8",width=3)
-    if t>2.5: place(im,shaped(posed,value),(376,380),310+40*value,opacity=.75*value)
-    box(im,(528,518,1075,580),fill="#edf5f5",radius=10)
-    text(im,(546,531),"러프의 비율을 살펴보는 중" if t<4.9 else "자동 체형에서 시작 · 필요하면 직접 조절",18,"#286f70",True)
-    text(im,(546,557),"분석 → 체형 확인 → 작가의 최종 선택",12,MUTED)
-    cursor(im,960,545,t>6.8 and t<7.1)
-    return im.convert("RGB")
 
-def export(kind, frames):
-    poster_index={"text-search":66,"body-manual":71,"body-auto":75}[kind]
-    frames[poster_index].save(OUT/f"{kind}-poster.jpg",quality=92)
+def ffmpeg(*args):
+    result=subprocess.run([FFMPEG,"-y","-hide_banner","-loglevel","error",*map(str,args)],capture_output=True,text=True)
+    if result.returncode:
+        raise RuntimeError(result.stderr)
+
+
+def gif_from_mp4(kind):
+    filters="fps=10,scale=896:560:flags=lanczos,split[a][b];[a]palettegen=max_colors=128:stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=4"
+    ffmpeg("-i",OUT/f"{kind}.mp4","-filter_complex",filters,"-loop","0",OUT/f"{kind}.gif")
+
+
+def export(kind,frames,poster):
+    frames[round(poster*FPS)].save(OUT/f"{kind}-poster.jpg",quality=92)
     writer=imageio_ffmpeg.write_frames(str(OUT/f"{kind}.mp4"),(W,H),fps=FPS,codec="libx264",quality=8,macro_block_size=2,output_params=["-movflags","+faststart","-pix_fmt","yuv420p"])
     writer.send(None)
-    for frame in frames: writer.send(np.asarray(frame))
+    for frame in frames:
+        writer.send(np.asarray(frame))
     writer.close()
-    # GIF is the portable editing/share master; MP4 keeps the landing lightweight.
-    small=[frame.resize((896,560),Image.Resampling.LANCZOS).quantize(colors=128) for frame in frames]
-    small[0].save(OUT/f"{kind}.gif",save_all=True,append_images=small[1:],duration=round(1000/FPS),loop=0,optimize=False)
-    print(kind, {s:(OUT/f"{kind}.{s}").stat().st_size for s in ("gif","mp4")},flush=True)
+    gif_from_mp4(kind)
+    print(kind,{s:(OUT/f"{kind}.{s}").stat().st_size for s in ("gif","mp4")},flush=True)
+
+
+def manual_recording(path):
+    # Only Standin's actual controls, live shape changes and saved card. No audio.
+    temporary=ROOT/"tmp/media-tools.local/body-manual-edit.mp4"
+    temporary.parent.mkdir(parents=True,exist_ok=True)
+    ffmpeg("-i",path,"-vf","trim=start=0.8:end=31.8,setpts=(PTS-STARTPTS)/1.8,fps=15,scale=1120:700:flags=lanczos","-t",str(31/1.8),"-an","-c:v","libx264","-crf","18","-pix_fmt","yuv420p",temporary)
+    reader=imageio_ffmpeg.read_frames(str(temporary),pix_fmt="rgb24")
+    next(reader)
+    writer=imageio_ffmpeg.write_frames(str(OUT/"body-manual.mp4"),(W,H),fps=15,codec="libx264",quality=8,macro_block_size=2,output_params=["-movflags","+faststart"])
+    writer.send(None)
+    for index,pixels in enumerate(reader):
+        frame=Image.frombytes("RGB",(W,H),pixels)
+        if index >= 218:
+            # Focus the final saved card, excluding unrelated model-library filters.
+            frame=frame.crop((0,0,944,590)).resize((W,H),Image.Resampling.LANCZOS)
+        writer.send(np.asarray(frame))
+    writer.close()
+    ffmpeg("-ss","6","-i",OUT/"body-manual.mp4","-frames:v","1","-q:v","2",OUT/"body-manual-poster.jpg")
+    gif_from_mp4("body-manual")
+    print("body-manual: edited actual app recording",flush=True)
+
 
 if __name__=="__main__":
     parser=argparse.ArgumentParser()
-    parser.add_argument("--library-root",type=Path,required=True)
-    parser.add_argument("--body-image",type=Path,required=True)
+    parser.add_argument("--body-recording",type=Path,help="User-supplied Standin recording; omit to retain its current edit")
     args=parser.parse_args()
-    OUT.mkdir(parents=True,exist_ok=True)
-    names=["UAL2__OverhandThrow__p01_f0010__three_quarter.jpg","UAL2__OverhandThrow__p02_f0021__three_quarter.jpg","Baseball Hit_00033__three_quarter.jpg","Baseball Hit_00054__three_quarter.jpg","Baseball Hit_00111__three_quarter.jpg","Boxing_01__three_quarter.jpg","Boxing_02__three_quarter.jpg","Boxing_03__three_quarter.jpg","Arm Stretching_00054__three_quarter.jpg","Arm Stretching_00129__three_quarter.jpg"]
-    photos=[Image.open(args.library_root/n).convert("RGB") for n in names]
-    body=Image.open(args.body_image).convert("RGBA")
-    body=body.crop(body.getbbox())
-    posed=cutout(photos[0])
-    background=Image.open(ROOT/"public/assets/workspace/clip-studio-reference.png").convert("RGBA").resize((W,661),Image.Resampling.LANCZOS)
+    choices=json.loads((SOURCE/"sword-candidates.json").read_text(encoding="utf-8"))
+    candidates=[]
+    for item in choices:
+        card=Image.new("RGB",(225,186),"#999999")
+        photo=Image.open(SOURCE/item["file"]).convert("RGB").resize((186,186),Image.Resampling.LANCZOS)
+        card.paste(photo,(19,0))
+        candidates.append({**item,"image":card})
+    background=Image.open(SOURCE/"clip-studio-blank.png").convert("RGBA").resize((W,661),Image.Resampling.LANCZOS)
     bg=Image.new("RGBA",(W,H),INK);bg.alpha_composite(background)
-    for kind,renderer in [("text-search",lambda t:make_text(t,bg,photos,posed)),("body-manual",lambda t:make_manual(t,bg,body,posed)),("body-auto",lambda t:make_auto(t,bg,body,posed))]:
-        export(kind,[renderer(i/FPS) for i in range(FPS*SECONDS)])
-    (OUT/"sources.json").write_text(json.dumps({"kind":"reconstructed feature demonstration; not a screen recording", "libraryPreviews":names,"bodyPreview":args.body_image.name,"workspace":"assets/workspace/clip-studio-reference.png","plannedUi":"Text search top search bar and scrolling results; proposed by product owner 2026-10-19","bodyInterpolation":"Illustrative proportion interpolation, not measured inference output","giftcard":{"source":"https://www.biz-con.co.kr/bizconshop/productDetail.do?categoryId=&productId=S0226973","image":"https://www.biz-con.co.kr/upload/images/202507/400_20250722133038387_10000.jpg","retrieved":"2026-10-19"}},ensure_ascii=False,indent=2),encoding="utf-8")
+    rough=Image.open(ROOT/"public/assets/hero-poses/pose-showcase-run-rough-cutout.png").convert("RGBA")
+    mannequin=Image.open(ROOT/"public/assets/hero-poses/pose-showcase-run-mannequin-cutout.png").convert("RGBA")
+    export("text-search",[make_text(i/FPS,bg,candidates) for i in range(FPS*12)],4.2)
+    export("body-auto",[make_auto(i/FPS,bg,rough,mannequin) for i in range(FPS*10)],5.8)
+    if args.body_recording:
+        manual_recording(args.body_recording)
+    manifest=json.loads((OUT/"sources.json").read_text(encoding="utf-8"))
+    for key in ("libraryPreviews","bodyPreview","bodyInterpolation","workspace"):
+        manifest.pop(key,None)
+    manifest.update({
+        "kind":"Actual body-control recording plus explicitly reconstructed search/auto-fit demonstrations",
+        "manual":{"source":"User-supplied Standin screen recording, 2026-10-19 174044","trimSeconds":[0.8,31.8],"speed":1.8,"audio":False,"finalShot":"Cropped to focus the saved card, excluding unrelated model-library filters"},
+        "workspace":"source/clip-studio-blank.png — user-supplied blank Clip Studio canvas, 2026-10-19",
+        "search":{"candidates":choices,"selection":"Curated authored sword-pose previews, not a live search or ranking measurement","attribution":"Standin-authored body poses, hand shapes and primitive sword guides; source rig from Quaternius Universal Animation Library (CC0)"},
+        "autoFit":{"rough":"assets/hero-poses/pose-showcase-run-rough-cutout.png","mannequin":"assets/hero-poses/pose-showcase-run-mannequin-cutout.png","method":"Existing matched webtoon rough and 3D concept assets, with illustrative body-proportion interpolation; not an inference recording"}
+    })
+    (OUT/"sources.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding="utf-8")

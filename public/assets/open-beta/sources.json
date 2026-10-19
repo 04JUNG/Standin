@@ -1,24 +1,85 @@
 {
-  "kind": "reconstructed feature demonstration; not a screen recording",
-  "libraryPreviews": [
-    "UAL2__OverhandThrow__p01_f0010__three_quarter.jpg",
-    "UAL2__OverhandThrow__p02_f0021__three_quarter.jpg",
-    "Baseball Hit_00033__three_quarter.jpg",
-    "Baseball Hit_00054__three_quarter.jpg",
-    "Baseball Hit_00111__three_quarter.jpg",
-    "Boxing_01__three_quarter.jpg",
-    "Boxing_02__three_quarter.jpg",
-    "Boxing_03__three_quarter.jpg",
-    "Arm Stretching_00054__three_quarter.jpg",
-    "Arm Stretching_00129__three_quarter.jpg"
-  ],
-  "bodyPreview": "standin-master-v2.png",
-  "workspace": "assets/workspace/clip-studio-reference.png",
+  "kind": "Actual body-control recording plus explicitly reconstructed search/auto-fit demonstrations",
   "plannedUi": "Text search top search bar and scrolling results; proposed by product owner 2026-10-19",
-  "bodyInterpolation": "Illustrative proportion interpolation, not measured inference output",
   "giftcard": {
     "source": "https://www.biz-con.co.kr/bizconshop/productDetail.do?categoryId=&productId=S0226973",
     "image": "https://www.biz-con.co.kr/upload/images/202507/400_20250722133038387_10000.jpg",
     "retrieved": "2026-10-19"
-  }
+  },
+  "manual": {
+    "source": "User-supplied Standin screen recording, 2026-10-19 174044",
+    "trimSeconds": [
+      0.8,
+      31.8
+    ],
+    "speed": 1.8,
+    "audio": false,
+    "finalShot": "Cropped to focus the saved card, excluding unrelated model-library filters"
+  },
+  "search": {
+    "candidates": [
+      {
+        "file": "sword-01.jpg",
+        "label": "도약 베기",
+        "angle": "사선",
+        "source": "webtoon-dynamic-20261004/character-thumbs/823ffe0724992451/dynamic_fantasy_leap_slash__three_quarter.jpg"
+      },
+      {
+        "file": "sword-02.jpg",
+        "label": "검을 든 경계",
+        "angle": "사선",
+        "source": "webtoon-dynamic-20261004/character-thumbs/823ffe0724992451/dynamic_fantasy_reverse_guard__three_quarter.jpg"
+      },
+      {
+        "file": "sword-03.jpg",
+        "label": "어깨 뒤 공격 준비",
+        "angle": "사선",
+        "source": "exaggerated-action-20261009-r2/character-thumbs/0063d60bd64fa0e2/exaggerated_sword_shoulder__three_quarter.jpg"
+      },
+      {
+        "file": "sword-04.jpg",
+        "label": "도약 베기",
+        "angle": "정면",
+        "source": "webtoon-dynamic-20261004/character-thumbs/823ffe0724992451/dynamic_fantasy_leap_slash__front.jpg"
+      },
+      {
+        "file": "sword-05.jpg",
+        "label": "검을 든 경계",
+        "angle": "정면",
+        "source": "webtoon-dynamic-20261004/character-thumbs/823ffe0724992451/dynamic_fantasy_reverse_guard__front.jpg"
+      },
+      {
+        "file": "sword-06.jpg",
+        "label": "어깨 뒤 공격 준비",
+        "angle": "정면",
+        "source": "exaggerated-action-20261009-r2/character-thumbs/0063d60bd64fa0e2/exaggerated_sword_shoulder__front.jpg"
+      },
+      {
+        "file": "sword-07.jpg",
+        "label": "도약 베기",
+        "angle": "측면",
+        "source": "webtoon-dynamic-20261004/character-thumbs/823ffe0724992451/dynamic_fantasy_leap_slash__side.jpg"
+      },
+      {
+        "file": "sword-08.jpg",
+        "label": "검을 든 경계",
+        "angle": "측면",
+        "source": "webtoon-dynamic-20261004/character-thumbs/823ffe0724992451/dynamic_fantasy_reverse_guard__side.jpg"
+      },
+      {
+        "file": "sword-09.jpg",
+        "label": "어깨 뒤 공격 준비",
+        "angle": "측면",
+        "source": "exaggerated-action-20261009-r2/character-thumbs/0063d60bd64fa0e2/exaggerated_sword_shoulder__side.jpg"
+      }
+    ],
+    "selection": "Curated authored sword-pose previews, not a live search or ranking measurement",
+    "attribution": "Standin-authored body poses, hand shapes and primitive sword guides; source rig from Quaternius Universal Animation Library (CC0)"
+  },
+  "autoFit": {
+    "rough": "assets/hero-poses/pose-showcase-run-rough-cutout.png",
+    "mannequin": "assets/hero-poses/pose-showcase-run-mannequin-cutout.png",
+    "method": "Existing matched webtoon rough and 3D concept assets, with illustrative body-proportion interpolation; not an inference recording"
+  },
+  "workspace": "source/clip-studio-blank.png — user-supplied blank Clip Studio canvas, 2026-10-19"
 }

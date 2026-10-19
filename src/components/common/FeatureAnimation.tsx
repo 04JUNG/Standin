@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Pause, Play } from "lucide-react";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 
-type Props = { id: string; label: string };
+type Props = { id: string; label: string; caption: string };
 
 /** GIF masters are also supplied; the page streams the smaller video version. */
-export function FeatureAnimation({ id, label }: Props) {
+export function FeatureAnimation({ id, label, caption }: Props) {
   const ref = useRef<HTMLVideoElement>(null);
   const manuallyPaused = useRef(false);
   const reducedMotion = useReducedMotion();
@@ -24,7 +24,7 @@ export function FeatureAnimation({ id, label }: Props) {
   return (
     <figure className="feature-animation">
       <div className="feature-animation__frame">
-        <video ref={ref} src={`/assets/open-beta/${id}.mp4`} poster={`/assets/open-beta/${id}-poster.jpg`} width="1120" height="700" muted loop playsInline preload="none" aria-label={label}
+        <video ref={ref} src={`/assets/open-beta/${id}.mp4?v=20261019-2`} poster={`/assets/open-beta/${id}-poster.jpg?v=20261019-2`} width="1120" height="700" muted loop playsInline preload="none" aria-label={label}
           onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} />
         <button type="button" className="feature-animation__control" onClick={() => {
           manuallyPaused.current = playing;
@@ -35,7 +35,7 @@ export function FeatureAnimation({ id, label }: Props) {
           {playing ? "일시정지" : "재생"}
         </button>
       </div>
-      <figcaption>기능 시연 예시 · 클립스튜디오 작업 흐름</figcaption>
+      <figcaption>{caption}</figcaption>
     </figure>
   );
 }
