@@ -2,7 +2,7 @@
 
 - Planned opening: October 21, 2026. The countdown uses Korean calendar days, updates while the page is open, and does not automatically claim the service is live after the scheduled date. SSR includes a dated fallback to avoid hydration mismatches.
 - One free month after release is for all open-beta participants, independent of preregistration or the survey.
-- The separate survey draw offers five ₩10,000 Baemin mobile gift cards. Entries run from the beta opening (October 21 planned) through November 11. Submission requires the survey and a usage screenshot. The survey URL and announcement date remain unpublished; do not point the event at the current `/feedback` redirect.
+- The separate survey event offers ten ₩10,000 Baemin mobile gift cards: five random-draw recipients plus five selected for active use and thoughtful feedback. Entries run from the beta opening (October 21 planned) through November 11. Submission requires the survey and a usage screenshot. The survey URL and announcement date remain unpublished; do not point the event at the current `/feedback` redirect.
 
 ## Demonstration assets
 
