@@ -22,7 +22,7 @@ npm run lint     # ESLint 검사
 
 ## 페이지 구조
 
-네 개의 독립 문서로 빌드된다(Vite MPA). 라우터는 쓰지 않으므로 정적 호스트에
+여덟 개의 독립 문서로 빌드된다(Vite MPA). 라우터는 쓰지 않으므로 정적 호스트에
 SPA rewrite 설정이 필요 없다.
 
 - `/` (`index.html`) — 랜딩
@@ -30,6 +30,7 @@ SPA rewrite 설정이 필요 없다.
   사용 가이드 → 오픈베타 사전등록 → FAQ → Footer`
 - `/guides/rough-to-3d-pose/` — 러프 입력·포즈 후보 비교 가이드
 - `/guides/clip-studio-pose-import/` — 선택한 결과를 클립스튜디오에서 활용하는 가이드
+- `/legal/terms/` · `/legal/privacy/` · `/legal/content-license/` · `/legal/beta/` — 약관 4종, 게시일·적용일 2026-10-19. 본문 사전 렌더링·목차·인쇄·TXT 저장 제공. 미확정 내용이 남은 문서는 검토본으로 표시하며, 배포 전 [게시 준비 기록](docs/LEGAL_PUBLICATION.md)을 확인한다.
 - `/signup` (`signup/index.html`) — 계정 만들기. 데스크톱 앱의 "웹에서 계정
   만들기" 버튼이 이 페이지를 외부 브라우저로 연다.
 

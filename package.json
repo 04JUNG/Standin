@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs && node scripts/check-seo.mjs",
+    "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs && node scripts/check-seo.mjs && node scripts/check-legal.mjs",
+    "sync:legal": "node scripts/sync-legal.mjs",
+    "check:legal": "node scripts/check-legal.mjs",
+    "check:legal-release": "node scripts/check-legal.mjs --release",
     "check:seo": "node scripts/check-seo.mjs",
     "preview": "vite preview",
     "lint": "eslint ."
