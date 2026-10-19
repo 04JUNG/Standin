@@ -38,20 +38,21 @@ export function BetaSection() {
             </div>
             <div className="survey-reward mt-4 max-w-lg">
               <div className="survey-reward__heading">
-                <span>별도 설문 이벤트</span><span>추첨 5명</span>
+                <span>별도 설문 이벤트</span><span>총 10명</span>
               </div>
               <div className="survey-reward__main">
                 <img src="/assets/open-beta/baemin-giftcard-10000.jpg" width="400" height="400" loading="lazy" alt="배달의민족 모바일 상품권 1만원권" />
                 <div>
                   <h3>써본 이야기를 들려주세요.</h3>
-                  <p className="survey-reward__prize">배달의민족 상품권<br /><strong>10,000원 × 5명</strong></p>
+                  <p className="survey-reward__prize">배달의민족 상품권<br /><strong>10,000원 × 10명</strong></p>
                 </div>
               </div>
               <dl className="survey-reward__details">
                 <div><dt>응모 기간</dt><dd>2026.10.21–11.11<br /><small>오픈베타 공개일부터 · 10.21 공개 예정</small></dd></div>
                 <div><dt>참여 방법</dt><dd>설문 작성 + 사용 화면 스크린샷 제출</dd></div>
+                <div><dt>선정 방식</dt><dd>추첨 5명 + 정성 후기 5명<br /><small>열심히 사용하고 정성껏 후기를 남겨주신 분 중 5명을 선정해요.</small></dd></div>
               </dl>
-              <p className="survey-reward__notice">설문 링크와 추첨·당첨 발표 일정은 이 페이지에서 추후 안내합니다. 경품은 모바일 상품권으로 발송됩니다.</p>
+              <p className="survey-reward__notice">설문 링크와 선정·당첨 발표 일정은 이 페이지에서 추후 안내합니다. 경품은 모바일 상품권으로 발송됩니다.</p>
             </div>
             <p className="mt-8 text-sm font-semibold text-white">{beta.updatesLabel}</p>
             <ul className="mt-3 grid max-w-lg gap-3">

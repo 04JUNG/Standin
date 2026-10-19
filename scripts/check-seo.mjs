@@ -72,7 +72,7 @@ assert.match(home, /정식 출시 후 1개월 무료 이용/, "Show the particip
 assert.match(home, /오픈베타 참여자 전원/, "Free month is for all beta participants");
 assert.match(home, /설문 작성 \+ 사용 화면 스크린샷 제출/, "Show both survey entry requirements");
 assert.match(home, /2026\.10\.21–11\.11/, "Show the survey event period");
-assert.match(home, /추첨 5명/, "Separate the prize draw from the universal perk");
+assert.match(home, /추첨 5명 \+ 정성 후기 5명/, "Show the ten-recipient survey award split separately from the universal perk");
 assert.match(home, /검색 화면 개편 예정/, "Do not present the planned search UI as released");
 assert.ok(home.includes('id="faq-availability"'), "Answer the availability question with the open beta status");
 assert.match(home, /data-launch-countdown/, "Show the progressively enhanced countdown");
