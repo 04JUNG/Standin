@@ -289,15 +289,6 @@ export const beta = {
 
 export const footer = {
   tagline: "Standin은 러프나 참고 이미지와 가까운 3D 인체 포즈 후보를 찾아주는 웹툰 작업 보조 도구입니다. 작가가 후보를 선택·조정하고 클립스튜디오에서 작화를 이어갑니다.",
-  // 푸터는 /signup 에서도 렌더되므로 hash를 루트 기준(`/#`)으로 둔다.
-  // 인덱스에서는 같은 문서 안의 hash 이동이라 동작이 그대로다.
-  links: [
-    { label: "이미지 입력", href: "/#input" },
-    { label: "처리 과정", href: "/#process" },
-    { label: "활용 결과", href: "/#result" },
-    // 개인정보 처리방침: 실제 문서 준비 전까지 비활성 처리
-    { label: "개인정보 처리방침", href: null },
-  ],
   copyright: "© 2026 Standin. All rights reserved.",
 };
 

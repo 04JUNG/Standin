@@ -5,13 +5,19 @@ import { GuidePage } from "./pages/GuidePage";
 import { guidePath, guides } from "./data/guides";
 import { footer, hero } from "./data/content";
 import { site } from "./data/site";
+import { LegalPage } from "./pages/LegalPage";
+import { legalDocuments, legalPath } from "./data/legal";
+import { legalContent } from "./data/legalContent";
 
 const origin = site.origin;
 export const publicPaths = ["/", ...guides.map(guidePath)];
+export const legalPaths = legalDocuments.map(legalPath);
+export const prerenderPaths = [...publicPaths, ...legalPaths];
 
 export function render(path: string) {
   const guide = guides.find((item) => guidePath(item) === path);
-  if (path !== "/" && !guide) throw new Error(`Unknown public page: ${path}`);
+  const legal = legalDocuments.find((item) => legalPath(item) === path);
+  if (path !== "/" && !guide && !legal) throw new Error(`Unknown public page: ${path}`);
   const url = `${origin}${path}`;
   const organization = {
     "@type": "Organization", "@id": `${origin}/#organization`, name: site.team, alternateName: site.name, url: `${origin}/`,
@@ -42,15 +48,16 @@ export function render(path: string) {
     ],
   }] : [organization, website, {
     "@type": "WebPage", "@id": `${url}#page`, url,
-    name: hero.title,
-    description: footer.tagline,
+    name: legal ? legal.label : hero.title,
+    description: legal ? legal.description : footer.tagline,
     inLanguage: "ko", isPartOf: { "@id": website["@id"] },
   }];
 
   return {
-    title: guide ? `${guide.title} | Standin` : hero.title,
-    description: guide ? guide.description : footer.tagline,
-    html: renderToString(<StrictMode>{guide ? <GuidePage guide={guide} /> : <App />}</StrictMode>),
+    title: legal ? `${legal.label} | Standin` : guide ? `${guide.title} | Standin` : hero.title,
+    description: legal ? legal.description : guide ? guide.description : footer.tagline,
+    html: renderToString(<StrictMode>{legal ? <LegalPage document={legal} /> : guide ? <GuidePage guide={guide} /> : <App />}</StrictMode>),
+    legalText: legal ? legalContent[legal.slug] : undefined,
     structuredData: JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c"),
   };
 }
