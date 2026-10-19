@@ -8,6 +8,7 @@ import { BetaSection } from "./components/sections/BetaSection";
 import { StandinIntro } from "./components/hero/StandinIntro";
 import { FaqSection } from "./components/sections/FaqSection";
 import { GuidesSection } from "./components/sections/GuidesSection";
+import { FeatureShowcaseSection } from "./components/sections/FeatureShowcaseSection";
 
 export function App() {
   return (
@@ -22,6 +23,7 @@ export function App() {
         <InputSection />
         <ProcessSection />
         <ResultSection />
+        <FeatureShowcaseSection />
         <GuidesSection />
         <BetaSection />
         <FaqSection />

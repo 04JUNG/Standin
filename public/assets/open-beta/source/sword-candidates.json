@@ -1,0 +1,56 @@
+[
+  {
+    "file": "sword-01.jpg",
+    "label": "도약 베기",
+    "angle": "사선",
+    "source": "webtoon-dynamic-20261004/character-thumbs/823ffe0724992451/dynamic_fantasy_leap_slash__three_quarter.jpg"
+  },
+  {
+    "file": "sword-02.jpg",
+    "label": "검을 든 경계",
+    "angle": "사선",
+    "source": "webtoon-dynamic-20261004/character-thumbs/823ffe0724992451/dynamic_fantasy_reverse_guard__three_quarter.jpg"
+  },
+  {
+    "file": "sword-03.jpg",
+    "label": "어깨 뒤 공격 준비",
+    "angle": "사선",
+    "source": "exaggerated-action-20261009-r2/character-thumbs/0063d60bd64fa0e2/exaggerated_sword_shoulder__three_quarter.jpg"
+  },
+  {
+    "file": "sword-04.jpg",
+    "label": "도약 베기",
+    "angle": "정면",
+    "source": "webtoon-dynamic-20261004/character-thumbs/823ffe0724992451/dynamic_fantasy_leap_slash__front.jpg"
+  },
+  {
+    "file": "sword-05.jpg",
+    "label": "검을 든 경계",
+    "angle": "정면",
+    "source": "webtoon-dynamic-20261004/character-thumbs/823ffe0724992451/dynamic_fantasy_reverse_guard__front.jpg"
+  },
+  {
+    "file": "sword-06.jpg",
+    "label": "어깨 뒤 공격 준비",
+    "angle": "정면",
+    "source": "exaggerated-action-20261009-r2/character-thumbs/0063d60bd64fa0e2/exaggerated_sword_shoulder__front.jpg"
+  },
+  {
+    "file": "sword-07.jpg",
+    "label": "도약 베기",
+    "angle": "측면",
+    "source": "webtoon-dynamic-20261004/character-thumbs/823ffe0724992451/dynamic_fantasy_leap_slash__side.jpg"
+  },
+  {
+    "file": "sword-08.jpg",
+    "label": "검을 든 경계",
+    "angle": "측면",
+    "source": "webtoon-dynamic-20261004/character-thumbs/823ffe0724992451/dynamic_fantasy_reverse_guard__side.jpg"
+  },
+  {
+    "file": "sword-09.jpg",
+    "label": "어깨 뒤 공격 준비",
+    "angle": "측면",
+    "source": "exaggerated-action-20261009-r2/character-thumbs/0063d60bd64fa0e2/exaggerated_sword_shoulder__side.jpg"
+  }
+]

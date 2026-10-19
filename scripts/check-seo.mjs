@@ -67,10 +67,15 @@ assert.ok((faq.match(/href="\/guides\//g) ?? []).length >= 5, "FAQ answers link 
 assert.ok(documents.get("/guides/rough-to-3d-pose/").includes('id="text-search"'), "Text input has addressable usage guidance");
 assert.equal((home.match(/<details\b/g) ?? []).length, 11, "Product FAQ answers must be present before JavaScript runs");
 assert.ok(home.includes('id="faq-text-search"') && home.includes('id="faq-body-type"'), "Answer text search and body type questions");
-assert.match(home, /오픈베타 공개 예정/, "Features not yet released must be labeled as upcoming");
-assert.match(home, /정식 출시 후 1개월 무료 이용/, "Show the preregistration perk");
+assert.match(home, /10월 21일 오픈베타 공개 예정/, "Show the scheduled opening date");
+assert.match(home, /정식 출시 후 1개월 무료 이용/, "Show the participant perk");
+assert.match(home, /오픈베타 참여자 전원/, "Free month is for all beta participants");
+assert.match(home, /설문 작성 \+ 사용 화면 스크린샷 제출/, "Show both survey entry requirements");
+assert.match(home, /2026\.10\.21–11\.11/, "Show the survey event period");
+assert.match(home, /추첨 5명/, "Separate the prize draw from the universal perk");
+assert.match(home, /검색 화면 개편 예정/, "Do not present the planned search UI as released");
 assert.ok(home.includes('id="faq-availability"'), "Answer the availability question with the open beta status");
-assert.match(home, /오픈베타 준비 중/, "Show the open beta status");
+assert.match(home, /data-launch-countdown/, "Show the progressively enhanced countdown");
 assert.ok(!/클로즈베타|CLOSED BETA/i.test(home), "Closed beta copy must not remain on the landing");
 assert.match(home, /오픈베타 일정과 참여 방법을 이메일로 받는 데 동의합니다/, "Open beta preregistration consent purpose");
 assert.match(home, /<button type="submit" disabled=""/, "Preregistration submit stays disabled until hydration");

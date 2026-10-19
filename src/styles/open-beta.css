@@ -1,0 +1,49 @@
+.feature-showcase { padding: 100px 0 30px; background: #f8f5ef; }
+.feature-showcase__intro { max-width: 760px; margin: 0 auto 72px; text-align: center; }
+.feature-showcase__intro h2 { margin-top: 16px; font-size: clamp(30px, 4vw, 48px); font-weight: 750; line-height: 1.2; letter-spacing: -.045em; }
+.feature-showcase__intro > p:last-child { margin-top: 20px; color: #667085; font-size: 18px; }
+.feature-showcase__row { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: center; gap: clamp(32px, 5vw, 72px); padding: 0 0 90px; scroll-margin-top: 100px; }
+.feature-showcase__row:has(.is-right) { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+.feature-showcase__media.is-right { order: 2; }
+.feature-showcase__copy h3 { font-size: clamp(28px, 3.2vw, 40px); font-weight: 750; line-height: 1.2; letter-spacing: -.04em; white-space: pre-line; margin-top: 16px; }
+.feature-showcase__body { margin-top: 22px; color: #667085; font-size: 18px; line-height: 1.8; }
+.feature-showcase__copy ol { display: grid; gap: 12px; margin-top: 28px; }
+.feature-showcase__copy li { display: flex; gap: 10px; align-items: center; font-size: 15px; font-weight: 600; }
+.feature-showcase__copy li span { width: 25px; height: 25px; border: 1px solid #ff6b5755; border-radius: 50%; text-align: center; line-height: 23px; font-size: 12px; color: #bb4939; }
+.feature-showcase__note { margin-top: 24px; border-left: 2px solid #ff6b57; padding-left: 12px; font-size: 13px; line-height: 1.7; color: #667085; }
+.feature-animation { min-width: 0; }
+.feature-animation__frame { position: relative; overflow: hidden; border-radius: 18px; border: 1px solid #d8dde5; box-shadow: 0 12px 32px #1522380e; background: #e7e9ec; aspect-ratio: 8 / 5; }
+.feature-animation video { display: block; width: 100%; height: 100%; object-fit: contain; }
+.feature-animation__control { display: flex; flex-shrink: 0; align-items: center; gap: 5px; min-height: 44px; padding: 5px 10px; border: 1px solid #ffffff70; border-radius: 8px; background: #152238ed; color: white; font-size: 11px; cursor: pointer; }
+.feature-animation__control:focus-visible { outline: 3px solid #8ed8e8; outline-offset: 2px; }
+.feature-animation figcaption { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 10px 2px 0; color: #667085; font-size: 12px; }
+.survey-reward { border-radius: 20px; background: #fff; color: #152238; padding: 20px; }
+.survey-reward__heading { display: flex; justify-content: space-between; gap: 12px; color: #327d7c; font-size: 13px; font-weight: 700; }
+.survey-reward__heading span:last-child { padding: 3px 9px; background: #e5f6f4; border-radius: 20px; }
+.survey-reward__main { display: flex; gap: 18px; align-items: center; margin: 12px 0; }
+.survey-reward__main img { width: 118px; height: 118px; object-fit: contain; flex-shrink: 0; }
+.survey-reward__main h3 { font-size: 15px; font-weight: 600; }
+.survey-reward__prize { margin-top: 9px; font-size: 15px; line-height: 1.5; }
+.survey-reward__prize strong { font-size: 24px; letter-spacing: -.04em; font-weight: 800; }
+.survey-reward__details { display: grid; gap: 10px; border-top: 1px solid #e5eaef; padding-top: 15px; font-size: 13px; }
+.survey-reward__details > div { display: grid; grid-template-columns: 65px 1fr; gap: 10px; }
+.survey-reward__details dt { color: #667085; }
+.survey-reward__details dd { line-height: 1.6; font-weight: 600; }
+.survey-reward__details small { font-size: 11px; font-weight: 400; color: #667085; }
+.survey-reward__notice { margin-top: 14px; font-size: 11px; line-height: 1.7; color: #667085; }
+@media (max-width: 1023px) {
+  .feature-showcase__row, .feature-showcase__row:has(.is-right) { grid-template-columns: 1fr; gap: 28px; }
+  .feature-showcase__media, .feature-showcase__media.is-right { order: 2; }
+  .feature-showcase__copy { max-width: 680px; }
+  .feature-showcase__intro { margin-bottom: 56px; }
+}
+@media (max-width: 480px) {
+  .feature-showcase { padding-top: 72px; }
+  .feature-showcase__row { padding-bottom: 64px; }
+  .feature-showcase__body { font-size: 16px; }
+  .feature-animation__frame { border-radius: 12px; }
+  .survey-reward { padding: 16px; }
+  .survey-reward__main { gap: 10px; }
+  .survey-reward__main img { width: 96px; height: 96px; }
+  .survey-reward__prize strong { font-size: 21px; }
+}
