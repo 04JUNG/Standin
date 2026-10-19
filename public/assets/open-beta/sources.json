@@ -77,9 +77,19 @@
     "attribution": "Standin-authored body poses, hand shapes and primitive sword guides; source rig from Quaternius Universal Animation Library (CC0)"
   },
   "autoFit": {
-    "rough": "assets/hero-poses/pose-showcase-run-rough-cutout.png",
-    "mannequin": "assets/hero-poses/pose-showcase-run-mannequin-cutout.png",
-    "method": "Existing matched webtoon rough and 3D concept assets, with illustrative body-proportion interpolation; not an inference recording"
+    "rough": "source/auto-fit-character-rough.png",
+    "roughPrompt": "source/auto-fit-rough-prompt.txt",
+    "roughTool": "Built-in image_gen",
+    "roughStyleReference": "Open beta card-news v3, C_기능별/02-pose-candidates.png",
+    "poseReference": {
+      "file": "sword-04.jpg",
+      "label": "도약 베기",
+      "angle": "정면",
+      "source": "webtoon-dynamic-20261004/character-thumbs/823ffe0724992451/dynamic_fantasy_leap_slash__front.jpg"
+    },
+    "modelSource": "Standin-server/data/curation/characters/standin-master-v2.fbx",
+    "modelFrames": "source/auto-fit-male-00.png through auto-fit-male-08.png",
+    "method": "Actual male library mesh rendered in Blender with library-soft-v1 lighting and a fixed camera. Editorial 3D shoulder widening and head scaling demonstrate the requested silhouette; UI and save flow are reconstructed, not an inference recording or measured inference result."
   },
   "workspace": "source/clip-studio-blank.png — user-supplied blank Clip Studio canvas, 2026-10-19"
 }

@@ -119,40 +119,49 @@ def make_text(t, bg, candidates):
     return im.convert("RGB")
 
 
-def fit_variant(sprite, amount):
-    # Illustration only; final pose is the existing matched rough/3D concept pair.
-    split=round(sprite.height*.49)
-    top=sprite.crop((0,0,sprite.width,split))
-    bottom=sprite.crop((0,split,sprite.width,sprite.height))
-    top=top.resize((round(top.width*(1.16-.16*amount)),top.height),Image.Resampling.LANCZOS)
-    bottom=bottom.resize((round(bottom.width*(1.06-.06*amount)),round(bottom.height*(.82+.18*amount))),Image.Resampling.LANCZOS)
-    result=Image.new("RGBA",(top.width,top.height+bottom.height))
-    result.alpha_composite(top,(0,0))
-    result.alpha_composite(bottom,((top.width-bottom.width)//2,top.height))
-    return result
+def make_auto(t,bg,rough,models,pose):
+    """A matching character rough, actual library mesh and a newly saved body card.
 
-
-def make_auto(t,bg,rough,mannequin):
-    amount=ease((t-2.5)/2.8)
-    step="01  웹툰 러프의 인물 확인" if t<2.5 else "02  러프에 맞춰 체형 변경" if t<6.8 else "03  비율을 비교하고 필요한 부분만 조절"
+    Model frames are separately rendered 3D geometry, with the same camera and
+    studio lighting. No screenshot slicing or 2D body stretching is used.
+    """
+    amount=ease((t-3.1)/2.8)
+    saved=t>=9.8
+    step="01  캐릭터 러프와 라이브러리 포즈 확인" if t<3 else "02  기본 체형에서 내 캐릭터의 비율로" if t<9.8 else "03  새로 만든 체형을 내 체형에 저장"
     im=base(bg,step)
-    # Existing blue-pencil webtoon rough including anatomical construction lines.
-    place(im,rough,(246,112,345,501))
-    window(im,"러프에 맞춘 체형",606,76,488,556)
-    text(im,(626,137),"같은 포즈, 내 캐릭터의 비율로",20,INK,True)
-    box(im,(625,187,844,491),"#f3f5f8",12)
-    box(im,(857,187,1075,491),"#f3f5f8",12,outline=CORAL if t>4.7 else "#dce2e9",width=2)
-    text(im,(640,202),"기본 체형",14,MUTED,True)
-    text(im,(869,202),"러프에 맞춘 체형",14,INK,True)
-    place(im,fit_variant(mannequin,0),(636,243,198,226))
-    place(im,fit_variant(mannequin,amount),(866,243,198,226))
-    box(im,(626,514,1075,575),"#edf5f5",10)
-    text(im,(643,526),"러프의 비율을 살펴보는 중" if t<5.1 else "체형 확인 후, 직접 세부 조절",18,"#286f70",True)
-    text(im,(643,553),"러프 입력 → 체형 확인 → 작가의 최종 선택",12,MUTED)
-    text(im,(627,598),"러프·체형 비교 연출 예시",13,MUTED)
-    if t>6.8:
-        place(im,mannequin,(246,112,345,501),.78*ease((t-6.8)/.9))
-    cursor(im,993,545,6.8<t<7.1)
+    # The original blank CSP canvas remains behind the floating Standin window.
+    box(im,(208,87,507,627),"white",2)
+    text(im,(224,103),"전투씬 · 캐릭터 러프",17,INK,True)
+    place(im,rough,(214,142,286,469))
+    window(im,"체형 커스텀" if saved else "러프에 맞춘 체형",526,63,578,576)
+    text(im,(546,122),"내 체형" if saved else "기본 체형과 비교해 보세요",23,INK,True)
+    text(im,(546,158),"넓은 어깨 · 작은 머리의 새 체형" if t>=6 else "러프 속 어깨와 머리 비율을 새 체형에 반영",15,"#ad493a" if t>=6 else MUTED,t>=6)
+    for x,label in ((545,"기본 라이브러리"),(825,"내 체형" if saved else "러프에 맞춘 새 체형")):
+        text(im,(x,195),label,15,INK,True)
+        box(im,(x,224,x+257,501),"#f4f6f9",12,outline=CORAL if x==825 and t>=3.1 else "#d7dee8",width=2)
+    place(im,models[0],(550,229,247,230))
+    text(im,(558,470),"남성 · 기본형",16,INK,True)
+    if t<3.1:
+        text(im,(850,326),"러프에서 체형 만들기",17,MUTED,True)
+        box(im,(846,373,1060,379),"#dce2e9",3)
+        box(im,(846,373,846+max(5,round(214*ease(t/3.1))),379),CORAL,3)
+    else:
+        frame=amount*8
+        lo=min(8,int(frame));hi=min(8,lo+1)
+        rendered=Image.blend(models[lo],models[hi],frame-lo)
+        place(im,rendered,(830,229,247,230))
+        text(im,(839,470),"전투씬 주인공",16,INK,True)
+        box(im,(1029,235,1074,258),CORAL,10)
+        text(im,(1036,239),"NEW",11,"white",True)
+    # This is the exact authored pose used as the rough's pose reference.
+    place(im,pose,(547,519,78,78))
+    text(im,(636,523),"참고 포즈 · 도약 베기",14,INK,True)
+    text(im,(636,547),"실제 포즈 라이브러리",12,MUTED)
+    button="#237d70" if saved else CORAL if t>=6 else "#d0d7e0"
+    box(im,(871,531,1081,577),button,10)
+    text(im,(896 if saved else 899,544),"내 체형에 저장됨" if saved else "내 체형으로 저장",16,"white",True)
+    text(im,(547,609),"실제 모델 기반 화면·동작 연출 예시",12,MUTED)
+    cursor(im,1004 if t>=6 else 974,559 if t>=6 else 356,9.4<t<9.8)
     return im.convert("RGB")
 
 
@@ -202,6 +211,7 @@ def manual_recording(path):
 if __name__=="__main__":
     parser=argparse.ArgumentParser()
     parser.add_argument("--body-recording",type=Path,help="User-supplied Standin recording; omit to retain its current edit")
+    parser.add_argument("--only",choices=["text-search","body-auto"],help="Regenerate one storyboard only")
     args=parser.parse_args()
     choices=json.loads((SOURCE/"sword-candidates.json").read_text(encoding="utf-8"))
     candidates=[]
@@ -212,10 +222,13 @@ if __name__=="__main__":
         candidates.append({**item,"image":card})
     background=Image.open(SOURCE/"clip-studio-blank.png").convert("RGBA").resize((W,661),Image.Resampling.LANCZOS)
     bg=Image.new("RGBA",(W,H),INK);bg.alpha_composite(background)
-    rough=Image.open(ROOT/"public/assets/hero-poses/pose-showcase-run-rough-cutout.png").convert("RGBA")
-    mannequin=Image.open(ROOT/"public/assets/hero-poses/pose-showcase-run-mannequin-cutout.png").convert("RGBA")
-    export("text-search",[make_text(i/FPS,bg,candidates) for i in range(FPS*12)],4.2)
-    export("body-auto",[make_auto(i/FPS,bg,rough,mannequin) for i in range(FPS*10)],5.8)
+    if args.only in (None,"text-search"):
+        export("text-search",[make_text(i/FPS,bg,candidates) for i in range(FPS*12)],4.2)
+    if args.only in (None,"body-auto"):
+        rough=Image.open(SOURCE/"auto-fit-character-rough.png").convert("RGBA")
+        models=[Image.open(SOURCE/f"auto-fit-male-{i:02d}.png").convert("RGBA") for i in range(9)]
+        pose=Image.open(SOURCE/"sword-04.jpg").convert("RGBA")
+        export("body-auto",[make_auto(i/FPS,bg,rough,models,pose) for i in range(FPS*13)],8)
     if args.body_recording:
         manual_recording(args.body_recording)
     manifest=json.loads((OUT/"sources.json").read_text(encoding="utf-8"))
@@ -226,6 +239,6 @@ if __name__=="__main__":
         "manual":{"source":"User-supplied Standin screen recording, 2026-10-19 174044","trimSeconds":[0.8,31.8],"speed":1.8,"audio":False,"finalShot":"Cropped to focus the saved card, excluding unrelated model-library filters"},
         "workspace":"source/clip-studio-blank.png — user-supplied blank Clip Studio canvas, 2026-10-19",
         "search":{"candidates":choices,"selection":"Curated authored sword-pose previews, not a live search or ranking measurement","attribution":"Standin-authored body poses, hand shapes and primitive sword guides; source rig from Quaternius Universal Animation Library (CC0)"},
-        "autoFit":{"rough":"assets/hero-poses/pose-showcase-run-rough-cutout.png","mannequin":"assets/hero-poses/pose-showcase-run-mannequin-cutout.png","method":"Existing matched webtoon rough and 3D concept assets, with illustrative body-proportion interpolation; not an inference recording"}
+        "autoFit":{"rough":"source/auto-fit-character-rough.png","roughPrompt":"source/auto-fit-rough-prompt.txt","roughTool":"Built-in image_gen","roughStyleReference":"Open beta card-news v3, C_기능별/02-pose-candidates.png","poseReference":choices[3],"modelSource":"Standin-server/data/curation/characters/standin-master-v2.fbx","modelFrames":"source/auto-fit-male-00.png through auto-fit-male-08.png","method":"Actual male library mesh rendered in Blender with library-soft-v1 lighting and a fixed camera. Editorial 3D shoulder widening and head scaling demonstrate the requested silhouette; UI and save flow are reconstructed, not an inference recording or measured inference result."}
     })
     (OUT/"sources.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding="utf-8")

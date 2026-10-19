@@ -6,8 +6,8 @@ export const nav = {
   links: [
     { label: "이미지 입력", href: "#input" },
     { label: "처리 과정", href: "#process" },
-    { label: "문장 검색·체형", href: "#features" },
     { label: "활용 결과", href: "#result" },
+    { label: "새 기능", href: "#features" },
   ],
   launchHref: "#beta",
 };

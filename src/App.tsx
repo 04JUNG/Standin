@@ -22,8 +22,8 @@ export function App() {
         <HeroSection />
         <InputSection />
         <ProcessSection />
-        <FeatureShowcaseSection />
         <ResultSection />
+        <FeatureShowcaseSection />
         <GuidesSection />
         <BetaSection />
         <FaqSection />

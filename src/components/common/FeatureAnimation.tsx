@@ -10,6 +10,7 @@ export function FeatureAnimation({ id, label, caption }: Props) {
   const manuallyPaused = useRef(false);
   const reducedMotion = useReducedMotion();
   const [playing, setPlaying] = useState(false);
+  const version = id === "body-auto" ? "20261019-3" : "20261019-2";
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
@@ -24,7 +25,7 @@ export function FeatureAnimation({ id, label, caption }: Props) {
   return (
     <figure className="feature-animation">
       <div className="feature-animation__frame">
-        <video ref={ref} src={`/assets/open-beta/${id}.mp4?v=20261019-2`} poster={`/assets/open-beta/${id}-poster.jpg?v=20261019-2`} width="1120" height="700" muted loop playsInline preload="none" aria-label={label}
+        <video ref={ref} src={`/assets/open-beta/${id}.mp4?v=${version}`} poster={`/assets/open-beta/${id}-poster.jpg?v=${version}`} width="1120" height="700" muted loop playsInline preload="none" aria-label={label}
           onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} />
         <button type="button" className="feature-animation__control" onClick={() => {
           manuallyPaused.current = playing;
