@@ -2,7 +2,6 @@ import { ArrowRight } from "lucide-react";
 import { Container } from "../common/Container";
 import { Button } from "../common/Button";
 import { Badge } from "../common/Badge";
-import { LaunchCountdown } from "../common/LaunchCountdown";
 import { HeroPoseReveal } from "./HeroPoseReveal";
 import { footer, hero } from "../../data/content";
 
@@ -23,7 +22,7 @@ export function HeroSection() {
             러프 위를 움직여 같은 자세의 3D 포즈를 확인해 보세요.
           </p>
           <div className="mb-5 flex justify-center">
-            <Badge tone="coral"><LaunchCountdown /></Badge>
+            <Badge tone="coral">오픈베타 참여하기</Badge>
           </div>
 
           <div className="flex flex-col justify-center gap-3 sm:flex-row sm:items-center">

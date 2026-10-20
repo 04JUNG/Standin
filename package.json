@@ -5,14 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run check:countdown && tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs && node scripts/check-seo.mjs && node scripts/check-legal.mjs",
+    "build": "npm run check:feedback && tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs && node scripts/check-seo.mjs && node scripts/check-legal.mjs",
     "check:countdown": "node --experimental-strip-types scripts/check-countdown.mjs",
     "sync:legal": "node scripts/sync-legal.mjs",
     "check:legal": "node scripts/check-legal.mjs",
     "check:legal-release": "node scripts/check-legal.mjs --release",
     "check:seo": "node scripts/check-seo.mjs",
     "preview": "vite preview",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "sync:feedback": "node scripts/sync-feedback-schema.mjs",
+    "check:feedback": "node scripts/sync-feedback-schema.mjs --check && node --test scripts/open-beta.test.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.454.0",
