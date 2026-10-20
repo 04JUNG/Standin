@@ -129,7 +129,7 @@ VITE_BETA_ENDPOINT=https://script.google.com/macros/s/AKfy.../exec
 
 - [x] 최신 포즈 에셋 기반 OG·X 카드 이미지(1200×630) 적용
 - [ ] 개인정보 처리방침 문서 링크
-- [ ] 새 설문 수신기를 배포하고 `VITE_FEEDBACK_ENDPOINT` 설정 및 실제 Google 저장 검증
+- [x] 새 설문 수신기를 배포하고 `VITE_FEEDBACK_ENDPOINT` 설정 및 실제 Google 저장 검증 (2026-10-21, PR 미리보기)
 - [ ] 오픈베타 클라이언트 릴리스를 Latest로 지정하고 설치 확인
 - [x] `www.standinpose.com` 기준 canonical / og:url 및 소셜 이미지 절대 URL
 
