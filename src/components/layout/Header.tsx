@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Container } from "../common/Container";
 import { BrandMark } from "../common/BrandMark";
-import { LaunchCountdown } from "../common/LaunchCountdown";
+
 import { nav } from "../../data/content";
 import { useActiveSection } from "../../hooks/useActiveSection";
 
@@ -75,7 +75,7 @@ export function Header() {
               href={nav.launchHref}
               className="hidden items-center rounded-full border border-brand-coral/30 bg-brand-coral/12 px-3 py-1 text-[13px] font-semibold whitespace-nowrap text-brand-coral-dark transition-colors hover:border-brand-coral hover:bg-brand-coral hover:text-white md:inline-flex"
             >
-              <LaunchCountdown />
+              오픈베타 다운로드
             </a>
             <button
               type="button"
@@ -113,7 +113,7 @@ export function Header() {
                 onClick={() => setMenuOpen(false)}
                 className="mt-2 inline-flex items-center self-start rounded-full border border-brand-coral/30 bg-brand-coral/12 px-3 py-1 text-[13px] font-semibold text-brand-coral-dark"
               >
-                <LaunchCountdown />
+                오픈베타 다운로드
               </a>
             </nav>
           </Container>

@@ -12,6 +12,7 @@ export function Footer() {
             <BrandMark className="text-xl" />
           </a>
           <nav aria-label="약관 및 정책" className="site-footer__links">
+            <a href="/feedback/">오픈베타 설문</a>
             {legalDocuments.map((document) => (
               <a key={document.slug} href={legalPath(document)} className={document.slug === "privacy" ? "site-footer__privacy" : undefined}>
                 {document.label}

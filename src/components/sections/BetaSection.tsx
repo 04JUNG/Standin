@@ -1,8 +1,7 @@
 import { Gift, ScanLine, SlidersHorizontal, TextSearch } from "lucide-react";
 import { Container } from "../common/Container";
-import { BetaSignupForm } from "../forms/BetaSignupForm";
+import { Downloads } from "../common/Downloads";
 import { beta } from "../../data/content";
-import { LaunchCountdown } from "../common/LaunchCountdown";
 
 const updateIcons = [TextSearch, ScanLine, SlidersHorizontal];
 
@@ -17,7 +16,7 @@ export function BetaSection() {
                 {beta.eyebrow}
               </span>
               <span className="rounded-full border border-brand-coral/40 bg-brand-coral/15 px-3 py-1 text-[13px] font-semibold text-white">
-                <LaunchCountdown />
+                오픈베타 참여하기
               </span>
             </div>
             <h2 className="mt-4 text-3xl leading-tight font-bold tracking-tight text-white sm:text-4xl">
@@ -48,11 +47,11 @@ export function BetaSection() {
                 </div>
               </div>
               <dl className="survey-reward__details">
-                <div><dt>응모 기간</dt><dd>2026.10.21–11.11<br /><small>오픈베타 공개일부터 · 10.21 공개 예정</small></dd></div>
+                <div><dt>응모 기간</dt><dd>2026.10.21–11.11</dd></div>
                 <div><dt>참여 방법</dt><dd>설문 작성 + 사용 화면 스크린샷 제출</dd></div>
                 <div><dt>선정 방식</dt><dd>추첨 5명 + 정성 후기 5명<br /><small>열심히 사용하고 정성껏 후기를 남겨주신 분 중 5명을 선정해요.</small></dd></div>
               </dl>
-              <p className="survey-reward__notice">설문 링크와 선정·당첨 발표 일정은 이 페이지에서 추후 안내합니다. 경품은 모바일 상품권으로 발송됩니다.</p>
+              <p className="survey-reward__notice"><a href="/feedback/" className="underline underline-offset-4">사용 후기 설문 작성하기</a> · 선정·당첨 발표 일정은 이 페이지에서 안내합니다. 경품은 모바일 상품권으로 발송됩니다.</p>
             </div>
             <p className="mt-8 text-sm font-semibold text-white">{beta.updatesLabel}</p>
             <ul className="mt-3 grid max-w-lg gap-3">
@@ -88,7 +87,7 @@ export function BetaSection() {
           </div>
 
           <div className="lg:pl-8">
-            <BetaSignupForm />
+            <Downloads />
           </div>
         </div>
       </Container>

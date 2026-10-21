@@ -67,7 +67,7 @@ assert.ok((faq.match(/href="\/guides\//g) ?? []).length >= 5, "FAQ answers link 
 assert.ok(documents.get("/guides/rough-to-3d-pose/").includes('id="text-search"'), "Text input has addressable usage guidance");
 assert.equal((home.match(/<details\b/g) ?? []).length, 11, "Product FAQ answers must be present before JavaScript runs");
 assert.ok(home.includes('id="faq-text-search"') && home.includes('id="faq-body-type"'), "Answer text search and body type questions");
-assert.match(home, /10월 21일 오픈베타 공개 예정/, "Show the scheduled opening date");
+assert.match(home, /Standin 다운로드/, "Show open beta downloads");
 assert.match(home, /정식 출시 후 1개월 무료 이용/, "Show the participant perk");
 assert.match(home, /오픈베타 참여자 전원/, "Free month is for all beta participants");
 assert.match(home, /설문 작성 \+ 사용 화면 스크린샷 제출/, "Show both survey entry requirements");
@@ -75,18 +75,22 @@ assert.match(home, /2026\.10\.21–11\.11/, "Show the survey event period");
 assert.match(home, /추첨 5명 \+ 정성 후기 5명/, "Show the ten-recipient survey award split separately from the universal perk");
 assert.match(home, /검색 화면 개편 예정/, "Do not present the planned search UI as released");
 assert.ok(home.includes('id="faq-availability"'), "Answer the availability question with the open beta status");
-assert.match(home, /data-launch-countdown/, "Show the progressively enhanced countdown");
+assert.ok(!home.includes("data-launch-countdown"), "Launch PR replaces the countdown");
 assert.ok(!/클로즈베타|CLOSED BETA/i.test(home), "Closed beta copy must not remain on the landing");
-assert.match(home, /오픈베타 일정과 참여 방법을 이메일로 받는 데 동의합니다/, "Open beta preregistration consent purpose");
-assert.match(home, /<button type="submit" disabled=""/, "Preregistration submit stays disabled until hydration");
+assert.ok(!home.includes("오픈베타 사전등록"), "Do not ask users to preregister after launch");
+assert.ok(home.includes('href="https://github.com/04JUNG/Standin-client/releases/latest"'), "Download fallback works before hydration");
 for (const [path, html] of documents) {
-  assert.match(html, /href="\/#beta"[^>]*>오픈베타 사전등록/, `${path}: link to open beta preregistration`);
-  assert.ok(!html.includes('href="/closed-beta/"') && !html.includes('href="/feedback/"'), `${path}: retired closed beta links`);
+  assert.match(html, /href="\/#beta"[^>]*>오픈베타 다운로드/, `${path}: link to downloads`);
+  assert.ok(!html.includes('href="/closed-beta/"') && html.includes('href="/feedback/"'), `${path}: open beta feedback navigation`);
 }
 const signupHtml = await readFile(new URL("signup/index.html", dist), "utf8");
 assert.match(signupHtml, /name="robots" content="noindex"/, "signup: existing private-flow indexing policy");
 assert.match(signupHtml, /<script type="module"[^>]*src="\/assets\//, "signup: preserve the browser entry point");
-for (const path of ["feedback", "closed-beta"]) {
+const feedbackHtml = await readFile(new URL("feedback/index.html", dist), "utf8");
+assert.match(feedbackHtml, /name="robots" content="noindex"/);
+assert.match(feedbackHtml, /<script type="module"[^>]*src="\/assets\//);
+assert.ok(!feedbackHtml.includes('http-equiv="refresh"'), "Feedback must open the survey, not redirect");
+for (const path of ["closed-beta"]) {
   const html = await readFile(new URL(`${path}/index.html`, dist), "utf8");
   assert.match(html, /name="robots" content="noindex"/, `${path}: retired path stays out of the index`);
   assert.match(html, /http-equiv="refresh" content="0; url=\/#beta"/, `${path}: old links redirect to the open beta status`);
@@ -103,4 +107,4 @@ for (const [, url, lastmod] of sitemap.matchAll(/<url><loc>(.*?)<\/loc><lastmod>
 const robots = await readFile(new URL("robots.txt", dist), "utf8");
 assert.ok(robots.includes(`Sitemap: ${origin}/sitemap.xml`));
 assert.ok(!/^Disallow:\s*\/\s*$/m.test(robots), "Public pages must remain crawlable");
-console.log(`SEO checks passed: ${publicPaths.length} prerendered pages, metadata, links, FAQ, open beta preregistration and sitemap.`);
+console.log(`SEO checks passed: ${publicPaths.length} prerendered pages, metadata, links, FAQ, open beta downloads, feedback and sitemap.`);

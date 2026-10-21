@@ -16,7 +16,7 @@ export const hero = {
   eyebrow: "WEBTOON 3D POSE TOOL",
   title: "Standin — 러프 이미지로 찾는 웹툰 3D 포즈",
   body: "그림 위에 마우스를 올려 Standin이 찾은 같은 자세의 3D 인형을 직접 비교해 보세요.",
-  primaryCta: "오픈베타 사전등록",
+  primaryCta: "오픈베타 다운로드",
   // 가이드 페이지에서도 쓰므로 루트 기준 hash로 둔다.
   primaryHref: "/#beta",
   secondaryCta: "사용 과정 보기",
@@ -185,14 +185,13 @@ export const clipStudio = {
     "Standin은 클립스튜디오의 공식 플러그인 또는 공식 제휴 서비스가 아닙니다.",
 };
 
-// 오픈베타 사전등록. 폼 항목은 클로즈베타 사전등록과 같아서 같은 수신 웹앱
-// (server/beta-form)을 쓰고, `program`으로 기록할 탭만 나눈다.
-// 옵션을 고치면 Code.gs의 FIELDS와 scripts/formspree-to-csv.mjs도 함께 고친다.
+// 오픈베타 안내. 기존 사전등록 옵션은 BetaSignupForm 호환용으로 남긴다.
+// 현재 설문 문항은 feedbackSurvey.ts에서 관리한다.
 export const beta = {
   program: "open-beta",
   eyebrow: "OPEN BETA",
-  title: "10월 21일, 함께 시작해요.",
-  body: "2026년 10월 21일 오픈베타를 공개할 예정입니다. 사전등록을 남기면 공개 소식과 참여 방법을 이메일로 안내합니다.",
+  title: "Standin을 직접 써보세요.",
+  body: "러프나 문장으로 포즈를 찾고, 내 캐릭터의 체형으로 조절해 보세요. 설치 파일을 받아 바로 시작하고, 사용한 경험을 설문으로 알려주세요.",
   perkLabel: "오픈베타 참여자 전원",
   perk: "정식 출시 후 1개월 무료 이용",
   updatesLabel: "오픈베타에서 달라지는 점",
@@ -215,7 +214,7 @@ export const beta = {
     },
   ],
   badges: { added: "구현 완료", upcoming: "오픈베타 공개 예정" },
-  note: "설치 파일은 오픈베타 공개와 함께 제공합니다. 가격·결제 정보는 받지 않습니다.",
+  note: "Windows·macOS용 데스크톱 앱입니다. 다운로드와 앱 이용에 설문 참여는 필수가 아닙니다.",
   emailLabel: "이메일",
   emailPlaceholder: "artist@example.com",
   roleLabel: "작업 형태",
