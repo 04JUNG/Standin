@@ -54,8 +54,8 @@ export function GuidePage({ guide }: { guide: Guide }) {
             ))}
             {guide.references && (
               <section id="references" className="mt-10 scroll-mt-24" aria-labelledby="references-title">
-                <h2 id="references-title" className="text-2xl font-bold text-brand-ink">클립스튜디오 조작 참고 문서</h2>
-                <p className="mt-4 leading-relaxed text-neutral-800">클립스튜디오 안에서 자세와 카메라를 조정하는 방법은 공식 매뉴얼에서 확인할 수 있습니다. Standin의 파일 형식과 가져오기 방법은 오픈베타 공개 시 제공하는 안내를 확인해 주세요.</p>
+                <h2 id="references-title" className="text-2xl font-bold text-brand-ink">설치·호환성과 조작 참고 문서</h2>
+                <p className="mt-4 leading-relaxed text-neutral-800">앱 설치 안내는 Standin 릴리스에서, 클립스튜디오의 파일 형식 지원과 자세·카메라 조작은 공식 매뉴얼에서 확인할 수 있습니다. 아래 문서는 모든 Standin 출력 파일이 모든 버전에서 동일하게 재현된다는 보장을 뜻하지 않습니다.</p>
                 <ul className="mt-4 list-disc space-y-3 pl-6 text-neutral-800">
                   {guide.references.map((reference) => <li key={reference.url}><a href={reference.url} className="underline underline-offset-4">{reference.label}</a></li>)}
                 </ul>

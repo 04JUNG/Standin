@@ -80,7 +80,7 @@ export const guides: Guide[] = [
   {
     slug: "clip-studio-pose-import",
     publishedAt: "2026-10-09",
-    modifiedAt: "2026-10-19",
+    modifiedAt: "2026-10-27",
     title: "Standin에서 선택한 3D 포즈를 클립스튜디오 작업에 활용하는 방법",
     description: "Standin에서 선택한 포즈의 결과를 내보낸 뒤 클립스튜디오에서 러프와 크기·방향·구도를 비교하고 작화를 이어갑니다. Standin은 포즈 후보 선택을 돕고, 최종 선화와 연출은 작가가 결정합니다.",
     sections: [
@@ -97,10 +97,22 @@ export const guides: Guide[] = [
       {
         id: "export-result",
         title: "2. 선택한 결과를 내보내세요",
-        body: "선택한 포즈를 내보내고 저장된 결과를 확인하세요. 아래 영상은 클립스튜디오 작업으로 이어지는 사용 장면입니다. 파일 형식과 가져오기 방법은 오픈베타 공개 시 함께 안내합니다.",
+        body: "Standin의 저장 화면에서 저장 완료 여부와 파일 형식·위치를 확인하세요. FBX는 Windows 탐색기나 macOS Finder에서 클립스튜디오 캔버스로 끌어놓거나, 파일 > 가져오기 > 3D 데이터로 불러올 수 있습니다. BVH는 적용할 3D 인형을 먼저 선택한 뒤 파일 > 가져오기 > 3D 데이터에서 불러오고, 가져올 포즈 범위를 확인하세요.",
         checks: [
           "선택한 후보와 내보낼 결과가 같은지 확인하세요.",
-          "저장 위치와 파일을 확인한 뒤 클립스튜디오에서 사용할 컷을 준비하세요.",
+          "저장 화면의 ‘폴더 열기’로 파일을 찾고, 실제 확장자가 FBX인지 BVH인지 확인하세요.",
+          "BVH는 클립스튜디오 PRO·EX 3.1.0 이상에서 지원합니다. 사용 중인 버전을 먼저 확인하세요.",
+        ],
+      },
+      {
+        id: "file-formats",
+        title: "FBX·BVH와 클립스튜디오 버전은 어떻게 확인하나요?",
+        body: "Standin에서 사용할 수 있는 내보내기 형식은 서버 지원 상태에 따라 달라지므로 저장 화면에 표시된 실제 결과를 기준으로 확인하세요. FBX는 3D 파일로, BVH는 3D 인형에 적용하는 동작·포즈 데이터로 가져옵니다. 클립스튜디오의 형식 지원과 Standin 결과의 체형·손·카메라 재현은 별도로 확인해야 합니다.",
+        checks: [
+          "FBX: 클립스튜디오의 3D 데이터 가져오기로 열고, 모델과 관절·체형이 기대한 모습인지 확인하세요.",
+          "BVH: 클립스튜디오 PRO·EX 3.1.0 이상이 필요합니다. 적용할 3D 인형과 가져올 포즈를 선택하세요.",
+          "FBX 대신 BVH로 저장되었다는 안내가 나오면 체형·손 모양 없이 동작만 포함됩니다.",
+          "카메라·원근·모델 크기까지 자동으로 일치한다고 가정하지 말고 러프와 나란히 비교하세요.",
         ],
       },
       {
@@ -127,7 +139,7 @@ export const guides: Guide[] = [
       {
         id: "troubleshooting",
         title: "가져온 결과가 예상과 다르면 무엇을 확인하나요?",
-        body: "먼저 선택했던 후보와 실제로 저장한 결과를 비교하세요. 그다음 사용 중인 파일 형식과 클립스튜디오 환경을 오픈베타 공개 시 제공하는 안내와 대조하세요. 자세 자체의 차이인지, 크기·방향·구도의 차이인지 나누어 확인하면 손볼 부분을 정하기 쉽습니다.",
+        body: "먼저 선택했던 후보와 실제로 저장한 결과를 비교하세요. 저장 화면에 표시된 형식과 체형 관련 안내, 클립스튜디오 버전을 확인한 다음 자세 자체의 차이인지, 크기·방향·구도의 차이인지 나누어 살펴보세요. 문제가 계속되면 앱 버전·운영체제·파일 형식·오류 문구를 적어 standin.asm@gmail.com으로 문의하세요. 미공개 원고는 문의에 꼭 필요한 범위만 첨부하세요.",
       },
       {
         id: "independent-tool",
@@ -141,6 +153,9 @@ export const guides: Guide[] = [
       label: "Standin이 찾은 3D 포즈를 Clip Studio 캔버스에 배치하는 화면 녹화",
     },
     references: [
+      { label: "Standin 공식 앱 릴리스: 설치 안내와 변경 내역", url: "https://github.com/04JUNG/Standin-client/releases/latest" },
+      { label: "CLIP STUDIO PAINT 공식 매뉴얼: FBX·BVH 가져오기 (영문)", url: "https://help.clip-studio.com/en-us/manual_en/660_3d/Importing_3D_Files.htm" },
+      { label: "CLIP STUDIO PAINT 공식 버전 3 릴리스 노트: 3.1.0 BVH 지원 (영문)", url: "https://www.clipstudio.net/en/dl/release_note/v3/" },
       { label: "CLIP STUDIO PAINT 공식 매뉴얼: 3D 인체 포즈 조정 (영문)", url: "https://help.clip-studio.com/en-us/manual_en/660_3d/Posing_3D_drawing_figures.htm" },
       { label: "CLIP STUDIO PAINT 공식 매뉴얼: 카메라 각도 설정 (영문)", url: "https://help.clip-studio.com/en-us/manual_en/660_3d/Set_camera_angle.htm" },
     ],
