@@ -25,6 +25,7 @@ export function render(path: string) {
     description: footer.tagline,
     sameAs: [operator.xUrl],
     logo: `${origin}/favicon.svg`,
+    email: site.supportEmail,
     contactPoint: { "@type": "ContactPoint", contactType: "customer support", email: site.supportEmail, availableLanguage: "ko" },
   };
   const website = { "@type": "WebSite", "@id": `${origin}/#website`, name: "Standin", url: `${origin}/`, inLanguage: "ko", publisher: { "@id": organization["@id"] } };
@@ -56,6 +57,7 @@ export function render(path: string) {
     inLanguage: "ko", isPartOf: { "@id": website["@id"] },
     ...(!legal ? {
       dateModified: site.modifiedAt,
+      author: { "@id": organization["@id"] },
       mainEntity: { "@id": `${origin}/#application` },
       hasPart: { "@id": `${origin}/#faq` },
     } : {}),

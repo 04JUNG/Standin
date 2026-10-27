@@ -28,17 +28,19 @@ export function FaqSection() {
               title="자주 묻는 질문"
               description="현재 범위와 앞으로의 계획을 구분해 정직하게 안내합니다."
             />
-            <p className="mt-4 text-sm text-neutral-600">답변 검토: {site.team} · <time dateTime={site.modifiedAt}>{site.modifiedAt}</time></p>
+            <p className="mt-4 text-sm text-neutral-600">최종 수정·답변 검토: {site.team} · <time dateTime={site.modifiedAt}>{site.modifiedAt}</time></p>
           </div>
 
           <div className="divide-y divide-neutral-250 border-t border-neutral-250">
             {faqItems.map((item) => (
               <details key={item.id} id={`faq-${item.id}`} className="group scroll-mt-24 py-1">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-lg font-semibold text-brand-ink [&::-webkit-details-marker]:hidden">
-                  {item.question}
-                  <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-brand-ink transition-transform duration-200 group-open:rotate-45">
-                    <Plus size={18} />
-                  </span>
+                <summary className="cursor-pointer list-none py-4 text-left text-brand-ink [&::-webkit-details-marker]:hidden">
+                  <h3 className="flex items-center justify-between gap-4 text-lg font-semibold">
+                    {item.question}
+                    <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-brand-ink transition-transform duration-200 group-open:rotate-45" aria-hidden="true">
+                      <Plus size={18} />
+                    </span>
+                  </h3>
                 </summary>
                 <p className="pb-5 pr-12 leading-relaxed text-neutral-600">
                   {item.answer}
@@ -47,6 +49,11 @@ export function FaqSection() {
                   <a href={item.relatedLink.href} className="mb-5 inline-block text-sm font-semibold text-brand-coral-dark underline underline-offset-4">
                     {item.relatedLink.label}
                   </a>
+                )}
+                {item.sourceLink && (
+                  <p className="mb-5 text-sm leading-relaxed text-neutral-600">
+                    출처: <a href={item.sourceLink.href} className="underline underline-offset-4">{item.sourceLink.label}</a>
+                  </p>
                 )}
               </details>
             ))}
