@@ -3,10 +3,11 @@ import { renderToString } from "react-dom/server";
 import { App } from "./App";
 import { GuidePage } from "./pages/GuidePage";
 import { guidePath, guides } from "./data/guides";
-import { footer, hero } from "./data/content";
+import { beta, footer, hero } from "./data/content";
+import { faqItems } from "./data/faq";
 import { site } from "./data/site";
 import { LegalPage } from "./pages/LegalPage";
-import { legalDocuments, legalPath } from "./data/legal";
+import { legalDocuments, legalPath, operator } from "./data/legal";
 import { legalContent } from "./data/legalContent";
 
 const origin = site.origin;
@@ -22,10 +23,12 @@ export function render(path: string) {
   const organization = {
     "@type": "Organization", "@id": `${origin}/#organization`, name: site.team, alternateName: site.name, url: `${origin}/`,
     description: footer.tagline,
+    sameAs: [operator.xUrl],
+    logo: `${origin}/favicon.svg`,
     contactPoint: { "@type": "ContactPoint", contactType: "customer support", email: site.supportEmail, availableLanguage: "ko" },
   };
   const website = { "@type": "WebSite", "@id": `${origin}/#website`, name: "Standin", url: `${origin}/`, inLanguage: "ko", publisher: { "@id": organization["@id"] } };
-  const graph = guide ? [organization, website, {
+  const graph: Record<string, unknown>[] = guide ? [organization, website, {
     "@type": "Article",
     "@id": `${url}#article`,
     url,
@@ -51,7 +54,36 @@ export function render(path: string) {
     name: legal ? legal.label : hero.title,
     description: legal ? legal.description : footer.tagline,
     inLanguage: "ko", isPartOf: { "@id": website["@id"] },
+    ...(!legal ? {
+      dateModified: site.modifiedAt,
+      mainEntity: { "@id": `${origin}/#application` },
+      hasPart: { "@id": `${origin}/#faq` },
+    } : {}),
   }];
+
+  if (path === "/") {
+    graph.push({
+      "@type": "SoftwareApplication", "@id": `${origin}/#application`,
+      name: site.name, url, description: footer.tagline,
+      applicationCategory: "MultimediaApplication",
+      operatingSystem: ["Windows", "macOS"],
+      featureList: beta.updates.filter((update) => !update.upcoming).map((update) => update.title),
+      installUrl: `${origin}/#beta`,
+      softwareHelp: guides.map((item) => ({ "@type": "WebPage", url: `${origin}${guidePath(item)}`, name: item.title })),
+      provider: { "@id": organization["@id"] },
+      mainEntityOfPage: { "@id": `${url}#page` },
+      inLanguage: "ko",
+    }, {
+      "@type": "FAQPage", "@id": `${origin}/#faq`, url: `${origin}/#faq`,
+      name: "Standin 자주 묻는 질문", inLanguage: "ko",
+      isPartOf: { "@id": `${url}#page` }, dateModified: site.modifiedAt,
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question", "@id": `${origin}/#faq-${item.id}`,
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer },
+      })),
+    });
+  }
 
   return {
     title: legal ? `${legal.label} | Standin` : guide ? `${guide.title} | Standin` : hero.title,

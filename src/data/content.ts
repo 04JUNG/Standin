@@ -285,7 +285,7 @@ export const beta = {
 };
 
 export const footer = {
-  tagline: "Standin은 러프나 참고 이미지와 가까운 3D 인체 포즈 후보를 찾아주는 웹툰 작업 보조 도구입니다. 작가가 후보를 선택·조정하고 클립스튜디오에서 작화를 이어갑니다.",
+  tagline: "Standin은 러프·참고 이미지나 문장으로 가까운 3D 인체 포즈 후보를 찾는 Windows·macOS용 웹툰 작업 보조 앱입니다. 작가가 후보를 선택·조정하고 클립스튜디오에서 작화를 이어갑니다.",
   copyright: "© 2026 Standin. All rights reserved.",
 };
 

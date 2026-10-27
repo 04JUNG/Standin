@@ -1,11 +1,12 @@
 import type { FaqItem } from "../types/landing";
+import { footer } from "./content";
 
 export const faqItems: FaqItem[] = [
   {
     id: "what-is-standin",
     question: "Standin은 어떤 웹툰 작업 도구인가요?",
     answer:
-      "Standin은 러프나 참고 이미지와 가까운 3D 인체 포즈 후보를 찾아주는 웹툰 작업 보조 도구입니다. 작가가 후보를 비교하고 원하는 시작점을 선택한 뒤 클립스튜디오에서 작화를 이어갑니다.",
+      footer.tagline,
   },
   {
     id: "image-input",
@@ -26,7 +27,7 @@ export const faqItems: FaqItem[] = [
     relatedLink: { label: "클립스튜디오 활용 단계 보기", href: "/guides/clip-studio-pose-import/#select-pose" },
     question: "선택한 3D 포즈를 클립스튜디오에서 어떻게 활용하나요?",
     answer:
-      "Standin에서 선택한 포즈의 결과를 내보내 클립스튜디오의 기존 작화 작업에 활용합니다. 가져온 결과의 크기·방향·구도를 러프와 비교하고 필요한 부분을 조정한 뒤 선화와 작화를 이어가세요. 파일 형식과 가져오기 방법은 오픈베타 공개 시 함께 안내합니다.",
+      "Standin의 저장 화면에서 내보낸 파일을 확인한 뒤 클립스튜디오로 가져와 작화에 활용합니다. FBX는 Windows 탐색기나 macOS Finder에서 캔버스로 끌어놓을 수 있습니다. BVH는 클립스튜디오 PRO·EX 3.1.0 이상에서 적용할 3D 인형을 선택하고 파일 > 가져오기 > 3D 데이터로 불러오세요. 가져온 결과의 크기·방향·구도를 러프와 비교하고 조정합니다.",
   },
   {
     id: "auto-complete",
@@ -67,9 +68,45 @@ export const faqItems: FaqItem[] = [
       "네. 키·등신·어깨와 팔다리 비율 등을 직접 조절해 체형을 저장하거나, 러프에 맞춘 자동 체형을 확인한 뒤 필요한 부분을 다듬을 수 있습니다. 오픈베타에서 사용할 수 있습니다.",
   },
   {
+    id: "supported-platforms",
+    relatedLink: { label: "Windows·macOS 설치 파일 받기", href: "/#beta" },
+    question: "Windows와 macOS에서 사용할 수 있나요?",
+    answer:
+      "Standin은 Windows와 macOS용 데스크톱 앱으로 사용할 수 있습니다. Windows는 .exe 설치 파일, macOS는 Apple Silicon·Intel 공용 .dmg를 제공합니다. Mac에서는 앱을 응용 프로그램 폴더로 옮긴 뒤 실행하세요. 현재 다운로드에는 모바일·태블릿용 앱이 포함되어 있지 않습니다.",
+  },
+  {
+    id: "pricing",
+    relatedLink: { label: "오픈베타 무료 범위와 사용 한도", href: "/legal/beta/" },
+    question: "Standin은 무료인가요? 유료로 자동 전환되나요?",
+    answer:
+      "Standin 오픈베타에서 제공하는 분석·후보 선택·보정·내보내기 기능은 무료이며, 별도 유료 신청 없이 자동 결제되지 않습니다. 무료 이용에도 분석 횟수와 전체 처리량 한도가 있으므로 오픈베타 운영정책을 확인하세요. 정식 출시 후 1개월 무료 혜택 이후의 요금은 별도 가격 안내를 확인해야 합니다. 피드백 설문은 무료 이용의 필수 조건이 아닙니다.",
+  },
+  {
+    id: "export-formats",
+    relatedLink: { label: "FBX·BVH 가져오기와 버전 확인", href: "/guides/clip-studio-pose-import/#file-formats" },
+    question: "FBX와 BVH 내보내기는 무엇이 다른가요?",
+    answer:
+      "Standin은 저장 화면에 표시된 FBX 또는 BVH 파일을 내보내며, 사용할 수 있는 형식은 서버 지원 상태에 따라 달라집니다. FBX를 사용할 수 없을 때 BVH로 저장되면 체형·손 모양 없이 동작만 포함됩니다. BVH를 불러오려면 클립스튜디오 PRO·EX 3.1.0 이상이 필요합니다. 형식만으로 체형·손·카메라가 모두 똑같이 전달된다고 보장하지 않으므로 가져온 결과를 확인하세요.",
+  },
+  {
+    id: "unpublished-artwork",
+    relatedLink: { label: "개인정보처리방침 검토용 미리보기", href: "/legal/privacy/" },
+    question: "미공개 원고를 올리기 전에 무엇을 확인해야 하나요?",
+    answer:
+      "미공개 원고를 올리기 전에는 처리 목적·보관 기간·외부 AI 전달 여부·삭제 방법을 확인하세요. 현재 공개된 Standin 개인정보처리방침은 검토용 미리보기이며, 아직 적용되지 않은 정책과 확인이 필요한 항목을 표시하고 있습니다. 최종 정책과 실제 앱의 동의 안내를 확인하고, 확인되지 않은 처리 조건은 standin.asm@gmail.com으로 문의하세요.",
+  },
+  {
+    id: "commercial-use",
+    relatedLink: { label: "콘텐츠 라이선스와 공동 작업 조건", href: "/legal/content-license/" },
+    question: "포즈를 참고해 만든 웹툰을 상업적으로 이용할 수 있나요?",
+    answer:
+      "Standin이 상업 이용 권한을 확보하여 제공하는 자산은 해당 라이선스의 허용 범위 안에서 완성 웹툰·일러스트의 상업 이용에 활용할 수 있습니다. 완성 작품의 이용 허락은 포즈·모델·출력 파일 자체의 재판매나 공개 재배포 허락을 포함하지 않습니다. 제3자 자산의 별도 조건과 공동 작업자에게 파일을 전달하는 조건은 콘텐츠 라이선스에서 확인하세요.",
+  },
+  {
     id: "availability",
+    relatedLink: { label: "현재 버전 다운로드와 참여 안내", href: "/#beta" },
     question: "지금 바로 사용할 수 있나요?",
     answer:
-      "Windows·macOS용 설치 파일을 다운로드해 오픈베타에 참여할 수 있습니다. 사전등록·설문 참여 여부와 관계없이 오픈베타 참여자 전원에게 정식 출시 후 1개월 무료 이용 혜택을 드립니다. 별도로 10월 21일부터 11월 11일까지 설문을 작성하고 사용 화면 스크린샷을 제출한 분 중 추첨 5명과 열심히 사용하고 정성껏 후기를 남겨주신 5명을 선정해, 총 10명에게 배달의민족 모바일 상품권 1만원권을 드립니다. 사용 후기는 /feedback/에서 남길 수 있으며, 선정·당첨 발표 일정은 홈페이지에서 안내합니다.",
+      "Windows·macOS용 설치 파일을 다운로드해 오픈베타에 참여할 수 있습니다. 사전등록이나 피드백 설문 참여는 다운로드와 앱 이용의 필수 조건이 아닙니다. 현재 배포 버전과 설치 파일은 이 페이지의 다운로드 영역에서 확인하세요.",
   },
 ];

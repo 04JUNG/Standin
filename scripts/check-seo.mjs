@@ -5,6 +5,7 @@ import { publicPaths } from "../dist-ssr/entry-server.js";
 const origin = "https://www.standinpose.com";
 const dist = new URL("../dist/", import.meta.url);
 const documents = new Map();
+const unescapeHtml = (value) => value.replaceAll("&quot;", '"').replaceAll("&#x27;", "'").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&");
 
 for (const path of publicPaths) {
   const html = await readFile(new URL(`.${path}index.html`, dist), "utf8");
@@ -24,6 +25,12 @@ for (const path of publicPaths) {
   assert.ok(schema["@graph"].some((node) => node.url === `${origin}${path}`), `${path}: schema URL`);
   const contentNode = schema["@graph"].find((node) => ["WebPage", "Article"].includes(node["@type"]));
   const description = html.match(/name="description"\s+content="([^"]+)"/)[1];
+  const title = html.match(/<title>(.*?)<\/title>/)[1];
+  const meta = new Map([...html.matchAll(/<meta\s+(?:name|property)="([^"]+)"\s+content="([^"]+)"/g)].map(([, key, value]) => [key, value]));
+  assert.equal(meta.get("twitter:title"), title, `${path}: Twitter title matches page title`);
+  assert.equal(meta.get("twitter:description"), description, `${path}: Twitter description matches page description`);
+  assert.ok(meta.get("og:image:alt"), `${path}: descriptive social image`);
+  assert.ok(meta.get("twitter:image:alt"), `${path}: descriptive Twitter image`);
   assert.equal(description, contentNode.description, `${path}: metadata and schema must describe the visible content consistently`);
   const paragraphs = [...html.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map((match) => match[1]);
   assert.ok(paragraphs.includes(description), `${path}: description must be visible`);
@@ -33,6 +40,11 @@ for (const path of publicPaths) {
   assert.ok(html.includes(`href="mailto:${organization.contactPoint.email}"`), `${path}: public support contact matches schema`);
   const visibleText = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, "");
   assert.ok(visibleText.includes(organization.name), `${path}: organization is visible`);
+  for (const profile of organization.sameAs ?? []) {
+    assert.ok(html.includes(`href="${profile}"`), `${path}: organization profiles must be visible`);
+  }
+  await access(new URL(`.${new URL(organization.logo).pathname}`, dist));
+  assert.ok(!html.includes("오픈베타 공개 시"), `${path}: no stale post-launch instructions`);
   if (path.startsWith("/guides/")) {
     assert.match(html, /aria-label="이 가이드의 질문"/, `${path}: question navigation`);
     assert.ok((html.match(/<section\b[^>]*id="/g) ?? []).length >= 6, `${path}: addressable guide answers`);
@@ -65,7 +77,34 @@ const home = documents.get("/");
 const faq = home.match(/<section id="faq"[\s\S]*?<\/section>/)[0];
 assert.ok((faq.match(/href="\/guides\//g) ?? []).length >= 5, "FAQ answers link to relevant detailed guidance");
 assert.ok(documents.get("/guides/rough-to-3d-pose/").includes('id="text-search"'), "Text input has addressable usage guidance");
-assert.equal((home.match(/<details\b/g) ?? []).length, 11, "Product FAQ answers must be present before JavaScript runs");
+const homeGraph = JSON.parse(home.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])["@graph"];
+const faqSchema = homeGraph.find((node) => node["@type"] === "FAQPage");
+const homePage = homeGraph.find((node) => node["@type"] === "WebPage");
+const application = homeGraph.find((node) => node["@type"] === "SoftwareApplication");
+const visibleFaq = [...faq.matchAll(/<details\b[^>]*id="([^"]+)"[^>]*>([\s\S]*?)<\/details>/g)];
+assert.equal(visibleFaq.length, 16, "All product FAQ answers must exist in the initial HTML");
+assert.equal(faqSchema.mainEntity.length, visibleFaq.length, "Schema must describe exactly the visible FAQ");
+for (const [index, [, id, markup]] of visibleFaq.entries()) {
+  const question = unescapeHtml(markup.match(/<summary[^>]*>([\s\S]*?)<span/)[1]);
+  const answer = unescapeHtml(markup.match(/<p\b[^>]*>([\s\S]*?)<\/p>/)[1]);
+  const structured = faqSchema.mainEntity[index];
+  assert.equal(structured["@id"], `${origin}/#${id}`, `FAQ ${id}: resolvable question anchor`);
+  assert.equal(structured["@type"], "Question");
+  assert.equal(structured.name, question, `FAQ ${id}: question matches visible text`);
+  assert.deepEqual(structured.acceptedAnswer, { "@type": "Answer", text: answer }, `FAQ ${id}: no hidden or conflicting answer`);
+}
+assert.equal(homePage.hasPart["@id"], faqSchema["@id"]);
+assert.equal(homePage.mainEntity["@id"], application["@id"]);
+assert.equal(homePage.dateModified, faqSchema.dateModified);
+assert.ok(home.includes(`dateTime="${homePage.dateModified}"`), "FAQ review date is visible");
+assert.deepEqual(application.operatingSystem, ["Windows", "macOS"]);
+assert.equal(application.description, homePage.description);
+assert.equal(application.installUrl, `${origin}/#beta`);
+for (const feature of application.featureList) assert.ok(home.includes(feature), "Application features match visible copy");
+assert.ok(!application.aggregateRating && !application.review, "Do not invent software ratings or reviews");
+for (const id of ["pricing", "supported-platforms", "export-formats", "unpublished-artwork", "commercial-use"]) {
+  assert.ok(home.includes(`id="faq-${id}"`), `Answer buying and trust question: ${id}`);
+}
 assert.ok(home.includes('id="faq-text-search"') && home.includes('id="faq-body-type"'), "Answer text search and body type questions");
 assert.match(home, /Standin 다운로드/, "Show open beta downloads");
 assert.match(home, /정식 출시 후 1개월 무료 이용/, "Show the participant perk");
@@ -104,8 +143,8 @@ assert.deepEqual(locations.sort(), publicPaths.map((path) => `${origin}${path}`)
 for (const [, url, lastmod] of sitemap.matchAll(/<url><loc>(.*?)<\/loc><lastmod>(.*?)<\/lastmod><\/url>/g)) {
   const html = documents.get(new URL(url).pathname);
   const graph = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])["@graph"];
-  const article = graph.find((node) => node["@type"] === "Article");
-  if (article) assert.equal(lastmod, article.dateModified, `${url}: sitemap and article dates agree`);
+  const page = graph.find((node) => ["Article", "WebPage"].includes(node["@type"]));
+  assert.equal(lastmod, page.dateModified, `${url}: sitemap and editorial dates agree`);
 }
 const robots = await readFile(new URL("robots.txt", dist), "utf8");
 assert.ok(robots.includes(`Sitemap: ${origin}/sitemap.xml`));

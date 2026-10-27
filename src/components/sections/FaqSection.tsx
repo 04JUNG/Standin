@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Container } from "../common/Container";
 import { SectionHeading } from "../common/SectionHeading";
 import { faqItems } from "../../data/faq";
+import { site } from "../../data/site";
 
 export function FaqSection() {
   useEffect(() => {
@@ -21,11 +22,14 @@ export function FaqSection() {
     <section id="faq" className="py-20 sm:py-28 lg:py-32">
       <Container>
         <div className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.3fr)] lg:gap-16">
-          <SectionHeading
-            eyebrow="FAQ"
-            title="자주 묻는 질문"
-            description="현재 범위와 앞으로의 계획을 구분해 정직하게 안내합니다."
-          />
+          <div>
+            <SectionHeading
+              eyebrow="FAQ"
+              title="자주 묻는 질문"
+              description="현재 범위와 앞으로의 계획을 구분해 정직하게 안내합니다."
+            />
+            <p className="mt-4 text-sm text-neutral-600">답변 검토: {site.team} · <time dateTime={site.modifiedAt}>{site.modifiedAt}</time></p>
+          </div>
 
           <div className="divide-y divide-neutral-250 border-t border-neutral-250">
             {faqItems.map((item) => (
