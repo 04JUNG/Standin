@@ -2,6 +2,7 @@ import { Container } from "../common/Container";
 import { BrandMark } from "../common/BrandMark";
 import { footer } from "../../data/content";
 import { legalDocuments, legalPath, operator } from "../../data/legal";
+import { MeasurementSettings } from "../common/MeasurementSettings";
 
 export function Footer() {
   return (
@@ -13,6 +14,7 @@ export function Footer() {
           </a>
           <nav aria-label="약관 및 정책" className="site-footer__links">
             <a href="/feedback/">오픈베타 설문</a>
+            <MeasurementSettings />
             {legalDocuments.map((document) => (
               <a key={document.slug} href={legalPath(document)} className={document.slug === "privacy" ? "site-footer__privacy" : undefined}>
                 {document.label}

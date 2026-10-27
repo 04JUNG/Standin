@@ -1,6 +1,10 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
+  /** Set true only after policy publication and measurement QA. */
+  readonly VITE_MEASUREMENT_ENABLED?: string;
+  readonly VITE_GA4_MEASUREMENT_ID?: string;
+  readonly VITE_META_PIXEL_ID?: string;
   /**
    * 오픈베타 사전등록 폼 수신 엔드포인트(Apps Script 웹앱 URL).
    * 없으면 폼이 데모(검증만) 모드로 동작한다. 설정: server/beta-form/README.md

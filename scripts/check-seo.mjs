@@ -78,9 +78,12 @@ assert.ok(home.includes('id="faq-availability"'), "Answer the availability quest
 assert.ok(!home.includes("data-launch-countdown"), "Launch PR replaces the countdown");
 assert.ok(!/클로즈베타|CLOSED BETA/i.test(home), "Closed beta copy must not remain on the landing");
 assert.ok(!home.includes("오픈베타 사전등록"), "Do not ask users to preregister after launch");
-assert.ok(home.includes('href="https://github.com/04JUNG/Standin-client/releases/latest"'), "Download fallback works before hydration");
+assert.match(home, /href="https:\/\/github\.com\/04JUNG\/Standin-client\/releases\/download\/[^\"]+\.exe"/, "Windows installer works before hydration");
+assert.match(home, /href="https:\/\/github\.com\/04JUNG\/Standin-client\/releases\/download\/[^\"]+\.dmg"/, "macOS installer works before hydration");
+assert.ok(!home.includes('href="https://github.com/04JUNG/Standin-client/releases/latest"'), "Downloads stay on the landing instead of linking to GitHub UI");
 for (const [path, html] of documents) {
-  assert.match(html, /href="\/#beta"[^>]*>오픈베타 다운로드/, `${path}: link to downloads`);
+  const downloadHref = path === "/" ? "#beta" : "/#beta";
+  assert.match(html, new RegExp(`href="${downloadHref}"[^>]*>오픈베타 다운로드`), `${path}: link to downloads without dropping home campaign parameters`);
   assert.ok(!html.includes('href="/closed-beta/"') && html.includes('href="/feedback/"'), `${path}: open beta feedback navigation`);
 }
 const signupHtml = await readFile(new URL("signup/index.html", dist), "utf8");
