@@ -5,6 +5,16 @@ const assetPrefix = "https://github.com/04JUNG/Standin-client/releases/download/
 export type DownloadAsset = { label: string; name: string; url: string; size: number };
 export type PublicRelease = { tag: string; assets: DownloadAsset[] };
 
+// Verified public installers (2026-10-27). Keep downloads usable before JS and
+// during API outages; refresh this snapshot when publishing a client release.
+export const fallbackRelease: PublicRelease = {
+  tag: "v0.2.3",
+  assets: [
+    { label: "Windows · 64비트", name: "Standin_0.2.3_x64-setup.exe", url: `${assetPrefix}v0.2.3/Standin_0.2.3_x64-setup.exe`, size: 4837488 },
+    { label: "macOS · Apple Silicon / Intel", name: "Standin_0.2.3_universal.dmg", url: `${assetPrefix}v0.2.3/Standin_0.2.3_universal.dmg`, size: 13355919 },
+  ],
+};
+
 /** Only the release selected by GitHub's /latest endpoint is eligible. */
 export function parseRelease(value: unknown): PublicRelease {
   if (!value || typeof value !== "object") throw new Error("INVALID_RELEASE");
