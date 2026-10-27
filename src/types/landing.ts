@@ -21,6 +21,7 @@ export type FaqItem = {
   question: string;
   answer: string;
   relatedLink?: { label: string; href: string };
+  sourceLink?: { label: string; href: string };
 };
 
 export type BetaRole = "" | "artist" | "studio" | "assistant" | "other";

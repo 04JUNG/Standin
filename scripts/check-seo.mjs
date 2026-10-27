@@ -83,9 +83,10 @@ const homePage = homeGraph.find((node) => node["@type"] === "WebPage");
 const application = homeGraph.find((node) => node["@type"] === "SoftwareApplication");
 const visibleFaq = [...faq.matchAll(/<details\b[^>]*id="([^"]+)"[^>]*>([\s\S]*?)<\/details>/g)];
 assert.equal(visibleFaq.length, 16, "All product FAQ answers must exist in the initial HTML");
+assert.equal((faq.match(/<h3\b/g) ?? []).length, visibleFaq.length, "FAQ questions are semantic headings");
 assert.equal(faqSchema.mainEntity.length, visibleFaq.length, "Schema must describe exactly the visible FAQ");
 for (const [index, [, id, markup]] of visibleFaq.entries()) {
-  const question = unescapeHtml(markup.match(/<summary[^>]*>([\s\S]*?)<span/)[1]);
+  const question = unescapeHtml(markup.match(/<h3\b[^>]*>([\s\S]*?)<span/)[1]);
   const answer = unescapeHtml(markup.match(/<p\b[^>]*>([\s\S]*?)<\/p>/)[1]);
   const structured = faqSchema.mainEntity[index];
   assert.equal(structured["@id"], `${origin}/#${id}`, `FAQ ${id}: resolvable question anchor`);
@@ -95,6 +96,10 @@ for (const [index, [, id, markup]] of visibleFaq.entries()) {
 }
 assert.equal(homePage.hasPart["@id"], faqSchema["@id"]);
 assert.equal(homePage.mainEntity["@id"], application["@id"]);
+assert.equal(homePage.author["@id"], `${origin}/#organization`);
+for (const source of ["https://help.clip-studio.com/en-us/manual_en/660_3d/Importing_3D_Files.htm", "https://www.clipstudio.net/en/dl/release_note/v3/"]) {
+  assert.ok(faq.includes(`href="${source}"`), "Relevant official sources are linked from FAQ answers");
+}
 assert.equal(homePage.dateModified, faqSchema.dateModified);
 assert.ok(home.includes(`dateTime="${homePage.dateModified}"`), "FAQ review date is visible");
 assert.deepEqual(application.operatingSystem, ["Windows", "macOS"]);

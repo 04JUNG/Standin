@@ -24,6 +24,7 @@ export const faqItems: FaqItem[] = [
   },
   {
     id: "clip-studio-workflow",
+    sourceLink: { label: "CLIP STUDIO 공식 파일 가져오기 매뉴얼 (영문)", href: "https://help.clip-studio.com/en-us/manual_en/660_3d/Importing_3D_Files.htm" },
     relatedLink: { label: "클립스튜디오 활용 단계 보기", href: "/guides/clip-studio-pose-import/#select-pose" },
     question: "선택한 3D 포즈를 클립스튜디오에서 어떻게 활용하나요?",
     answer:
@@ -83,6 +84,7 @@ export const faqItems: FaqItem[] = [
   },
   {
     id: "export-formats",
+    sourceLink: { label: "CLIP STUDIO 공식 3.1.0 변경 내역 (영문)", href: "https://www.clipstudio.net/en/dl/release_note/v3/" },
     relatedLink: { label: "FBX·BVH 가져오기와 버전 확인", href: "/guides/clip-studio-pose-import/#file-formats" },
     question: "FBX와 BVH 내보내기는 무엇이 다른가요?",
     answer:
