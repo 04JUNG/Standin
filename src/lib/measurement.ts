@@ -4,7 +4,7 @@ type Tag = (...args: unknown[]) => void;
 type Pixel = Tag & { callMethod?: Tag; queue: unknown[][]; push?: Pixel; loaded: boolean; version: string };
 type MeasurementWindow = Window & { dataLayer?: unknown[]; gtag?: Tag; fbq?: Pixel; _fbq?: Pixel };
 
-const choiceKey = "standin.measurement.v1";
+const choiceKey = "standin.measurement.v2";
 const lifetime = 180 * 24 * 60 * 60 * 1000;
 const publicPaths = new Set(["/", "/guides/rough-to-3d-pose/", "/guides/clip-studio-pose-import/"]);
 const campaignKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_id"] as const;
@@ -46,7 +46,7 @@ export function createMeasurement(config: MeasurementConfig, browser?: Window) {
     if (!available || !win) return null;
     try {
       const saved = JSON.parse(win.localStorage.getItem(choiceKey) ?? "null");
-      return saved?.version === 1 && saved.expiresAt > Date.now() &&
+      return saved?.version === 2 && saved.expiresAt > Date.now() &&
         typeof saved.analytics === "boolean" && typeof saved.advertising === "boolean"
         ? { analytics: saved.analytics, advertising: saved.advertising } : null;
     } catch { return null; }
@@ -124,7 +124,7 @@ export function createMeasurement(config: MeasurementConfig, browser?: Window) {
     const previous = choice;
     const withdrawing = (choice.analytics && !next.analytics) || (choice.advertising && !next.advertising);
     choice = { analytics: Boolean(next.analytics && ga4Id), advertising: Boolean(next.advertising && pixelId) };
-    try { if (persist) win.localStorage.setItem(choiceKey, JSON.stringify({ ...choice, version: 1, expiresAt: Date.now() + lifetime })); }
+    try { if (persist) win.localStorage.setItem(choiceKey, JSON.stringify({ ...choice, version: 2, expiresAt: Date.now() + lifetime })); }
     catch { /* Storage can be blocked; the current-page choice still applies. */ }
     if (withdrawing) {
       // Block queued and subsequent events, then unload the providers on a fresh document.

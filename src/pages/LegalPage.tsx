@@ -29,6 +29,7 @@ export function LegalPage({ document }: { document: LegalDocument }) {
               <div><dt>버전</dt><dd>{legalVersion}</dd></div>
             </dl>
             {pending && <aside className="legal-review-notice">검토용 미리보기입니다. 아래 내용에는 아직 적용되지 않은 보관·동의 정책과 확인이 필요한 항목이 포함되어 있습니다. 현재 앱 동작을 보장하는 최종 개인정보처리방침이 아닙니다.</aside>}
+            {document.slug === "privacy" && <aside className="legal-review-notice">웹사이트 측정에 대해서는 2026년 10월 29일 공개한 <a href="/legal/measurement/">웹사이트 측정 개인정보 고지</a>가 아래 검토본 제11항의 미사용 안내를 대체합니다. Google·Meta 측정은 각각 선택 동의 후에만 작동합니다.</aside>}
             <div className="legal-actions">
               <a href={`/legal/${document.slug}/${document.slug}-${legalVersion}.txt`} download>전문 내려받기 (.txt)</a>
               <button type="button" onClick={() => window.print()}>인쇄하기</button>

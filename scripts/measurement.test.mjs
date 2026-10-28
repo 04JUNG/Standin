@@ -106,8 +106,8 @@ test("withdrawal blocks queued events, removes only revoked cookies, and reloads
 });
 
 test("expired, malformed or inaccessible preferences default to no tracking", () => {
-  for (const saved of ["{", JSON.stringify({ ...both, version: 1, expiresAt: 0 })]) {
-    const { win, storage, scripts } = browser(); storage.set("standin.measurement.v1", saved);
+  for (const saved of ["{", JSON.stringify({ ...both, version: 2, expiresAt: 0 })]) {
+    const { win, storage, scripts } = browser(); storage.set("standin.measurement.v2", saved);
     assert.equal(createMeasurement(config, win).start(), null); assert.equal(scripts.length, 0);
   }
   const { win, scripts } = browser(); win.localStorage.getItem = () => { throw Error("blocked"); };
@@ -117,8 +117,8 @@ test("expired, malformed or inaccessible preferences default to no tracking", ()
 test("withdrawal in another tab immediately blocks tracking here", () => {
   const state = browser(); const measurement = createMeasurement(config, state.win);
   measurement.start(); measurement.saveChoice(both);
-  state.storage.set("standin.measurement.v1", JSON.stringify({ ...none, version: 1, expiresAt: Date.now() + 10000 }));
-  state.listeners.get("storage")({ key: "standin.measurement.v1" });
+  state.storage.set("standin.measurement.v2", JSON.stringify({ ...none, version: 2, expiresAt: Date.now() + 10000 }));
+  state.listeners.get("storage")({ key: "standin.measurement.v2" });
   measurement.download("Standin_1.0_x64-setup.exe");
   assert.equal(state.reloads, 1);
   assert.equal(events(state.win).filter((event) => event[1] === "download_click").length, 0);
