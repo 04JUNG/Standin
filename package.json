@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "npm run check:feedback && npm run check:measurement && tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs && node scripts/check-seo.mjs && node scripts/check-legal.mjs",
-    "check:measurement": "node --experimental-strip-types --test scripts/measurement.test.mjs",
+    "check:measurement": "node --experimental-strip-types --test scripts/measurement.test.mjs scripts/acquisition.test.mjs",
     "check:countdown": "node --experimental-strip-types scripts/check-countdown.mjs",
     "sync:legal": "node scripts/sync-legal.mjs",
     "check:legal": "node scripts/check-legal.mjs",
