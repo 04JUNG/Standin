@@ -13,5 +13,5 @@ export function supportsAcquisition(tag: string): boolean {
   const match = /^v?(\d+)\.(\d+)\.(\d+)$/.exec(tag);
   if (!match) return false;
   const [major,minor,patch] = match.slice(1).map(Number);
-  return major>0 || minor>2 || minor===2 && patch>=4;
+  return major>0 || minor>2 || minor===2 && patch>=5;
 }
