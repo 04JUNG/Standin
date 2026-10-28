@@ -15,6 +15,7 @@ export function Footer() {
           <nav aria-label="약관 및 정책" className="site-footer__links">
             <a href="/feedback/">오픈베타 설문</a>
             <MeasurementSettings />
+            <a href="/legal/measurement/">웹사이트 측정 개인정보 고지</a>
             {legalDocuments.map((document) => (
               <a key={document.slug} href={legalPath(document)} className={document.slug === "privacy" ? "site-footer__privacy" : undefined}>
                 {document.label}
