@@ -25,7 +25,7 @@ export function PoseSearchVideo({ label, ariaLabel }: PoseSearchVideoProps) {
       >
         <img
           className="pose-reference-demo__workspace"
-          src="/assets/workspace/clip-studio-volleyball-workflow.png"
+          src="/assets/videos/result-demo-natural-v6-poster.jpg"
           alt=""
           aria-hidden="true"
         />
@@ -56,7 +56,7 @@ export function PoseSearchVideo({ label, ariaLabel }: PoseSearchVideoProps) {
                 <div className="pose-reference-card__image">
                   <span className="pose-reference-card__sprite">
                     <img
-                      src="/assets/process/volleyball-pose-variants-v2-sheet.png"
+                      src="/assets/hero-poses/realistic-v2/volleyball-candidates.webp"
                       alt=""
                     />
                   </span>
@@ -75,7 +75,7 @@ export function PoseSearchVideo({ label, ariaLabel }: PoseSearchVideoProps) {
             <article className="pose-reference-card is-answer">
               <div className="pose-reference-card__image">
                 <img
-                  src="/assets/hero-poses/pose-showcase-volleyball-mannequin-cutout.png"
+                  src="/assets/hero-poses/realistic-v2/volleyball-mannequin-v4.webp"
                   alt=""
                 />
                 <span className="pose-reference-card__number">05</span>

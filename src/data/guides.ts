@@ -72,9 +72,9 @@ export const guides: Guide[] = [
       },
     ],
     video: {
-      src: "/assets/videos/input-demo-webtoon-v5.mp4",
-      poster: "/assets/videos/input-demo-webtoon-v5-poster.jpg",
-      label: "Clip Studio에서 러프 이미지를 Standin에 입력하는 화면 녹화",
+      src: "/assets/videos/input-demo-natural-v8.mp4",
+      poster: "/assets/videos/input-demo-natural-v8-poster.jpg",
+      label: "Clip Studio에서 러프 이미지를 Standin에 입력하는 작업 흐름 연출 예시",
     },
   },
   {
@@ -148,9 +148,9 @@ export const guides: Guide[] = [
       },
     ],
     video: {
-      src: "/assets/videos/result-demo-rough-v3.mp4",
-      poster: "/assets/videos/result-demo-rough-v3-poster.jpg",
-      label: "Standin이 찾은 3D 포즈를 Clip Studio 캔버스에 배치하는 화면 녹화",
+      src: "/assets/videos/result-demo-natural-v6.mp4",
+      poster: "/assets/videos/result-demo-natural-v6-poster.jpg",
+      label: "Standin이 찾은 3D 포즈를 Clip Studio 캔버스에 배치하는 작업 흐름 연출 예시",
     },
     references: [
       { label: "Standin 공식 앱 릴리스: 설치 안내와 변경 내역", url: "https://github.com/04JUNG/Standin-client/releases/latest" },

@@ -365,16 +365,16 @@ body {
 }
 
 .hero-pose__stage[data-pose="action"] .hero-pose__visual {
-  transform: scale(1.17);
+  transform: scale(1);
 }
 
 .hero-pose__stage[data-pose="action"] .hero-pose__rough {
-  transform: translate(-2%, -0.7%) scale(0.88);
+  transform: none;
   transform-origin: center;
 }
 
 .hero-pose__neighbor[data-pose="action"] img {
-  transform: translate(-2.35%, -0.82%) scale(1.03);
+  transform: none;
   transform-origin: center;
 }
 

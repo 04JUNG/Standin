@@ -8,9 +8,9 @@ export function InputSection() {
       <Container wide>
         <div className="grid items-center gap-12 lg:grid-cols-[7fr_5fr] lg:gap-20">
           <MediaVideo
-            src="/assets/videos/input-demo-webtoon-v5.mp4"
-            poster="/assets/videos/input-demo-webtoon-v5-poster.jpg"
-            ariaLabel="Clip Studio에서 러프 이미지를 Standin에 입력하는 화면 녹화"
+            src="/assets/videos/input-demo-natural-v8.mp4"
+            poster="/assets/videos/input-demo-natural-v8-poster.jpg"
+            ariaLabel="Clip Studio에서 러프 이미지를 Standin에 입력하는 작업 흐름 연출 예시"
           />
 
           <div className="max-w-xl">

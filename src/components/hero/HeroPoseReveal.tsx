@@ -37,36 +37,36 @@ const poseExamples: PoseExample[] = [
     category: "ACTION",
     title: "낮은 전방 런지",
     description: "뻗은 손의 원근감과 몸통 회전이 강조되는 액션 포즈",
-    rough: "/assets/hero-poses/pose-showcase-action-rough-cutout.png",
-    mannequin: "/assets/hero-poses/pose-showcase-action-mannequin.png",
-    mannequinCutout: "/assets/hero-poses/pose-showcase-action-mannequin-cutout.png",
+    rough: "/assets/hero-poses/realistic-v2/action-rough.webp",
+    mannequin: "/assets/hero-poses/realistic-v2/action-mannequin.webp",
+    mannequinCutout: "/assets/hero-poses/realistic-v2/action-mannequin.webp",
   },
   {
     id: "run",
     category: "RUN",
     title: "스타트 대시",
     description: "바닥을 짚고 앞으로 튀어나가는 순간의 달리기 포즈",
-    rough: "/assets/hero-poses/pose-showcase-run-rough-cutout.png",
-    mannequin: "/assets/hero-poses/pose-showcase-run-mannequin.png",
-    mannequinCutout: "/assets/hero-poses/pose-showcase-run-mannequin-cutout.png",
+    rough: "/assets/hero-poses/realistic-v2/run-rough.webp",
+    mannequin: "/assets/hero-poses/realistic-v2/run-mannequin.webp",
+    mannequinCutout: "/assets/hero-poses/realistic-v2/run-mannequin.webp",
   },
   {
     id: "spin",
     category: "DYNAMIC",
     title: "공중 회전",
     description: "팔다리가 교차하며 회전의 방향이 또렷하게 보이는 공중 포즈",
-    rough: "/assets/hero-poses/pose-showcase-spin-rough-cutout.png",
-    mannequin: "/assets/hero-poses/pose-showcase-spin-mannequin.png",
-    mannequinCutout: "/assets/hero-poses/pose-showcase-spin-mannequin-cutout.png",
+    rough: "/assets/hero-poses/realistic-v2/spin-rough-v3.webp",
+    mannequin: "/assets/hero-poses/realistic-v2/spin-mannequin-v3.webp",
+    mannequinCutout: "/assets/hero-poses/realistic-v2/spin-mannequin-v3.webp",
   },
   {
     id: "volleyball",
     category: "VOLLEYBALL",
     title: "배구 공중 동작",
     description: "허리를 뒤로 젖히고 두 팔을 펼친 역동적인 공중 포즈",
-    rough: "/assets/hero-poses/pose-showcase-volleyball-rough-cutout.png",
-    mannequin: "/assets/hero-poses/pose-showcase-volleyball-mannequin.png",
-    mannequinCutout: "/assets/hero-poses/pose-showcase-volleyball-mannequin-cutout.png",
+    rough: "/assets/hero-poses/realistic-v2/volleyball-rough-v4.webp",
+    mannequin: "/assets/hero-poses/realistic-v2/volleyball-mannequin-v4.webp",
+    mannequinCutout: "/assets/hero-poses/realistic-v2/volleyball-mannequin-v4.webp",
   },
 ];
 
@@ -74,7 +74,7 @@ const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
 
 const POSE_IMAGE_ASPECT = 768 / 1024;
-const ACTION_VISUAL_SCALE = 1.17;
+const ACTION_VISUAL_SCALE = 1;
 
 export function HeroPoseReveal() {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -112,7 +112,7 @@ export function HeroPoseReveal() {
   }, []);
 
   useEffect(() => {
-    if (showWorkspace || isHovering || showFullResult) return;
+    if (showWorkspace || isHovering || showFullResult || hasInteracted) return;
 
     const timer = window.setInterval(() => {
       setActiveIndex((current) => (current + 1) % poseExamples.length);
@@ -120,7 +120,7 @@ export function HeroPoseReveal() {
     }, 4200);
 
     return () => window.clearInterval(timer);
-  }, [isHovering, showFullResult, showWorkspace]);
+  }, [hasInteracted, isHovering, showFullResult, showWorkspace]);
 
   const updateLens = (event: PointerEvent<HTMLDivElement>) => {
     if (event.pointerType !== "mouse" || !stageRef.current) return;
@@ -199,6 +199,7 @@ export function HeroPoseReveal() {
   };
 
   const changePose = (nextIndex: number) => {
+    setHasInteracted(true);
     setActiveIndex((nextIndex + poseExamples.length) % poseExamples.length);
     setShowFullResult(false);
     setLens(null);
@@ -249,6 +250,19 @@ export function HeroPoseReveal() {
       : shouldShowDemoLens
         ? { clipPath: "inset(24% 35% 24% 35% round 3px)" }
         : { clipPath: "inset(50% 50% 50% 50% round 3px)" };
+
+  // New renders have real alpha. Remove the sketch inside the reveal window
+  // so it cannot show through the mannequin's transparent surroundings.
+  const revealHole = isHovering && lens
+    ? { left: `${lens.left}px`, top: `${lens.top}px`, right: `calc(100% - ${lens.right}px)`, bottom: `calc(100% - ${lens.bottom}px)` }
+    : shouldShowDemoLens
+      ? { left: "35%", top: "24%", right: "65%", bottom: "76%" }
+      : null;
+  const roughStyle: CSSProperties | undefined = showFullResult
+    ? { opacity: 0 }
+    : revealHole
+      ? { clipPath: `polygon(evenodd, 0 0, 100% 0, 100% 100%, 0 100%, 0 0, ${revealHole.left} ${revealHole.top}, ${revealHole.left} ${revealHole.bottom}, ${revealHole.right} ${revealHole.bottom}, ${revealHole.right} ${revealHole.top}, ${revealHole.left} ${revealHole.top}, 0 0)` }
+      : undefined;
 
   const lensStyle: CSSProperties | undefined =
     isHovering && lens
@@ -328,6 +342,7 @@ export function HeroPoseReveal() {
                 <img
                   className="hero-pose__image hero-pose__rough"
                   src={activePose.rough}
+                  style={roughStyle}
                   alt={`${activePose.title}를 파란 선으로 그린 인체 러프`}
                   draggable={false}
                 />
