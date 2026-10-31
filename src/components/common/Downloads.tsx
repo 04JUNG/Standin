@@ -55,8 +55,8 @@ export function Downloads() {
     {appLink && latestChecked && supportsAcquisition(release.tag) && <div className="mt-5 rounded-xl border border-neutral-250 p-4 text-sm leading-relaxed">
       <p className="font-semibold">설치를 마쳤나요?</p>
       <a href={appLink} className="mt-2 inline-flex min-h-12 items-center rounded-xl bg-brand-ink px-4 font-bold text-white">설치했어요 — 앱 열기</a>
-      <p className="mt-2 text-neutral-600">최신 버전을 설치한 PC에서 눌러주세요. 앱에서 별도로 동의하면 어떤 광고가 실제 사용에 도움이 되었는지 알려줄 수 있습니다. 동의하지 않아도 이용할 수 있습니다.</p>
-      <p className="mt-2 text-neutral-600">앱이 열리지 않으면 설치한 Standin을 직접 실행하세요. <a href="/legal/measurement/#app-attribution" className="underline">광고·앱 이용 연결 안내</a></p>
+      <p className="mt-2 text-neutral-600">최신 버전을 설치한 PC에서 눌러주세요. v0.2.7부터 새 등록 앱은 소재별 첫 실행·첫 이미지 분석 성공 건수를 선택 동의와 별도로 집계합니다. 이 건수 집계에는 설치·작업 식별자를 보내지 않습니다. 설치별 이용 이력 연결은 별도 선택 동의로 진행합니다.</p>
+      <p className="mt-2 text-neutral-600">앱이 열리지 않으면 설치한 Standin을 직접 실행하세요. <a href="/legal/measurement/#campaign-counts" className="underline">소재별 건수·선택 연결 안내</a></p>
     </div>}
     {failed && <div className="mt-4 flex flex-wrap items-center gap-4">
       <p className="w-full text-sm text-neutral-600">최신 버전 확인이 지연되고 있습니다. 위 버튼으로 확인된 공개 버전을 받을 수 있습니다.</p>
