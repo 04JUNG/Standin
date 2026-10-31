@@ -1,13 +1,18 @@
+export type Creative = 'meta-poster-a' | 'meta-hook-a';
 /** Only campaign labels cross into the app: no click ID, cookie, email or fingerprint. */
-export function appCampaignLink(href: string): string | null {
+export function campaignCreative(href: string): Creative | null {
   try {
     const url = new URL(href);
     if (url.searchParams.get('utm_source') !== 'instagram' || url.searchParams.get('utm_medium') !== 'paid_social' || url.searchParams.get('utm_campaign') !== 'open-beta') return null;
     if (['utm_source','utm_medium','utm_campaign','utm_content'].some(key=>url.searchParams.getAll(key).length!==1)) return null;
     const creative = url.searchParams.get('utm_content');
     if (creative !== 'meta-poster-a' && creative !== 'meta-hook-a') return null;
-    return `standin://campaign?source=instagram&campaign=open-beta&creative=${creative}`;
+    return creative;
   } catch { return null; }
+}
+export function appCampaignLink(href: string): string | null {
+  const creative = campaignCreative(href);
+  return creative ? `standin://campaign?source=instagram&campaign=open-beta&creative=${creative}` : null;
 }
 export function supportsAcquisition(tag: string): boolean {
   const match = /^v?(\d+)\.(\d+)\.(\d+)$/.exec(tag);
