@@ -6,14 +6,24 @@ const assetPrefix = "https://github.com/04JUNG/Standin-client/releases/download/
 export type DownloadAsset = { label: string; name: string; url: string; size: number };
 export type PublicRelease = { tag: string; assets: DownloadAsset[]; campaignAssets?: Partial<Record<Creative, DownloadAsset[]>> };
 
-// Verified public installers (2026-10-31). Keep downloads usable before JS and
+// Verified public installers (2026-11-01 KST). Keep downloads usable before JS and
 // during API outages; refresh this snapshot when publishing a client release.
 export const fallbackRelease: PublicRelease = {
-  tag: "v0.2.7",
+  tag: "v0.2.8",
   assets: [
-    { label: "Windows · 64비트", name: "Standin_0.2.7_x64-setup.exe", url: `${assetPrefix}v0.2.7/Standin_0.2.7_x64-setup.exe`, size: 4841304 },
-    { label: "macOS · Apple Silicon / Intel", name: "Standin_0.2.7_universal.dmg", url: `${assetPrefix}v0.2.7/Standin_0.2.7_universal.dmg`, size: 13360838 },
+    { label: "Windows · 64비트", name: "Standin_0.2.8_x64-setup.exe", url: `${assetPrefix}v0.2.8/Standin_0.2.8_x64-setup.exe`, size: 4841144 },
+    { label: "macOS · Apple Silicon / Intel", name: "Standin_0.2.8_universal.dmg", url: `${assetPrefix}v0.2.8/Standin_0.2.8_universal.dmg`, size: 13362150 },
   ],
+  campaignAssets: {
+    'meta-poster-a': [
+      { label: "Windows · 64비트", name: "Standin_0.2.8_meta-poster-a_x64-setup.exe", url: `${assetPrefix}v0.2.8/Standin_0.2.8_meta-poster-a_x64-setup.exe`, size: 4841504 },
+      { label: "macOS · Apple Silicon / Intel", name: "Standin_0.2.8_meta-poster-a_universal.dmg", url: `${assetPrefix}v0.2.8/Standin_0.2.8_meta-poster-a_universal.dmg`, size: 13361891 },
+    ],
+    'meta-hook-a': [
+      { label: "Windows · 64비트", name: "Standin_0.2.8_meta-hook-a_x64-setup.exe", url: `${assetPrefix}v0.2.8/Standin_0.2.8_meta-hook-a_x64-setup.exe`, size: 4842568 },
+      { label: "macOS · Apple Silicon / Intel", name: "Standin_0.2.8_meta-hook-a_universal.dmg", url: `${assetPrefix}v0.2.8/Standin_0.2.8_meta-hook-a_universal.dmg`, size: 13362005 },
+    ],
+  },
 };
 
 /** Only the release selected by GitHub's /latest endpoint is eligible. */
