@@ -9,6 +9,7 @@ import { StandinIntro } from "./components/hero/StandinIntro";
 import { FaqSection } from "./components/sections/FaqSection";
 import { GuidesSection } from "./components/sections/GuidesSection";
 import { FeatureShowcaseSection } from "./components/sections/FeatureShowcaseSection";
+import { SupportersPopup } from "./components/common/SupportersPopup";
 
 export function App() {
   return (
@@ -29,6 +30,7 @@ export function App() {
         <FaqSection />
       </main>
       <Footer />
+      <SupportersPopup />
     </div>
   );
 }
