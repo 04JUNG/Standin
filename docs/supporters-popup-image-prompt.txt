@@ -1,0 +1,19 @@
+Source: Standin-master-docs/서포터즈/Standin_서포터즈_인스타피드_1080x1350_v2_활동이력안내_2026-11-03.png
+Tool: built-in image_gen (edit), 2026-11-03
+Output: public/assets/supporters/recruitment-popup-2026-11.png (1092 x 1440)
+Web asset: recruitment-popup-2026-11.jpg (JPEG quality 90, same pixel dimensions)
+
+Edit the provided Standin recruitment poster into a compact website popup graphic, preserving its distinctive existing design and artwork. Input image is the edit target, not just inspiration. Preserve the electric blue background, red/white/navy colors, Standin. wordmark, bold extruded Korean recruitment lettering, tablet and stylus artwork, playful white/red accent marks. Output a flat portrait 4:5 bitmap, about 1080x1350, opaque background, no UI mockup or browser frame. Reuse/reflow existing upper poster artwork at high fidelity. Only simplify the bottom information for readability in a 328px-wide website popup.
+Keep these exact texts and no other text:
+"Standin."
+"2026"
+"서포터즈"
+"모집!"
+"내 그림에 써보고,"
+"솔직한 후기를 들려주세요."
+"기본 활동비"
+"20만 원"
+"세전 · 기본 활동 완료 시"
+"20명 이내 · 11.06 23:59 마감"
+"활동 2026.11.09–11.20"
+Composition: existing vivid recruitment title and tablet illustration fill upper approximately 65%; preserve large white reward panel near bottom with red 20만 원; clear compact deadline and activity strip below. Remove the original lower activity checklist, eligibility paragraph, contact email, and profile-link button completely, and use their space to increase headline/benefit readability. Do NOT add any application CTA, QR, URL, or profile-link text: a real HTML application button will be rendered beneath the image by the website. Korean spelling and numbers must be exact. Maintain crisp typography and a clean full-bleed rectangle.
