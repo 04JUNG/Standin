@@ -12,7 +12,6 @@ export function MeasurementSettings() {
     if (!measurement.available) return;
     const saved = measurement.start();
     if (saved) setChoice(saved);
-    setOpen(!saved);
     setReady(true);
   }, []);
   if (!ready) return null;
@@ -26,7 +25,7 @@ export function MeasurementSettings() {
     <button type="button" ref={settingsButton} onClick={() => { setOpen(true); requestAnimationFrame(() => title.current?.focus()); }} className="min-h-11 text-sm underline underline-offset-4">쿠키 설정</button>
     {open && <section aria-labelledby="measurement-title" className="fixed inset-x-3 bottom-3 z-50 mx-auto max-h-[70vh] max-w-xl overflow-y-auto rounded-2xl border border-neutral-250 bg-white p-5 text-brand-ink shadow-xl sm:p-6">
       <h2 id="measurement-title" ref={title} tabIndex={-1} className="text-lg font-bold">방문 통계와 광고 성과 측정</h2>
-      <p className="mt-2 text-sm leading-relaxed">선택한 항목에만 쿠키와 측정 도구를 사용합니다. 허용하지 않아도 다운로드할 수 있고, 아래 쿠키 설정에서 언제든 변경할 수 있습니다.</p>
+      <p className="mt-2 text-sm leading-relaxed">설정을 저장하기 전에는 Google에 쿠키 없는 기본 방문·클릭 통계를 전송합니다. 아래 항목을 허용하면 해당 쿠키와 측정 도구를 사용합니다. “허용 안 함”을 선택하면 기본 통계도 중단합니다. 다운로드는 설정과 관계없이 이용할 수 있습니다.</p>
       <div className="mt-3 space-y-2 text-sm">
         {measurement.hasAnalytics && <div>
           <label className="flex min-h-11 items-center gap-3"><input type="checkbox" aria-describedby="measurement-analytics-detail" checked={choice.analytics} onChange={(event) => setChoice({ ...choice, analytics: event.target.checked })} className="h-5 w-5 shrink-0" />방문·다운로드 통계 (Google Analytics)</label>
