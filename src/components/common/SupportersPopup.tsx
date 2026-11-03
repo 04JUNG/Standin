@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { ArrowUpRight, X } from "lucide-react";
+import { dismissSupportersToday, isSupportersDismissedToday, SUPPORTERS_DISMISSAL_KEY } from "../../lib/supportersPopup";
 import "../../styles/supporters-popup.css";
 
 const APPLICATION_URL =
@@ -12,7 +13,7 @@ export function SupportersPopup() {
 
   useEffect(() => {
     const dialog = dialogRef.current;
-    if (!dialog || Date.now() >= CLOSES_AT) return;
+    if (!dialog || Date.now() >= CLOSES_AT || isSupportersDismissedToday()) return;
 
     let previousOverflow: string | undefined;
     let previousFocus: HTMLElement | null = null;
@@ -25,12 +26,15 @@ export function SupportersPopup() {
       }
     };
     const closeWhenExpired = () => {
-      if (Date.now() >= CLOSES_AT) dialog.close();
+      if (Date.now() >= CLOSES_AT || isSupportersDismissedToday()) dialog.close();
+    };
+    const syncDismissal = (event: StorageEvent) => {
+      if (event.key === SUPPORTERS_DISMISSAL_KEY) closeWhenExpired();
     };
 
     // Let the existing 2.2-second brand intro finish before opening the dialog.
     const openTimer = window.setTimeout(() => {
-      if (Date.now() >= CLOSES_AT) return;
+      if (Date.now() >= CLOSES_AT || isSupportersDismissedToday()) return;
       previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       previousOverflow = document.body.style.overflow;
       dialog.showModal();
@@ -41,12 +45,14 @@ export function SupportersPopup() {
     dialog.addEventListener("close", restorePage);
     document.addEventListener("visibilitychange", closeWhenExpired);
     window.addEventListener("pageshow", closeWhenExpired);
+    window.addEventListener("storage", syncDismissal);
     return () => {
       window.clearTimeout(openTimer);
       window.clearTimeout(expiryTimer);
       dialog.removeEventListener("close", restorePage);
       document.removeEventListener("visibilitychange", closeWhenExpired);
       window.removeEventListener("pageshow", closeWhenExpired);
+      window.removeEventListener("storage", syncDismissal);
       dialog.close();
       restorePage();
     };
@@ -90,9 +96,17 @@ export function SupportersPopup() {
             <span className="supporters-popup__hint">지원 자격·활동 조건 확인 및 신청 · 구글 폼</span>
           </div>
         </a>
-        <button type="button" className="supporters-popup__dismiss" onClick={() => dialogRef.current?.close()}>
-          닫고 둘러보기
-        </button>
+        <div className="supporters-popup__actions">
+          <button type="button" className="supporters-popup__dismiss" onClick={() => {
+            dismissSupportersToday();
+            dialogRef.current?.close();
+          }}>
+            오늘 하루 보지 않기
+          </button>
+          <button type="button" className="supporters-popup__dismiss" onClick={() => dialogRef.current?.close()}>
+            닫기
+          </button>
+        </div>
       </div>
     </dialog>
   );
