@@ -25,7 +25,7 @@ export function MeasurementSettings() {
     <button type="button" ref={settingsButton} onClick={() => { setOpen(true); requestAnimationFrame(() => title.current?.focus()); }} className="min-h-11 text-sm underline underline-offset-4">쿠키 설정</button>
     {open && <section aria-labelledby="measurement-title" className="fixed inset-x-3 bottom-3 z-50 mx-auto max-h-[70vh] max-w-xl overflow-y-auto rounded-2xl border border-neutral-250 bg-white p-5 text-brand-ink shadow-xl sm:p-6">
       <h2 id="measurement-title" ref={title} tabIndex={-1} className="text-lg font-bold">방문 통계와 광고 성과 측정</h2>
-      <p className="mt-2 text-sm leading-relaxed">설정을 저장하기 전에는 Google에 쿠키 없는 기본 방문·클릭 통계를 전송합니다. 아래 항목을 허용하면 해당 쿠키와 측정 도구를 사용합니다. “허용 안 함”을 선택하면 기본 통계도 중단합니다. 다운로드는 설정과 관계없이 이용할 수 있습니다.</p>
+      <p className="mt-2 text-sm leading-relaxed">방문 통계와 광고 성과 측정은 기본으로 사용합니다. 기존에 저장한 설정이 있으면 그 설정을 따릅니다. 아래에서 항목별로 끄거나 “허용 안 함”으로 모두 중단할 수 있습니다. 다운로드는 설정과 관계없이 이용할 수 있습니다.</p>
       <div className="mt-3 space-y-2 text-sm">
         {measurement.hasAnalytics && <div>
           <label className="flex min-h-11 items-center gap-3"><input type="checkbox" aria-describedby="measurement-analytics-detail" checked={choice.analytics} onChange={(event) => setChoice({ ...choice, analytics: event.target.checked })} className="h-5 w-5 shrink-0" />방문·다운로드 통계 (Google Analytics)</label>
@@ -36,7 +36,7 @@ export function MeasurementSettings() {
           <p id="measurement-advertising-detail" className="pl-8 text-sm leading-relaxed">Meta에 페이지 조회·클릭과 쿠키·접속 정보를 전송합니다. Meta는 광고 성과 측정 외에도 광고·추천 개인화, 서비스 개선과 보안에 사용할 수 있습니다. 아래 쿠키 설정에서 언제든 철회할 수 있습니다.</p>
         </div>}
       </div>
-      <p className="mt-3 text-sm leading-relaxed">각 선택에는 Google LLC 또는 Meta Platforms, Inc.에 대한 정보 전송과 미국 등 국외 이전 동의가 포함됩니다. 수신자별 국가·항목·목적·보유기간·연락처를 아래 고지에서 확인해 주세요.</p>
+      <p className="mt-3 text-sm leading-relaxed">사용 중인 항목은 Google LLC 또는 Meta Platforms, Inc.에 정보를 전송하며 미국 등 국외에서 처리될 수 있습니다. 수신자별 국가·항목·목적·보유기간·연락처를 아래 고지에서 확인해 주세요.</p>
       <a href="/legal/measurement/" target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-sm underline underline-offset-4">웹사이트 측정·국외 이전 상세 고지 (새 창)</a>
       <div className="mt-4 grid grid-cols-2 gap-3">
         <button type="button" onClick={() => save({ analytics: false, advertising: false })} className="min-h-12 rounded-xl border border-neutral-250 px-3 font-semibold">허용 안 함</button>

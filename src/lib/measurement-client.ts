@@ -1,6 +1,6 @@
 import { createMeasurement } from "./measurement";
 
-// Public destination IDs. New visitors use cookieless GA; Meta requires opt-in.
+// Public destination IDs. Start automatically unless a saved visitor setting disables them.
 // Set VITE_MEASUREMENT_ENABLED=false to disable without changing consent records.
 export const measurement = createMeasurement({
   enabled: import.meta.env.VITE_MEASUREMENT_ENABLED !== "false",

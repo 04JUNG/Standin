@@ -38,7 +38,6 @@ export function createMeasurement(config: MeasurementConfig, browser?: Window) {
   const pixelId = /^\d{5,30}$/.test(config.pixelId) ? config.pixelId : "";
   const available = Boolean(config.enabled && win && (ga4Id || pixelId) && isMeasurementPage(win.location.href));
   let choice: MeasurementChoice = { analytics: false, advertising: false };
-  let cookieless = false;
   let gaStarted = false;
   let pixelStarted = false;
   let started = false;
@@ -64,14 +63,14 @@ export function createMeasurement(config: MeasurementConfig, browser?: Window) {
 
   function startProviders() {
     if (!available || !win) return;
-    if ((choice.analytics || cookieless) && ga4Id && !gaStarted) {
+    if (choice.analytics && ga4Id && !gaStarted) {
       gaStarted = true;
       win.dataLayer = win.dataLayer ?? [];
       // Google's bootstrap expects an Arguments object in dataLayer.
       // eslint-disable-next-line prefer-rest-params
       win.gtag = win.gtag ?? function (..._args: unknown[]) { win.dataLayer!.push(arguments); };
       win.gtag("consent", "default", {
-        analytics_storage: choice.analytics ? "granted" : "denied", ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied",
+        analytics_storage: "granted", ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied",
       });
       win.gtag("js", new Date());
       let referrer = "";
@@ -123,27 +122,23 @@ export function createMeasurement(config: MeasurementConfig, browser?: Window) {
   function applyChoice(next: MeasurementChoice, persist: boolean) {
     if (!available || !win) return;
     const previous = choice;
-    const withdrawing = ((choice.analytics || cookieless) && !next.analytics) || (choice.advertising && !next.advertising);
-    const grantingAnalytics = gaStarted && !choice.analytics && next.analytics;
-    cookieless = false;
+    const withdrawing = (choice.analytics && !next.analytics) || (choice.advertising && !next.advertising);
     choice = { analytics: Boolean(next.analytics && ga4Id), advertising: Boolean(next.advertising && pixelId) };
     let saved = !persist;
     try {
       if (persist) win.localStorage.setItem(choiceKey, JSON.stringify({ ...choice, version: 2, expiresAt: Date.now() + lifetime }));
       saved = true;
-    } catch { /* Keep the current document so a blocked save does not lose a refusal. */ }
+    } catch { /* Do not reload and lose a refusal when storage is blocked. */ }
     if (withdrawing) {
       // Block queued and subsequent events, then unload the providers on a fresh document.
-      if (ga4Id) (win as unknown as Record<string, unknown>)[`ga-disable-${ga4Id}`] = true;
-      if (win.fbq) { if (Array.isArray(win.fbq.queue)) win.fbq.queue.length = 0; win.fbq("consent", "revoke"); }
+      if (ga4Id && !choice.analytics) (win as unknown as Record<string, unknown>)[`ga-disable-${ga4Id}`] = true;
+      if (win.fbq && !choice.advertising) { if (Array.isArray(win.fbq.queue)) win.fbq.queue.length = 0; win.fbq("consent", "revoke"); }
       clearCookies(previous);
       if (saved) win.location.reload();
+      else startProviders();
       return;
     }
-    if (grantingAnalytics) {
-      (win as unknown as Record<string, unknown>)[`ga-disable-${ga4Id}`] = false;
-      win.gtag?.("consent", "update", { analytics_storage: "granted" });
-    }
+    if (choice.analytics && gaStarted && !previous.analytics) (win as unknown as Record<string, unknown>)[`ga-disable-${ga4Id}`] = false;
     if (choice.advertising && pixelStarted && !previous.advertising) win.fbq?.("consent", "grant");
     startProviders();
   }
@@ -151,7 +146,7 @@ export function createMeasurement(config: MeasurementConfig, browser?: Window) {
   function track(event: "download_click" | "pc_link_copy", params: Record<string, string> = {}) {
     if (!available || !win) return;
     try {
-      if ((choice.analytics || cookieless) && gaStarted) win.gtag?.("event", event, { ...params, send_to: ga4Id, transport_type: "beacon" });
+      if (choice.analytics && gaStarted) win.gtag?.("event", event, { ...params, send_to: ga4Id, transport_type: "beacon" });
       if (choice.advertising && pixelStarted) {
         const names = { download_click: "DownloadClick", pc_link_copy: "PcLinkCopy" };
         win.fbq?.("trackSingleCustom", pixelId, names[event], params);
@@ -162,19 +157,20 @@ export function createMeasurement(config: MeasurementConfig, browser?: Window) {
   return {
     available, hasAnalytics: Boolean(ga4Id), hasAdvertising: Boolean(pixelId),
     start() {
-      if (started) return readChoice();
+      if (!available) return null;
+      if (started) return choice;
       started = true;
       const saved = readChoice();
-      if (saved) choice = saved;
-      else cookieless = true;
+      // Automatic measurement is a default, not a visitor consent record.
+      choice = saved ?? { analytics: Boolean(ga4Id), advertising: Boolean(pixelId) };
       startProviders();
       if (available && win) win.addEventListener("storage", (event) => {
         if (event.key !== choiceKey && event.key !== null) return;
         const next = readChoice() ?? { analytics: false, advertising: false };
         // Propagate withdrawal to an already-open tab without rewriting storage.
-        if (((choice.analytics || cookieless) && !next.analytics) || (choice.advertising && !next.advertising)) applyChoice(next, false);
+        if ((choice.analytics && !next.analytics) || (choice.advertising && !next.advertising)) applyChoice(next, false);
       });
-      return saved;
+      return choice;
     },
     saveChoice(next: MeasurementChoice) { applyChoice(next, true); },
     download(fileName: string) {
