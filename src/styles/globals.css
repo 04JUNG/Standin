@@ -1287,6 +1287,10 @@ body {
 
 .standin-intro__wordmark {
   position: absolute;
+  /* Keep the brand intact even when the page allows Japanese text wrapping. */
+  width: max-content;
+  white-space: nowrap;
+  overflow-wrap: normal;
   top: calc(7rem + clamp(34.1px, 3.41vw, 41.8px));
   left: 50%;
   display: flex;
@@ -1614,7 +1618,7 @@ body {
 
   .standin-intro__wordmark {
     top: calc(5rem + 30.5px);
-    font-size: clamp(7.2rem, 32.4vw, 9.6rem);
+    font-size: clamp(4rem, 26vw, 9.6rem);
   }
 }
 
