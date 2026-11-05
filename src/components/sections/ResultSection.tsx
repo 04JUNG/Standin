@@ -1,8 +1,11 @@
+import { useI18n } from "../../i18n/context";
 import { Container } from "../common/Container";
 import { MediaVideo } from "../common/MediaVideo";
-import { flow } from "../../data/content";
+import { useLandingContent } from "../../i18n/landing";
 
 export function ResultSection() {
+  const { t } = useI18n();
+  const { flow } = useLandingContent();
   return (
     <section id="result" className="py-20 sm:py-24 lg:py-28">
       <Container wide>
@@ -10,7 +13,7 @@ export function ResultSection() {
           <MediaVideo
             src="/assets/videos/result-demo-natural-v6.mp4"
             poster="/assets/videos/result-demo-natural-v6-poster.jpg"
-            ariaLabel="Standin이 찾은 3D 포즈를 Clip Studio 캔버스에 배치해 레이어로 생성하는 작업 흐름 연출 예시"
+            ariaLabel={t("Standin이 찾은 3D 포즈를 Clip Studio 캔버스에 배치해 레이어로 생성하는 작업 흐름 연출 예시")}
             aspect="aspect-[144/85]"
           />
 

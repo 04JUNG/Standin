@@ -1,8 +1,11 @@
+import { useI18n } from "../../i18n/context";
 import { Container } from "../common/Container";
 import { PoseSearchVideo } from "../demo/PoseSearchVideo";
-import { flow } from "../../data/content";
+import { useLandingContent } from "../../i18n/landing";
 
 export function ProcessSection() {
+  const { t } = useI18n();
+  const { flow } = useLandingContent();
   return (
     <section id="process" className="bg-neutral-100 py-20 sm:py-24 lg:py-28">
       <Container wide>
@@ -10,7 +13,7 @@ export function ProcessSection() {
           <div className="lg:order-2">
             <PoseSearchVideo
               label={flow.process.mediaLabel}
-              ariaLabel="클립스튜디오의 배구 러프를 분석해 서로 다른 3D 자세 후보 다섯 개를 비교하고 가장 가까운 포즈를 선택하는 데모"
+              ariaLabel={t("클립스튜디오의 배구 러프를 분석해 서로 다른 3D 자세 후보 다섯 개를 비교하고 가장 가까운 포즈를 선택하는 데모")}
             />
           </div>
 
@@ -22,7 +25,7 @@ export function ProcessSection() {
             <p className="mt-6 text-lg leading-relaxed text-neutral-600 lg:text-xl">
               {flow.process.body}
             </p>
-            <ol className="mt-7 flex flex-wrap gap-2" aria-label="Standin 처리 순서">
+            <ol className="mt-7 flex flex-wrap gap-2" aria-label={t("Standin 처리 순서")}>
               {flow.process.steps.map((step, index) => (
                 <li
                   key={step}

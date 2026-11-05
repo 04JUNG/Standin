@@ -6,14 +6,14 @@ type MeasurementWindow = Window & { dataLayer?: unknown[]; gtag?: Tag; fbq?: Pix
 
 const choiceKey = "standin.measurement.v2";
 const lifetime = 180 * 24 * 60 * 60 * 1000;
-const publicPaths = new Set(["/", "/guides/rough-to-3d-pose/", "/guides/clip-studio-pose-import/"]);
+const publicPaths = new Set(["/", "/ja/", "/guides/rough-to-3d-pose/", "/guides/clip-studio-pose-import/"]);
 const campaignKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_id"] as const;
 const safeValue = /^[a-zA-Z0-9_-]{1,100}$/;
 
 /** Campaign labels only. Never copy arbitrary query parameters or personal identifiers. */
 export function campaignUrl(href: string, forPc = false): string {
   const source = new URL(href);
-  const result = new URL(forPc ? "/" : source.pathname, source.origin);
+  const result = new URL(forPc ? (source.pathname === "/ja/" ? "/ja/" : "/") : source.pathname, source.origin);
   for (const key of campaignKeys) {
     const value = source.searchParams.get(key);
     if (value && safeValue.test(value)) result.searchParams.set(key, value);
@@ -80,7 +80,7 @@ export function createMeasurement(config: MeasurementConfig, browser?: Window) {
         allow_google_signals: false, allow_ad_personalization_signals: false,
         cookie_domain: "none", cookie_prefix: "standin", cookie_expires: lifetime / 1000,
       });
-      win.gtag("event", "page_view", { send_to: ga4Id });
+      win.gtag("event", "page_view", { send_to: ga4Id, page_language: win.location.pathname === "/ja/" ? "ja" : "ko" });
       loadScript("standin-ga4", `https://www.googletagmanager.com/gtag/js?id=${ga4Id}`);
     }
     if (choice.advertising && pixelId && !pixelStarted) {
@@ -145,6 +145,7 @@ export function createMeasurement(config: MeasurementConfig, browser?: Window) {
 
   function track(event: "download_click" | "pc_link_copy", params: Record<string, string> = {}) {
     if (!available || !win) return;
+    params = { ...params, page_language: win.location.pathname === "/ja/" ? "ja" : "ko" };
     try {
       if (choice.analytics && gaStarted) win.gtag?.("event", event, { ...params, send_to: ga4Id, transport_type: "beacon" });
       if (choice.advertising && pixelStarted) {

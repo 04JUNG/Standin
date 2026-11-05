@@ -1,0 +1,32 @@
+/* Japanese punctuation must wrap normally; Korean keep-all rules do not apply. */
+html[lang="ja"] body {
+  font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+  line-break: strict;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+html[lang="ja"] :is(h1, h2, h3, p, button, a) {
+  word-break: normal;
+  line-break: strict;
+}
+html[lang="ja"] :is(h1, h2, h3) { line-height: 1.45; letter-spacing: -.025em; }
+.language-control { position: relative; flex-shrink: 0; }
+.language-switcher { display: flex; align-items: center; gap: 2px; font-size: 12px; white-space: nowrap; }
+.language-switcher a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; border-radius: 8px; color: #667085; }
+.language-switcher a[aria-current="page"] { color: #152238; font-weight: 700; text-decoration: underline; text-underline-offset: 5px; }
+.language-switcher a:hover { background: #eef1f4; color: #152238; }
+.language-suggestion { position: absolute; right: 0; top: 48px; display: flex; gap: 8px; align-items: center; width: max-content; max-width: 280px; padding: 8px 12px; background: #fff; border: 1px solid #d8dde5; border-radius: 12px; box-shadow: 0 8px 24px #15223814; font-size: 13px; }
+.language-suggestion a { padding: 8px 0; text-decoration: underline; text-underline-offset: 4px; }
+.language-suggestion button { width: 32px; min-height: 32px; font-size: 22px; }
+.locale-availability { margin-top: 20px; padding: 16px; border: 1px solid #d8dde5; border-radius: 12px; background: #f8f5ef; font-size: 14px; line-height: 1.8; }
+.locale-availability p + p { margin-top: 8px; }
+.locale-availability a { display: inline-flex; align-items: center; min-height: 44px; }
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .landing-shell header .landing-nav a { padding-inline: 8px; font-size: 13px; }
+  .landing-shell header a.md\:inline-flex { display: none; }
+}
+@media (max-width: 639px) {
+  html[lang="ja"] .hero-pose__instruction { font-size: 11px; max-width: 90%; text-align: center; }
+  html[lang="ja"] .hero-workspace__flow { flex-wrap: wrap; }
+  html[lang="ja"] .feature-animation figcaption { flex-wrap: wrap; gap: 8px; }
+}

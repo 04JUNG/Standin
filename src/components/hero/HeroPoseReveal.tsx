@@ -1,3 +1,5 @@
+import { useI18n } from "../../i18n/context";
+import type { Translator } from "../../i18n/context";
 import {
   ArrowLeft,
   ArrowRight,
@@ -5,6 +7,7 @@ import {
 } from "lucide-react";
 import {
   useEffect,
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
@@ -31,12 +34,12 @@ type RevealLens = {
   size: number;
 };
 
-const poseExamples: PoseExample[] = [
+const getPoseExamples = (t: Translator): PoseExample[] => [
   {
     id: "action",
     category: "ACTION",
-    title: "낮은 전방 런지",
-    description: "뻗은 손의 원근감과 몸통 회전이 강조되는 액션 포즈",
+    title: t("낮은 전방 런지"),
+    description: t("뻗은 손의 원근감과 몸통 회전이 강조되는 액션 포즈"),
     rough: "/assets/hero-poses/realistic-v2/action-rough.webp",
     mannequin: "/assets/hero-poses/realistic-v2/action-mannequin.webp",
     mannequinCutout: "/assets/hero-poses/realistic-v2/action-mannequin.webp",
@@ -44,8 +47,8 @@ const poseExamples: PoseExample[] = [
   {
     id: "run",
     category: "RUN",
-    title: "스타트 대시",
-    description: "바닥을 짚고 앞으로 튀어나가는 순간의 달리기 포즈",
+    title: t("스타트 대시"),
+    description: t("바닥을 짚고 앞으로 튀어나가는 순간의 달리기 포즈"),
     rough: "/assets/hero-poses/realistic-v2/run-rough.webp",
     mannequin: "/assets/hero-poses/realistic-v2/run-mannequin.webp",
     mannequinCutout: "/assets/hero-poses/realistic-v2/run-mannequin.webp",
@@ -53,8 +56,8 @@ const poseExamples: PoseExample[] = [
   {
     id: "spin",
     category: "DYNAMIC",
-    title: "공중 회전",
-    description: "팔다리가 교차하며 회전의 방향이 또렷하게 보이는 공중 포즈",
+    title: t("공중 회전"),
+    description: t("팔다리가 교차하며 회전의 방향이 또렷하게 보이는 공중 포즈"),
     rough: "/assets/hero-poses/realistic-v2/spin-rough-v3.webp",
     mannequin: "/assets/hero-poses/realistic-v2/spin-mannequin-v3.webp",
     mannequinCutout: "/assets/hero-poses/realistic-v2/spin-mannequin-v3.webp",
@@ -62,8 +65,8 @@ const poseExamples: PoseExample[] = [
   {
     id: "volleyball",
     category: "VOLLEYBALL",
-    title: "배구 공중 동작",
-    description: "허리를 뒤로 젖히고 두 팔을 펼친 역동적인 공중 포즈",
+    title: t("배구 공중 동작"),
+    description: t("허리를 뒤로 젖히고 두 팔을 펼친 역동적인 공중 포즈"),
     rough: "/assets/hero-poses/realistic-v2/volleyball-rough-v4.webp",
     mannequin: "/assets/hero-poses/realistic-v2/volleyball-mannequin-v4.webp",
     mannequinCutout: "/assets/hero-poses/realistic-v2/volleyball-mannequin-v4.webp",
@@ -77,6 +80,8 @@ const POSE_IMAGE_ASPECT = 768 / 1024;
 const ACTION_VISUAL_SCALE = 1;
 
 export function HeroPoseReveal() {
+  const { t } = useI18n();
+  const poseExamples = useMemo(() => getPoseExamples(t), [t]);
   const stageRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [lens, setLens] = useState<RevealLens | null>(null);
@@ -109,7 +114,7 @@ export function HeroPoseReveal() {
       rough.src = pose.rough;
       mannequin.src = pose.mannequin;
     });
-  }, []);
+  }, [poseExamples]);
 
   useEffect(() => {
     if (showWorkspace || isHovering || showFullResult || hasInteracted) return;
@@ -120,7 +125,7 @@ export function HeroPoseReveal() {
     }, 4200);
 
     return () => window.clearInterval(timer);
-  }, [hasInteracted, isHovering, showFullResult, showWorkspace]);
+  }, [hasInteracted, isHovering, showFullResult, showWorkspace, poseExamples.length]);
 
   const updateLens = (event: PointerEvent<HTMLDivElement>) => {
     if (event.pointerType !== "mouse" || !stageRef.current) return;
@@ -281,13 +286,9 @@ export function HeroPoseReveal() {
           <div className="hero-pose__topline">
             <div>
               <span className="hero-pose__category">WORKFLOW</span>
-              <h2 id="hero-pose-title" className="hero-pose__title">
-                Clip Studio에서 이어서 작업
-              </h2>
+              <h2 id="hero-pose-title" className="hero-pose__title">{t("Clip Studio에서 이어서 작업")}</h2>
             </div>
-            <p className="hero-pose__description">
-              Standin에서 선택한 3D 포즈를 작화 캔버스로 가져오는 흐름
-            </p>
+            <p className="hero-pose__description">{t("Standin에서 선택한 3D 포즈를 작화 캔버스로 가져오는 흐름")}</p>
           </div>
           <HeroWorkspaceDemo
             pose={activePose}
@@ -307,7 +308,7 @@ export function HeroPoseReveal() {
               className="hero-pose__neighbor is-left"
               data-pose={previousPose.id}
               onClick={() => changePose(previousIndex)}
-              aria-label={`${previousPose.title} 포즈로 이동`}
+              aria-label={t("{0} 포즈로 이동", previousPose.title)}
             >
               <img
                 src={previousPose.rough}
@@ -329,8 +330,8 @@ export function HeroPoseReveal() {
               aria-pressed={showFullResult}
               aria-label={
                 isCoarsePointer
-                  ? `${activePose.title}. 눌러서 3D 인형을 확인합니다.`
-                  : `${activePose.title}. 마우스를 움직여 3D 인형을 확인하고 클릭하면 작업 화면으로 이동합니다.`
+                  ? t("{0}. 눌러서 3D 인형을 확인합니다.", activePose.title)
+                  : t("{0}. 마우스를 움직여 3D 인형을 확인하고 클릭하면 작업 화면으로 이동합니다.", activePose.title)
               }
               onPointerEnter={handlePointerEnter}
               onPointerMove={updateLens}
@@ -343,13 +344,13 @@ export function HeroPoseReveal() {
                   className="hero-pose__image hero-pose__rough"
                   src={activePose.rough}
                   style={roughStyle}
-                  alt={`${activePose.title}를 파란 선으로 그린 인체 러프`}
+                  alt={t("{0}를 파란 선으로 그린 인체 러프", activePose.title)}
                   draggable={false}
                 />
                 <img
                   className="hero-pose__image hero-pose__result"
                   src={activePose.mannequin}
-                  alt={`${activePose.title}와 같은 자세의 흰색 3D 인형`}
+                  alt={t("{0}와 같은 자세의 흰색 3D 인형", activePose.title)}
                   draggable={false}
                   style={resultStyle}
                 />
@@ -366,7 +367,7 @@ export function HeroPoseReveal() {
               </div>
 
               <span className="hero-pose__mode" aria-hidden="true">
-                {showFullResult ? "3D 인형" : "러프"}
+                {showFullResult ? t("3D 인형") : t("러프")}
               </span>
 
               <span className="hero-pose__instruction">
@@ -374,15 +375,15 @@ export function HeroPoseReveal() {
                   <>
                     <MousePointer2 size={15} />
                     {isCoarsePointer
-                      ? "3D 포즈 확인 완료"
-                      : "클릭해 작업 화면 열기"}
+                      ? t("3D 포즈 확인 완료")
+                      : t("클릭해 작업 화면 열기")}
                   </>
                 ) : (
                   <>
                     <MousePointer2 size={15} />
                     {isCoarsePointer
-                      ? "눌러서 3D 포즈 확인"
-                      : "마우스를 움직여 3D 포즈 확인"}
+                      ? t("눌러서 3D 포즈 확인")
+                      : t("마우스를 움직여 3D 포즈 확인")}
                   </>
                 )}
               </span>
@@ -393,7 +394,7 @@ export function HeroPoseReveal() {
               className="hero-pose__neighbor is-right"
               data-pose={nextPose.id}
               onClick={() => changePose(nextIndex)}
-              aria-label={`${nextPose.title} 포즈로 이동`}
+              aria-label={t("{0} 포즈로 이동", nextPose.title)}
             >
               <img
                 src={nextPose.rough}
@@ -407,7 +408,7 @@ export function HeroPoseReveal() {
               type="button"
               className="hero-pose__arrow is-left"
               onClick={() => changePose(activeIndex - 1)}
-              aria-label="이전 포즈 보기"
+              aria-label={t("이전 포즈 보기")}
             >
               <ArrowLeft size={21} />
             </button>
@@ -415,7 +416,7 @@ export function HeroPoseReveal() {
               type="button"
               className="hero-pose__arrow is-right"
               onClick={() => changePose(activeIndex + 1)}
-              aria-label="다음 포즈 보기"
+              aria-label={t("다음 포즈 보기")}
             >
               <ArrowRight size={21} />
             </button>
@@ -432,14 +433,14 @@ export function HeroPoseReveal() {
             </div>
           </div>
 
-          <div className="hero-pose__pagination" aria-label="포즈 예시 선택">
+          <div className="hero-pose__pagination" aria-label={t("포즈 예시 선택")}>
             {poseExamples.map((pose, index) => (
               <button
                 key={pose.id}
                 type="button"
                 className={index === activeIndex ? "is-active" : ""}
                 onClick={() => changePose(index)}
-                aria-label={`${pose.title} 예시 보기`}
+                aria-label={t("{0} 예시 보기", pose.title)}
                 aria-current={index === activeIndex ? "true" : undefined}
               >
                 <span>{String(index + 1).padStart(2, "0")}</span>
