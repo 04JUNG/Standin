@@ -7,14 +7,16 @@ import { HeroPoseReveal } from "./HeroPoseReveal";
 import { useLandingContent } from "../../i18n/landing";
 
 export function HeroSection() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const { footer, hero } = useLandingContent();
   return (
     <section className="hero-showcase overflow-hidden pt-20 pb-16 sm:pt-24 lg:pt-28 lg:pb-24">
       <Container wide>
         <div className="mx-auto mb-6 max-w-2xl text-center">
           <h1 id="product-title" className="text-2xl font-bold tracking-tight text-brand-ink sm:text-3xl">
-            {hero.title.replace("\n", " ")}
+            {locale === "ja"
+              ? hero.title.split(/(?<=、)|(?=3D)/).map((phrase) => <span key={phrase} className="inline-block whitespace-nowrap">{phrase}</span>)
+              : hero.title.replace("\n", " ")}
           </h1>
           <p className="mt-3 text-base text-neutral-600">{footer.tagline}</p>
         </div>
