@@ -1,11 +1,15 @@
+import { useI18n } from "../../i18n/context";
 import { Plus } from "lucide-react";
 import { useEffect } from "react";
 import { Container } from "../common/Container";
 import { SectionHeading } from "../common/SectionHeading";
-import { faqItems } from "../../data/faq";
+import { useLandingContent } from "../../i18n/landing";
 import { site } from "../../data/site";
 
 export function FaqSection() {
+  const { t, locale } = useI18n();
+  const modifiedAt = locale === "ja" ? "2026-11-05" : site.modifiedAt;
+  const { faqItems } = useLandingContent();
   useEffect(() => {
     const openLinkedAnswer = () => {
       const id = window.location.hash.slice(1);
@@ -16,7 +20,7 @@ export function FaqSection() {
     openLinkedAnswer();
     window.addEventListener("hashchange", openLinkedAnswer);
     return () => window.removeEventListener("hashchange", openLinkedAnswer);
-  }, []);
+  }, [faqItems]);
 
   return (
     <section id="faq" className="py-20 sm:py-28 lg:py-32">
@@ -25,10 +29,10 @@ export function FaqSection() {
           <div>
             <SectionHeading
               eyebrow="FAQ"
-              title="자주 묻는 질문"
-              description="현재 범위와 앞으로의 계획을 구분해 정직하게 안내합니다."
+              title={t("자주 묻는 질문")}
+              description={t("현재 범위와 앞으로의 계획을 구분해 정직하게 안내합니다.")}
             />
-            <p className="mt-4 text-sm text-neutral-600">최종 수정·답변 검토: {site.team} · <time dateTime={site.modifiedAt}>{site.modifiedAt}</time></p>
+            <p className="mt-4 text-sm text-neutral-600">{t("최종 수정·답변 검토:")} {t(site.team)} · <time dateTime={modifiedAt}>{modifiedAt}</time></p>
           </div>
 
           <div className="divide-y divide-neutral-250 border-t border-neutral-250">
@@ -51,8 +55,7 @@ export function FaqSection() {
                   </a>
                 )}
                 {item.sourceLink && (
-                  <p className="mb-5 text-sm leading-relaxed text-neutral-600">
-                    출처: <a href={item.sourceLink.href} className="underline underline-offset-4">{item.sourceLink.label}</a>
+                  <p className="mb-5 text-sm leading-relaxed text-neutral-600">{t("출처:")}<a href={item.sourceLink.href} className="underline underline-offset-4">{item.sourceLink.label}</a>
                   </p>
                 )}
               </details>

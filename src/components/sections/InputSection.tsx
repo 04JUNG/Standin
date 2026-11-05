@@ -1,8 +1,11 @@
+import { useI18n } from "../../i18n/context";
 import { Container } from "../common/Container";
 import { MediaVideo } from "../common/MediaVideo";
-import { flow } from "../../data/content";
+import { useLandingContent } from "../../i18n/landing";
 
 export function InputSection() {
+  const { t } = useI18n();
+  const { flow } = useLandingContent();
   return (
     <section id="input" className="border-y border-neutral-250 bg-white py-20 sm:py-24 lg:py-28">
       <Container wide>
@@ -10,7 +13,7 @@ export function InputSection() {
           <MediaVideo
             src="/assets/videos/input-demo-natural-v8.mp4"
             poster="/assets/videos/input-demo-natural-v8-poster.jpg"
-            ariaLabel="Clip Studio에서 러프 이미지를 Standin에 입력하는 작업 흐름 연출 예시"
+            ariaLabel={t("Clip Studio에서 러프 이미지를 Standin에 입력하는 작업 흐름 연출 예시")}
           />
 
           <div className="max-w-xl">
@@ -21,7 +24,7 @@ export function InputSection() {
             <p className="mt-6 text-lg leading-relaxed text-neutral-600 lg:text-xl">
               {flow.input.body}
             </p>
-            <ul className="mt-7 flex flex-wrap gap-2" aria-label="입력 방법">
+            <ul className="mt-7 flex flex-wrap gap-2" aria-label={t("입력 방법")}>
               {flow.input.modes.map((mode) => (
                 <li
                   key={mode}

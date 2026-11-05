@@ -14,6 +14,7 @@ export default defineConfig(({ isSsrBuild }) => ({
     rollupOptions: isSsrBuild ? {} : {
       input: {
         main: "index.html",
+        japanese: "ja/index.html",
         signup: "signup/index.html",
         feedback: "feedback/index.html",
         roughGuide: "guides/rough-to-3d-pose/index.html",

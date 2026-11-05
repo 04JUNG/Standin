@@ -1,3 +1,5 @@
+import { useI18n } from "../../i18n/context";
+
 type MediaVideoProps = {
   src: string;
   poster?: string;
@@ -21,6 +23,8 @@ export function MediaVideo({
   tone = "light",
 }: MediaVideoProps) {
   const dark = tone === "dark";
+  const { locale } = useI18n();
+  const caption = label ?? (locale === "ja" ? `${ariaLabel}。韓国語の画面を使った操作例です。` : undefined);
 
   return (
     <figure>
@@ -41,11 +45,11 @@ export function MediaVideo({
           preload="metadata"
         />
       </div>
-      {label ? (
+      {caption ? (
         <figcaption
           className={`mt-3 text-sm ${dark ? "text-neutral-400" : "text-neutral-600"}`}
         >
-          {label}
+          {caption}
         </figcaption>
       ) : null}
     </figure>

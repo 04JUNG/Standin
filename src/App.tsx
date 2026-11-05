@@ -10,13 +10,20 @@ import { FaqSection } from "./components/sections/FaqSection";
 import { GuidesSection } from "./components/sections/GuidesSection";
 import { FeatureShowcaseSection } from "./components/sections/FeatureShowcaseSection";
 import { SupportersPopup } from "./components/common/SupportersPopup";
+import { LocaleContext, useI18n } from "./i18n/context";
+import type { Locale } from "./i18n/locale";
 
-export function App() {
+export function App({ locale = "ko" }: { locale?: Locale }) {
+  return <LocaleContext.Provider value={locale}><Landing /></LocaleContext.Provider>;
+}
+
+function Landing() {
+  const { locale } = useI18n();
   return (
     <div className="landing-shell">
       <StandinIntro />
       <a className="skip-link" href="#main-content">
-        본문으로 바로가기
+        {locale === "ja" ? "本文へスキップ" : "본문으로 바로가기"}
       </a>
       <Header />
       <main id="main-content">
@@ -30,7 +37,7 @@ export function App() {
         <FaqSection />
       </main>
       <Footer />
-      <SupportersPopup />
+      {locale === "ko" && <SupportersPopup />}
     </div>
   );
 }

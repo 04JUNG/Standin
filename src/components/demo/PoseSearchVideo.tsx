@@ -1,3 +1,4 @@
+import { useI18n } from "../../i18n/context";
 import { Check, Maximize2, Minus, MousePointer2, RotateCcw } from "lucide-react";
 
 type PoseSearchVideoProps = {
@@ -13,6 +14,7 @@ const candidates = [
 ] as const;
 
 export function PoseSearchVideo({ label, ariaLabel }: PoseSearchVideoProps) {
+  const { t } = useI18n();
   return (
     <figure className="pose-reference-demo">
       <div
@@ -20,7 +22,7 @@ export function PoseSearchVideo({ label, ariaLabel }: PoseSearchVideoProps) {
         role="img"
         aria-label={
           ariaLabel ??
-          "클립스튜디오의 배구 러프 위에서 서로 다른 3D 포즈 후보 다섯 개를 비교하고 가장 가까운 자세를 선택하는 짧은 데모"
+          t("클립스튜디오의 배구 러프 위에서 서로 다른 3D 포즈 후보 다섯 개를 비교하고 가장 가까운 자세를 선택하는 짧은 데모")
         }
       >
         <img
@@ -31,14 +33,12 @@ export function PoseSearchVideo({ label, ariaLabel }: PoseSearchVideoProps) {
         />
 
         <div className="pose-reference-demo__loading" aria-hidden="true">
-          <span />
-          러프를 분석하는 중
-        </div>
+          <span />{t("러프를 분석하는 중")}</div>
 
         <section className="pose-candidate-window" aria-hidden="true">
           <header className="pose-candidate-window__header">
             <div>
-              <strong>포즈 후보</strong>
+              <strong>{t("포즈 후보")}</strong>
               <span>1 / 1</span>
             </div>
             <div className="pose-candidate-window__window-actions">
@@ -66,8 +66,8 @@ export function PoseSearchVideo({ label, ariaLabel }: PoseSearchVideoProps) {
                   </span>
                 </div>
                 <div className="pose-reference-card__info">
-                  <span>{candidate.match}</span>
-                  <small>3D 인체 · 동적 포즈</small>
+                  <span>{t(candidate.match)}</span>
+                  <small>{t("3D 인체 · 동적 포즈")}</small>
                 </div>
               </article>
             ))}
@@ -84,18 +84,17 @@ export function PoseSearchVideo({ label, ariaLabel }: PoseSearchVideoProps) {
                 </span>
               </div>
               <div className="pose-reference-card__info">
-                <span>가장 유사 98%</span>
-                <small>3D 인체 · 추천 포즈</small>
+                <span>{t("가장 유사 98%")}</span>
+                <small>{t("3D 인체 · 추천 포즈")}</small>
               </div>
             </article>
           </div>
 
           <footer className="pose-candidate-window__footer">
             <button type="button" tabIndex={-1}>
-              <RotateCcw size={10} /> 다시 검색 <kbd>R</kbd>
+              <RotateCcw size={10} />{t("다시 검색")}<kbd>R</kbd>
             </button>
-            <button type="button" className="is-primary" tabIndex={-1}>
-              이 포즈 사용 <kbd>Ctrl</kbd><kbd>Enter</kbd>
+            <button type="button" className="is-primary" tabIndex={-1}>{t("이 포즈 사용")}<kbd>Ctrl</kbd><kbd>Enter</kbd>
             </button>
           </footer>
 
@@ -107,12 +106,11 @@ export function PoseSearchVideo({ label, ariaLabel }: PoseSearchVideoProps) {
         </section>
 
         <div className="pose-reference-demo__applied" aria-hidden="true">
-          <Check size={12} strokeWidth={3} /> 배구 스파이크 포즈 선택 완료
-        </div>
+          <Check size={12} strokeWidth={3} />{t("배구 스파이크 포즈 선택 완료")}</div>
       </div>
 
       <figcaption>
-        {label ?? "배구 러프와 가까운 3D 자세 5개를 비교하고 선택하는 약 5초 데모"}
+        {label ?? t("배구 러프와 가까운 3D 자세 5개를 비교하고 선택하는 약 5초 데모")}
       </figcaption>
     </figure>
   );

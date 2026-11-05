@@ -1,11 +1,14 @@
+import { useI18n } from "../../i18n/context";
 import { ArrowRight } from "lucide-react";
 import { Container } from "../common/Container";
 import { Button } from "../common/Button";
 import { Badge } from "../common/Badge";
 import { HeroPoseReveal } from "./HeroPoseReveal";
-import { footer, hero } from "../../data/content";
+import { useLandingContent } from "../../i18n/landing";
 
 export function HeroSection() {
+  const { t } = useI18n();
+  const { footer, hero } = useLandingContent();
   return (
     <section className="hero-showcase overflow-hidden pt-20 pb-16 sm:pt-24 lg:pt-28 lg:pb-24">
       <Container wide>
@@ -18,11 +21,9 @@ export function HeroSection() {
         <HeroPoseReveal />
 
         <div className="hero-showcase__footer text-center">
-          <p className="hero-showcase__line">
-            러프 위를 움직여 같은 자세의 3D 포즈를 확인해 보세요.
-          </p>
+          <p className="hero-showcase__line">{t("러프 위를 움직여 같은 자세의 3D 포즈를 확인해 보세요.")}</p>
           <div className="mb-5 flex justify-center">
-            <Badge tone="coral">오픈베타 참여하기</Badge>
+            <Badge tone="coral">{t("오픈베타 참여하기")}</Badge>
           </div>
 
           <div className="flex flex-col justify-center gap-3 sm:flex-row sm:items-center">

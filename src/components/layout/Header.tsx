@@ -1,14 +1,18 @@
+import { useI18n } from "../../i18n/context";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Container } from "../common/Container";
 import { BrandMark } from "../common/BrandMark";
+import { LanguageSwitcher } from "../common/LanguageSwitcher";
 
-import { nav } from "../../data/content";
+import { useLandingContent } from "../../i18n/landing";
 import { useActiveSection } from "../../hooks/useActiveSection";
 
-const sectionIds = nav.links.map((link) => link.href.replace("#", ""));
+const sectionIds = ["input", "process", "result", "features"];
 
 export function Header() {
+  const { t } = useI18n();
+  const { nav } = useLandingContent();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const active = useActiveSection(sectionIds);
@@ -40,15 +44,15 @@ export function Header() {
         <div className="relative flex h-[72px] items-center justify-between gap-4">
           <a
             href="#main-content"
-            aria-label="Standin 홈"
+            aria-label={t("Standin 홈")}
             className="relative z-10 rounded-lg"
           >
             <BrandMark className="text-xl" />
           </a>
 
           <nav
-            aria-label="주요 메뉴"
-            className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 lg:flex"
+            aria-label={t("주요 메뉴")}
+            className="landing-nav hidden items-center gap-1 lg:flex"
           >
             {nav.links.map((link) => {
               const id = link.href.replace("#", "");
@@ -71,18 +75,17 @@ export function Header() {
           </nav>
 
           <div className="relative z-10 flex items-center gap-2">
+            <LanguageSwitcher />
             <a
               href={nav.launchHref}
               className="hidden items-center rounded-full border border-brand-coral/30 bg-brand-coral/12 px-3 py-1 text-[13px] font-semibold whitespace-nowrap text-brand-coral-dark transition-colors hover:border-brand-coral hover:bg-brand-coral hover:text-white md:inline-flex"
-            >
-              오픈베타 다운로드
-            </a>
+            >{t("오픈베타 다운로드")}</a>
             <button
               type="button"
               className="inline-flex h-11 w-11 items-center justify-center rounded-full text-brand-ink lg:hidden"
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
-              aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
+              aria-label={menuOpen ? t("메뉴 닫기") : t("메뉴 열기")}
               onClick={() => setMenuOpen((v) => !v)}
             >
               {menuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -97,7 +100,7 @@ export function Header() {
           className="border-t border-neutral-250/70 bg-brand-paper/95 backdrop-blur-md lg:hidden"
         >
           <Container wide>
-            <nav aria-label="모바일 메뉴" className="flex flex-col py-3">
+            <nav aria-label={t("모바일 메뉴")} className="flex flex-col py-3">
               {nav.links.map((link) => (
                 <a
                   key={link.href}
@@ -112,9 +115,7 @@ export function Header() {
                 href={nav.launchHref}
                 onClick={() => setMenuOpen(false)}
                 className="mt-2 inline-flex items-center self-start rounded-full border border-brand-coral/30 bg-brand-coral/12 px-3 py-1 text-[13px] font-semibold text-brand-coral-dark"
-              >
-                오픈베타 다운로드
-              </a>
+              >{t("오픈베타 다운로드")}</a>
             </nav>
           </Container>
         </div>

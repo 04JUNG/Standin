@@ -1,11 +1,14 @@
+import { useI18n } from "../../i18n/context";
 import { Gift, ScanLine, SlidersHorizontal, TextSearch } from "lucide-react";
 import { Container } from "../common/Container";
 import { Downloads } from "../common/Downloads";
-import { beta } from "../../data/content";
+import { useLandingContent } from "../../i18n/landing";
 
 const updateIcons = [TextSearch, ScanLine, SlidersHorizontal];
 
 export function BetaSection() {
+  const { t, locale } = useI18n();
+  const { beta } = useLandingContent();
   return (
     <section id="beta" className="bg-brand-ink py-20 sm:py-28 lg:py-32">
       <Container>
@@ -15,9 +18,7 @@ export function BetaSection() {
               <span className="text-xs font-semibold tracking-[0.12em] text-brand-coral uppercase">
                 {beta.eyebrow}
               </span>
-              <span className="rounded-full border border-brand-coral/40 bg-brand-coral/15 px-3 py-1 text-[13px] font-semibold text-white">
-                오픈베타 참여하기
-              </span>
+              <span className="rounded-full border border-brand-coral/40 bg-brand-coral/15 px-3 py-1 text-[13px] font-semibold text-white">{t("오픈베타 참여하기")}</span>
             </div>
             <h2 className="mt-4 text-3xl leading-tight font-bold tracking-tight text-white sm:text-4xl">
               {beta.title}
@@ -32,10 +33,10 @@ export function BetaSection() {
               <div>
                 <p className="text-sm font-semibold text-brand-coral">{beta.perkLabel}</p>
                 <p className="mt-1 text-lg font-bold text-white">{beta.perk}</p>
-                <p className="mt-1 text-xs text-neutral-250">사전등록·설문 참여 여부와 관계없이 드려요.</p>
+                <p className="mt-1 text-xs text-neutral-250">{t("사전등록·설문 참여 여부와 관계없이 드려요.")}</p>
               </div>
             </div>
-            <div className="survey-reward mt-4 max-w-lg">
+            {locale === "ko" && <div className="survey-reward mt-4 max-w-lg">
               <div className="survey-reward__heading">
                 <span>별도 설문 이벤트</span><span>총 10명</span>
               </div>
@@ -52,7 +53,7 @@ export function BetaSection() {
                 <div><dt>선정 방식</dt><dd>추첨 5명 + 정성 후기 5명<br /><small>열심히 사용하고 정성껏 후기를 남겨주신 분 중 5명을 선정해요.</small></dd></div>
               </dl>
               <p className="survey-reward__notice"><a href="/feedback/" className="underline underline-offset-4">사용 후기 설문 작성하기</a> · 선정·당첨 발표 일정은 이 페이지에서 안내합니다. 경품은 모바일 상품권으로 발송됩니다.</p>
-            </div>
+            </div>}
             <p className="mt-8 text-sm font-semibold text-white">{beta.updatesLabel}</p>
             <ul className="mt-3 grid max-w-lg gap-3">
               {beta.updates.map((item, index) => {

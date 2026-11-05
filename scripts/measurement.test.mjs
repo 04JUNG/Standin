@@ -13,7 +13,7 @@ function browser(href = "https://www.standinpose.com/?utm_source=instagram&utm_m
   const listeners = new Map();
   const win = {
     addEventListener: (type, callback) => listeners.set(type, callback),
-    location: { href, hostname: new URL(href).hostname, reload() { reloads += 1; } },
+    location: { href, pathname: new URL(href).pathname, hostname: new URL(href).hostname, reload() { reloads += 1; } },
     localStorage: { getItem: (key) => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, value) },
     document: {
       referrer: "https://www.instagram.com/path?email=private@example.com",
@@ -102,6 +102,22 @@ test("only installer clicks count as downloads; PC link copies never count as in
 test("PC link preserves campaign labels but drops click IDs, arbitrary parameters and sensitive values", () => {
   assert.equal(campaignUrl("https://www.standinpose.com/guides/clip-studio-pose-import/?utm_source=instagram&utm_content=meta-hook-b&fbclid=abc&email=x%40example.com#faq", true), "https://www.standinpose.com/?utm_source=instagram&utm_content=meta-hook-b#beta");
   assert.equal(campaignUrl("https://www.standinpose.com/?utm_content=x%40example.com", true), "https://www.standinpose.com/#beta");
+});
+
+test("Japanese visits and downloads preserve language, saved refusal and query filtering", () => {
+  const href = "https://www.standinpose.com/ja/?utm_source=x&utm_campaign=japan#features";
+  assert.equal(campaignUrl(href, true), "https://www.standinpose.com/ja/?utm_source=x&utm_campaign=japan#beta");
+  assert.equal(isMeasurementPage(href), true);
+  assert.equal(isMeasurementPage("https://www.standinpose.com/ja/?email=user@example.com"), false);
+  assert.equal(isMeasurementPage("https://www.standinpose.com/ja/signup/"), false);
+  const state = browser(href); savePreference(state, none);
+  const { win, scripts } = state;
+  const measurement = createMeasurement(config, win);
+  measurement.start(); measurement.download("Standin_1.0_x64-setup.exe");
+  assert.equal(scripts.length, 0);
+  measurement.saveChoice(both);
+  measurement.download("Standin_1.0_x64-setup.exe"); measurement.pcLinkCopy();
+  assert.deepEqual(events(win).map(item => item[2].page_language), ["ja", "ja", "ja"]);
 });
 
 test("account, survey and arbitrary payload URLs never start either SDK", () => {
