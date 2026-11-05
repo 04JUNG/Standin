@@ -8,7 +8,7 @@ import { site } from "../../data/site";
 
 export function FaqSection() {
   const { t, locale } = useI18n();
-  const modifiedAt = locale === "ja" ? "2026-11-05" : site.modifiedAt;
+  const modifiedAt = locale === "ja" ? "2026-11-06" : site.modifiedAt;
   const { faqItems } = useLandingContent();
   useEffect(() => {
     const openLinkedAnswer = () => {
