@@ -54,7 +54,7 @@ export function Downloads() {
     <p className="mt-3 text-sm leading-relaxed text-neutral-600">{t("컴퓨터의 운영체제에 맞는 설치 파일을 선택하세요.")}</p>
     {locale === "ja" && <aside className="locale-availability" aria-label="対応言語と利用の流れ">
       <p className="font-semibold">アプリ・登録画面は現在韓国語が中心です。</p>
-      <p>日本語化はこの紹介ページから進めています。インストール後、アカウントを作成し、認証メールのリンクで確認してからログインしてください。日本語での文章検索は動作・精度を検証中です。</p>
+      <p>日本語対応は、この紹介ページから順次進めています。インストール後にアカウントを作成し、確認メール内のリンクからメールアドレスの認証を済ませてからログインしてください。日本語によるポーズ検索の動作と精度は現在検証中です。</p>
       <a href="/signup/" hrefLang="ko" className="underline underline-offset-4">アカウント作成（韓国語）</a>
     </aside>}
     <div className="mt-4 rounded-xl bg-neutral-100 p-4 text-sm leading-relaxed">

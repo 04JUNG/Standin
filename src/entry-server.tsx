@@ -19,7 +19,7 @@ export const prerenderPaths = [...publicPaths, ...legalPaths];
 export function render(path: string) {
   const locale = localeFromPath(path);
   const { beta, footer, hero, faqItems } = landingContent(locale);
-  const modifiedAt = locale === "ja" ? "2026-11-05" : site.modifiedAt;
+  const modifiedAt = locale === "ja" ? "2026-11-06" : site.modifiedAt;
   const guide = guides.find((item) => guidePath(item) === path);
   const legal = legalDocuments.find((item) => legalPath(item) === path);
   if (path !== "/" && path !== "/ja/" && !guide && !legal) throw new Error(`Unknown public page: ${path}`);
