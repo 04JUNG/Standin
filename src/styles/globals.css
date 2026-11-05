@@ -1047,7 +1047,7 @@ body {
 
   .hero-pose__wordmark {
     top: 5.5%;
-    font-size: clamp(4rem, 26vw, 9.6rem);
+    font-size: clamp(7.2rem, 32.4vw, 9.6rem);
   }
 
   .hero-pose__neighbor {
@@ -1618,7 +1618,7 @@ body {
 
   .standin-intro__wordmark {
     top: calc(5rem + 30.5px);
-    font-size: clamp(7.2rem, 32.4vw, 9.6rem);
+    font-size: clamp(4rem, 26vw, 9.6rem);
   }
 }
 
