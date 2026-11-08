@@ -1,11 +1,14 @@
 export type MeasurementChoice = { analytics: boolean; advertising: boolean };
-export type MeasurementConfig = { enabled: boolean; ga4Id: string; pixelId: string };
+export type MeasurementConfig = { enabled: boolean; ga4Id: string; pixelId: string; journey?: {
+  setAllowed(allowed: boolean): Promise<boolean>;
+  event(name: "download_click" | "pc_link_copy" | "app_open_click", target: string): void;
+} };
 type Tag = (...args: unknown[]) => void;
 type Pixel = Tag & { callMethod?: Tag; queue: unknown[][]; push?: Pixel; loaded: boolean; version: string };
 type MeasurementWindow = Window & { dataLayer?: unknown[]; gtag?: Tag; fbq?: Pixel; _fbq?: Pixel };
 
-const choiceKey = "standin.measurement.v2";
-const lifetime = 180 * 24 * 60 * 60 * 1000;
+const choiceKey = "standin.measurement.v3";
+const lifetime = 90 * 24 * 60 * 60 * 1000;
 const publicPaths = new Set(["/", "/ja/", "/guides/rough-to-3d-pose/", "/guides/clip-studio-pose-import/"]);
 const campaignKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_id"] as const;
 const safeValue = /^[a-zA-Z0-9_-]{1,100}$/;
@@ -36,7 +39,7 @@ export function createMeasurement(config: MeasurementConfig, browser?: Window) {
   const win = browser as MeasurementWindow | undefined;
   const ga4Id = /^G-[A-Z0-9]+$/.test(config.ga4Id) ? config.ga4Id : "";
   const pixelId = /^\d{5,30}$/.test(config.pixelId) ? config.pixelId : "";
-  const available = Boolean(config.enabled && win && (ga4Id || pixelId) && isMeasurementPage(win.location.href));
+  const available = Boolean(config.enabled && win && (ga4Id || pixelId || config.journey) && isMeasurementPage(win.location.href));
   let choice: MeasurementChoice = { analytics: false, advertising: false };
   let gaStarted = false;
   let pixelStarted = false;
@@ -46,7 +49,11 @@ export function createMeasurement(config: MeasurementConfig, browser?: Window) {
     if (!available || !win) return null;
     try {
       const saved = JSON.parse(win.localStorage.getItem(choiceKey) ?? "null");
-      return saved?.version === 2 && saved.expiresAt > Date.now() &&
+      if (!saved) {
+        const old = JSON.parse(win.localStorage.getItem("standin.measurement.v2") ?? "null");
+        if (old?.expiresAt > Date.now() && old.analytics === false && old.advertising === false) return { analytics: false, advertising: false };
+      }
+      return saved?.version === 3 && saved.expiresAt > Date.now() &&
         typeof saved.analytics === "boolean" && typeof saved.advertising === "boolean"
         ? { analytics: saved.analytics, advertising: saved.advertising } : null;
     } catch { return null; }
@@ -63,6 +70,7 @@ export function createMeasurement(config: MeasurementConfig, browser?: Window) {
 
   function startProviders() {
     if (!available || !win) return;
+    void config.journey?.setAllowed(choice.analytics);
     if (choice.analytics && ga4Id && !gaStarted) {
       gaStarted = true;
       win.dataLayer = win.dataLayer ?? [];
@@ -119,28 +127,30 @@ export function createMeasurement(config: MeasurementConfig, browser?: Window) {
     }
   }
 
-  function applyChoice(next: MeasurementChoice, persist: boolean) {
-    if (!available || !win) return;
+  async function applyChoice(next: MeasurementChoice, persist: boolean) {
+    if (!available || !win) return true;
     const previous = choice;
     const withdrawing = (choice.analytics && !next.analytics) || (choice.advertising && !next.advertising);
-    choice = { analytics: Boolean(next.analytics && ga4Id), advertising: Boolean(next.advertising && pixelId) };
+    choice = { analytics: Boolean(next.analytics && (ga4Id || config.journey)), advertising: Boolean(next.advertising && pixelId) };
     let saved = !persist;
     try {
-      if (persist) win.localStorage.setItem(choiceKey, JSON.stringify({ ...choice, version: 2, expiresAt: Date.now() + lifetime }));
+      if (persist) win.localStorage.setItem(choiceKey, JSON.stringify({ ...choice, version: 3, expiresAt: Date.now() + lifetime }));
       saved = true;
     } catch { /* Do not reload and lose a refusal when storage is blocked. */ }
+    // An old-version grant may have left cookies even though this scope starts denied.
+    clearCookies(persist ? { analytics: true, advertising: true } : previous);
     if (withdrawing) {
       // Block queued and subsequent events, then unload the providers on a fresh document.
       if (ga4Id && !choice.analytics) (win as unknown as Record<string, unknown>)[`ga-disable-${ga4Id}`] = true;
       if (win.fbq && !choice.advertising) { if (Array.isArray(win.fbq.queue)) win.fbq.queue.length = 0; win.fbq("consent", "revoke"); }
-      clearCookies(previous);
-      if (saved) win.location.reload();
-      else startProviders();
-      return;
+      const erased = config.journey ? await config.journey.setAllowed(choice.analytics) : true;
+      if (saved && erased) win.location.reload();
+      return erased;
     }
     if (choice.analytics && gaStarted && !previous.analytics) (win as unknown as Record<string, unknown>)[`ga-disable-${ga4Id}`] = false;
     if (choice.advertising && pixelStarted && !previous.advertising) win.fbq?.("consent", "grant");
     startProviders();
+    return config.journey && !choice.analytics ? config.journey.setAllowed(false) : true;
   }
 
   function track(event: "download_click" | "pc_link_copy", params: Record<string, string> = {}) {
@@ -156,28 +166,29 @@ export function createMeasurement(config: MeasurementConfig, browser?: Window) {
   }
 
   return {
-    available, hasAnalytics: Boolean(ga4Id), hasAdvertising: Boolean(pixelId),
+    available, hasAnalytics: Boolean(ga4Id || config.journey), hasAdvertising: Boolean(pixelId),
     start() {
       if (!available) return null;
-      if (started) return choice;
+      if (started) return readChoice();
       started = true;
       const saved = readChoice();
-      // Automatic measurement is a default, not a visitor consent record.
-      choice = saved ?? { analytics: Boolean(ga4Id), advertising: Boolean(pixelId) };
+      // Consent must precede both third-party tags and first-party visitor creation.
+      choice = saved ?? { analytics: false, advertising: false };
       startProviders();
       if (available && win) win.addEventListener("storage", (event) => {
         if (event.key !== choiceKey && event.key !== null) return;
         const next = readChoice() ?? { analytics: false, advertising: false };
         // Propagate withdrawal to an already-open tab without rewriting storage.
-        if ((choice.analytics && !next.analytics) || (choice.advertising && !next.advertising)) applyChoice(next, false);
+        if ((choice.analytics && !next.analytics) || (choice.advertising && !next.advertising)) void applyChoice(next, false);
       });
-      return choice;
+      return saved;
     },
-    saveChoice(next: MeasurementChoice) { applyChoice(next, true); },
+    saveChoice(next: MeasurementChoice) { return applyChoice(next, true); },
     download(fileName: string) {
-      if (/^Standin_[\w.+-]+_x64-setup\.exe$/i.test(fileName)) track("download_click", { platform: "windows", file_extension: "exe" });
-      else if (/^Standin_[\w.+-]+_(universal|aarch64|x64)\.dmg$/i.test(fileName)) track("download_click", { platform: "macos", file_extension: "dmg" });
+      if (/^Standin_[\w.+-]+_x64-setup\.exe$/i.test(fileName)) { track("download_click", { platform: "windows", file_extension: "exe" }); if (choice.analytics) config.journey?.event("download_click", "download_windows"); }
+      else if (/^Standin_[\w.+-]+_(universal|aarch64|x64)\.dmg$/i.test(fileName)) { track("download_click", { platform: "macos", file_extension: "dmg" }); if (choice.analytics) config.journey?.event("download_click", "download_macos"); }
     },
-    pcLinkCopy() { track("pc_link_copy"); },
+    pcLinkCopy() { track("pc_link_copy"); if (choice.analytics) config.journey?.event("pc_link_copy", "pc_copy"); },
+    appOpen() { if (choice.analytics) config.journey?.event("app_open_click", "app_open"); },
   };
 }
