@@ -10,7 +10,7 @@ export function HeroSection() {
   const { t, locale } = useI18n();
   const { footer, hero } = useLandingContent();
   return (
-    <section className="hero-showcase overflow-hidden pt-20 pb-16 sm:pt-24 lg:pt-28 lg:pb-24">
+    <section id="hero" className="hero-showcase overflow-hidden pt-20 pb-16 sm:pt-24 lg:pt-28 lg:pb-24">
       <Container wide>
         <div className="mx-auto mb-6 max-w-2xl text-center">
           <h1 id="product-title" className="text-2xl font-bold tracking-tight text-brand-ink sm:text-3xl">

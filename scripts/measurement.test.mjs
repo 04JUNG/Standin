@@ -27,7 +27,7 @@ function browser(href = "https://www.standinpose.com/?utm_source=instagram&utm_m
 }
 const events = (win) => (win.dataLayer ?? []).map((item) => Array.from(item)).filter((item) => item[0] === "event");
 function savePreference(state, choice) {
-  state.storage.set("standin.measurement.v2", JSON.stringify({ ...choice, version: 2, expiresAt: Date.now() + 10000 }));
+  state.storage.set("standin.measurement.v3", JSON.stringify({ ...choice, version: 3, expiresAt: Date.now() + 10000 }));
 }
 
 test("disabled or unconfigured measurement never loads SDKs or records a download", () => {
@@ -39,14 +39,13 @@ test("disabled or unconfigured measurement never loads SDKs or records a downloa
   }
 });
 
-test("new visitors automatically start GA4 and Meta without fabricating a stored visitor choice", () => {
+test("new visitors do not load tags or record events before an explicit choice", () => {
   const { win, scripts, storage } = browser();
   const measurement = createMeasurement(config, win);
-  assert.deepEqual(measurement.start(), both);
+  assert.equal(measurement.start(), null);
   measurement.download("Standin_1.0_x64-setup.exe");
-  assert.equal(scripts.length, 2); assert.equal(storage.size, 0);
-  assert.deepEqual(events(win).map((event) => event[1]), ["page_view", "download_click"]);
-  assert.ok(win.fbq.queue.some((item) => item[0] === "trackSingleCustom" && item[2] === "DownloadClick"));
+  assert.equal(scripts.length, 0); assert.equal(storage.size, 0);
+  assert.deepEqual(events(win), []); assert.equal(win.fbq, undefined);
 });
 
 test("an existing refusal still prevents both SDKs and all events", () => {
@@ -59,7 +58,7 @@ test("an existing refusal still prevents both SDKs and all events", () => {
 
 test("blocked storage retains the current-page refusal without reloading into automatic collection", () => {
   const state = browser(); const measurement = createMeasurement(config, state.win);
-  measurement.start(); state.win.localStorage.setItem = () => { throw Error("blocked"); };
+  measurement.start(); measurement.saveChoice(both); state.win.localStorage.setItem = () => { throw Error("blocked"); };
   measurement.saveChoice(none); measurement.pcLinkCopy();
   assert.equal(state.reloads, 0); assert.equal(state.win[`ga-disable-${config.ga4Id}`], true);
   assert.deepEqual(events(state.win).map((event) => event[1]), ["page_view"]);
@@ -141,20 +140,20 @@ test("withdrawal blocks queued events, removes only revoked cookies, and reloads
   assert.ok(!state.cookieWrites.some((item) => item.startsWith("session=")));
 });
 
-test("expired, malformed or inaccessible preferences use automatic measurement defaults", () => {
+test("expired, malformed or inaccessible preferences require a fresh choice", () => {
   for (const saved of ["{", JSON.stringify({ ...both, version: 2, expiresAt: 0 })]) {
     const { win, storage, scripts } = browser(); storage.set("standin.measurement.v2", saved);
-    assert.deepEqual(createMeasurement(config, win).start(), both); assert.equal(scripts.length, 2);
+    assert.equal(createMeasurement(config, win).start(), null); assert.equal(scripts.length, 0);
   }
   const { win, scripts } = browser(); win.localStorage.getItem = () => { throw Error("blocked"); };
-  assert.deepEqual(createMeasurement(config, win).start(), both); assert.equal(scripts.length, 2);
+  assert.equal(createMeasurement(config, win).start(), null); assert.equal(scripts.length, 0);
 });
 
 test("withdrawal in another tab immediately blocks tracking here", () => {
   const state = browser(); const measurement = createMeasurement(config, state.win);
   measurement.start(); measurement.saveChoice(both);
-  state.storage.set("standin.measurement.v2", JSON.stringify({ ...none, version: 2, expiresAt: Date.now() + 10000 }));
-  state.listeners.get("storage")({ key: "standin.measurement.v2" });
+  savePreference(state, none);
+  state.listeners.get("storage")({ key: "standin.measurement.v3" });
   measurement.download("Standin_1.0_x64-setup.exe");
   assert.equal(state.reloads, 1);
   assert.equal(events(state.win).filter((event) => event[1] === "download_click").length, 0);

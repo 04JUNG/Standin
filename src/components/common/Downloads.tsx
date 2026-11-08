@@ -2,7 +2,7 @@ import { useI18n } from "../../i18n/context";
 import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
 import { fallbackRelease, parseRelease, RELEASES_API, type PublicRelease } from "../../lib/releases";
-import { measurement } from "../../lib/measurement-client";
+import { measurement, journey } from "../../lib/measurement-client";
 import { campaignUrl } from "../../lib/measurement";
 import { appCampaignLink, campaignCreative, supportsAcquisition, type Creative } from "../../lib/acquisition";
 
@@ -15,6 +15,11 @@ export function Downloads() {
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "error">("idle");
   const [pcUrl, setPcUrl] = useState("");
   const [appLink, setAppLink] = useState<string | null>(null);
+  const [journeyLink, setJourneyLink] = useState<string | null>(null);
+  useEffect(() => {
+    const update = () => setJourneyLink(journey.link());
+    update(); return journey.subscribe(update);
+  }, []);
   const [creative, setCreative] = useState<Creative | null>(null);
   const [clientReady, setClientReady] = useState(false);
   useEffect(() => {
@@ -27,6 +32,9 @@ export function Downloads() {
   const downloadAssets = campaignAssets ?? release.assets;
   // Resolve an ad's package before exposing a neutral download during hydration/API loading.
   const downloadsReady = clientReady && (!creative || latestChecked || failed);
+  const version = /^v?(\d+)\.(\d+)\.(\d+)/.exec(release.tag);
+  const supportsJourney = Boolean(version && (Number(version[1]) > 0 || Number(version[2]) > 2 || Number(version[2]) === 2 && Number(version[3]) >= 9));
+  const openLink = supportsJourney && journeyLink ? journeyLink : appLink;
   async function copyPcLink() {
     const url = campaignUrl(window.location.href, true);
     setPcUrl(url);
@@ -66,16 +74,17 @@ export function Downloads() {
     <div className="mt-6 space-y-3" aria-live="polite">
         <p className="text-sm font-semibold">{latestChecked ? t("최신 공개 버전") : t("공개 버전")} · {release.tag}</p>
         {!downloadsReady && <p role="status" className="text-sm text-neutral-600">{t("설치 파일을 확인하고 있습니다…")}</p>}
-        {downloadsReady && downloadAssets.map((asset) => <a key={asset.name} href={asset.url} onClick={() => measurement.download(asset.name)} className="flex min-h-14 items-center justify-between gap-3 rounded-xl bg-brand-coral px-4 py-3 font-bold text-brand-ink hover:bg-brand-coral-dark">
+        {downloadsReady && downloadAssets.map((asset) => <a data-journey-explicit key={asset.name} href={asset.url} onClick={() => measurement.download(asset.name)} className="flex min-h-14 items-center justify-between gap-3 rounded-xl bg-brand-coral px-4 py-3 font-bold text-brand-ink hover:bg-brand-coral-dark">
           <span>{t(asset.label)} {t("다운로드")}<span className="mt-1 block text-xs font-normal">{asset.size ? `${(asset.size / 1_000_000).toFixed(1)} MB` : t("설치 파일")}</span></span>
           <Download size={20} aria-hidden="true" />
         </a>)}
         <noscript><p>{t("아래 일반 설치 파일로 사용할 수 있습니다.")}</p>{fallbackRelease.assets.map(asset => <p key={asset.name}><a href={asset.url}>{t(asset.label)} {t("다운로드")}</a></p>)}</noscript>
     </div>
     {automaticSource && <p className="mt-4 text-sm leading-relaxed text-neutral-600">{t("받은 파일을 설치하고 Standin을 실행하세요. 별도로 ‘앱 열기’를 누르지 않아도 새 설치의 소재별 첫 실행·첫 이미지 분석 성공 건수가 집계됩니다. 설치 파일에는 포스터·영상 공통 구분만 포함하며, 설치별 이용 이력 연결은 선택 동의에 따릅니다.")}<a href="/legal/measurement/#campaign-counts" className="underline">{t("측정 안내")}</a></p>}
-    {appLink && latestChecked && supportsAcquisition(release.tag) && <div className="mt-5 rounded-xl border border-neutral-250 p-4 text-sm leading-relaxed">
+    {openLink && latestChecked && supportsAcquisition(release.tag) && <div className="mt-5 rounded-xl border border-neutral-250 p-4 text-sm leading-relaxed">
       <p className="font-semibold">{automaticSource ? t("이미 설치한 앱을 열고 싶다면") : t("설치를 마쳤나요?")}</p>
-      <a href={appLink} className="mt-2 inline-flex min-h-12 items-center rounded-xl bg-brand-ink px-4 font-bold text-white">{automaticSource ? t("이미 설치한 앱 열기 (선택)") : t("설치했어요 — 앱 열기")}</a>
+      {supportsJourney && journeyLink ? <button type="button" onClick={() => { const link = journey.link(); if (link) { measurement.appOpen(); window.location.assign(link); } else { setJourneyLink(null); void journey.prepareLink(); } }} className="mt-2 inline-flex min-h-12 items-center rounded-xl bg-brand-ink px-4 font-bold text-white">{t("설치했어요 — 앱 열기")}</button> : <a data-journey-explicit href={openLink} onClick={() => measurement.appOpen()} className="mt-2 inline-flex min-h-12 items-center rounded-xl bg-brand-ink px-4 font-bold text-white">{automaticSource ? t("이미 설치한 앱 열기 (선택)") : t("설치했어요 — 앱 열기")}</a>}
+      {supportsJourney && journeyLink && <p className="mt-2 text-neutral-600">{t("웹 분석을 허용했습니다. 최신 앱에서 추가 동의하면 이 방문의 다운로드 경로와 이후 분석·저장 단계를 연결합니다. 거절해도 앱을 사용할 수 있습니다. 일반 설치 파일을 직접 실행한 경우에는 개별 방문이 연결되지 않습니다.")}</p>}
       {!automaticSource && <p className="mt-2 text-neutral-600">{t("현재 제공하는 일반 설치 파일은 광고 구분을 포함하지 않습니다. 최신 버전을 설치한 PC에서 위 링크를 눌러주세요. v0.2.7부터 새 등록 앱의 소재별 첫 실행·첫 이미지 분석 성공 건수를 선택 동의와 별도로 집계하며, 설치·작업 식별자는 이 건수 집계에 보내지 않습니다.")}</p>}
       <p className="mt-2 text-neutral-600">{t("앱이 열리지 않으면 설치한 Standin을 직접 실행하세요.")}<a href="/legal/measurement/#campaign-counts" className="underline">{t("소재별 건수·선택 연결 안내")}</a></p>
     </div>}
