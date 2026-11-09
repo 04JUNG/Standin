@@ -36,10 +36,11 @@ export function BlogPage({ post }: { post?: BlogPost }) {
           <nav className="blog-toc" aria-label="글 목차"><h2>이 글에서 다루는 내용</h2><ol>{post.sections.map(section => <li key={section.id}><a href={`#${section.id}`}>{section.title}</a></li>)}</ol></nav>
         </header>
         {post.sections.map(section => <section className="blog-section" id={section.id} data-reading-section={section.id} key={section.id}>
-          <h2>{section.title}</h2>{section.paragraphs.map(p => <p key={p}>{p}</p>)}
+          <h2>{section.title}</h2>
+          {visuals?.sections[section.id] && <BlogFigure visual={visuals.sections[section.id]} />}
+          {section.paragraphs.map(p => <p key={p}>{p}</p>)}
           {section.table && <div className="blog-table-wrap" role="region" aria-label="BVH와 FBX 비교표" tabIndex={0}><table><thead><tr>{section.table.headers.map(h => <th scope="col" key={h}>{h}</th>)}</tr></thead><tbody>{section.table.rows.map(row => <tr key={row[0]}>{row.map((cell, i) => i === 0 ? <th scope="row" key={i}>{cell}</th> : <td key={i}>{cell}</td>)}</tr>)}</tbody></table></div>}
           {section.steps && <ol className="blog-steps">{section.steps.map(step => <li key={step}>{step}</li>)}</ol>}
-          {visuals?.sections[section.id] && <BlogFigure visual={visuals.sections[section.id]} />}
           {section.links && <ul className="blog-links">{section.links.map(link => <li key={link.href}><a href={link.href}>{link.label} →</a></li>)}</ul>}
         </section>)}
         <section id="article-sources" data-reading-section="article-sources" className="blog-section blog-sources"><h2>참고 자료</h2><p>확인일: {post.date}. 파일 형식과 메뉴 가져오기는 공식 문서를, Standin에서 직접 드래그하는 흐름은 앱 구현과 팀의 사용 검증을 기준으로 설명했습니다. 실제 적용 결과는 사용 버전과 파일 구성에 따라 확인하세요.</p><ul>{post.sources.map(source => <li key={source.href}><a href={source.href}>{source.label}</a></li>)}</ul></section>
