@@ -1,4 +1,6 @@
 import { StrictMode } from "react";
+import { BlogPage } from './pages/BlogPage';
+import { blogPosts, blogPath, blogDescription } from './data/blog';
 import { renderToString } from "react-dom/server";
 import { App } from "./App";
 import { GuidePage } from "./pages/GuidePage";
@@ -12,7 +14,7 @@ import { legalDocuments, legalPath, operator } from "./data/legal";
 import { legalContent } from "./data/legalContent";
 
 const origin = site.origin;
-export const publicPaths = ["/", "/ja/", ...guides.map(guidePath)];
+export const publicPaths = ["/", "/ja/", ...guides.map(guidePath), '/blog/', ...blogPosts.map(blogPath)];
 export const legalPaths = legalDocuments.map(legalPath);
 export const prerenderPaths = [...publicPaths, ...legalPaths];
 
@@ -22,7 +24,9 @@ export function render(path: string) {
   const modifiedAt = locale === "ja" ? "2026-11-06" : site.modifiedAt;
   const guide = guides.find((item) => guidePath(item) === path);
   const legal = legalDocuments.find((item) => legalPath(item) === path);
-  if (path !== "/" && path !== "/ja/" && !guide && !legal) throw new Error(`Unknown public page: ${path}`);
+  const post = blogPosts.find(item => blogPath(item) === path);
+  const blog = path === '/blog/' || Boolean(post);
+  if (path !== "/" && path !== "/ja/" && !guide && !legal && !blog) throw new Error(`Unknown public page: ${path}`);
   const url = `${origin}${path}`;
   const organization = {
     "@type": "Organization", "@id": `${origin}/#organization`, name: translate(locale, site.team), alternateName: site.name, url: `${origin}/`,
@@ -33,6 +37,21 @@ export function render(path: string) {
     contactPoint: { "@type": "ContactPoint", contactType: "customer support", email: site.supportEmail, availableLanguage: "ko" },
   };
   const website = { "@type": "WebSite", "@id": `${origin}/#website`, name: "Standin", url: `${origin}/`, inLanguage: ["ko", "ja"], publisher: { "@id": organization["@id"] } };
+  if (blog) {
+    const title = post ? `${post.title} | Standin 블로그` : 'Standin 블로그 | 러프에서 작화까지';
+    const description = post?.description ?? blogDescription;
+    const content = post ? { '@type': 'BlogPosting', '@id': `${url}#article`, url, headline: post.title, description,
+      datePublished: post.date, dateModified: post.date, inLanguage: 'ko', image: `${origin}/standin-social-card.png`,
+      author: { '@id': organization['@id'] }, publisher: { '@id': organization['@id'] }, mainEntityOfPage: url,
+      citation: post.sources.map(s => new URL(s.href, origin).href), isPartOf: { '@id': `${origin}/blog/#blog` } }
+      : { '@type': 'CollectionPage', '@id': `${url}#page`, url, name: title, description, dateModified: '2026-11-09', inLanguage: 'ko', isPartOf: { '@id': website['@id'] } };
+    return { title, description, html: renderToString(<StrictMode><BlogPage post={post} /></StrictMode>), legalText: undefined,
+      structuredData: JSON.stringify({ '@context': 'https://schema.org', '@graph': [organization, website,
+        { '@type': 'Blog', '@id': `${origin}/blog/#blog`, url: `${origin}/blog/`, name: 'Standin 블로그', publisher: { '@id': organization['@id'] } }, content,
+        { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: '홈', item: `${origin}/` },
+          { '@type': 'ListItem', position: 2, name: '블로그', item: `${origin}/blog/` }, ...(post ? [{ '@type': 'ListItem', position: 3, name: post.title, item: url }] : [])] }
+      ] }).replace(/</g, '\\u003c') };
+  }
   const graph: Record<string, unknown>[] = guide ? [organization, website, {
     "@type": "Article",
     "@id": `${url}#article`,

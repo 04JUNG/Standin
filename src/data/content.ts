@@ -8,6 +8,7 @@ export const nav = {
     { label: "처리 과정", href: "#process" },
     { label: "활용 결과", href: "#result" },
     { label: "새 기능", href: "#features" },
+    { label: "블로그", href: "/blog/" },
   ],
   launchHref: "#beta",
 };
