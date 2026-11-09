@@ -13,7 +13,9 @@
 
 기존 `standin.measurement.v3` 분석 선택 동의와 first-party journey 수집을 사용한다. Google/Meta에는 기존 페이지 조회만, 상세 구간은 Standin API로만 보낸다. 동의 전 수집하지 않으며 기존 철회·만료·90일 보관을 유지한다.
 
-`src/lib/journey.ts`의 글 경로·구간 목록과 BFF `src/journey/blogCatalog.ts`를 함께 갱신한다. 새로운 허용값을 수용하는 BFF를 먼저 배포하고 랜딩을 나중에 배포한다. 미등록값은 서버가 거절한다.
+`src/lib/journey.ts`의 글 경로·구간 목록과 BFF `src/journey/blogCatalog.ts`를 함께 갱신한다. 미등록값은 서버가 거절한다.
+
+현재는 콘텐츠 먼저 공개하는 단계이며 `BLOG_ANALYTICS_ENABLED = false`이다. 블로그 상세 수집은 중지하고 기존 페이지는 기존 서버 허용값으로 전송한다. 분석 동의 철회는 블로그에서도 계속 처리한다. Standin-app-server #172 승인·운영 배포 후 `/v1/admin/marketing`의 `blog` 응답을 확인하고 이 플래그를 true로 바꿔 배포한다. 그 시점부터 새 구간 지표가 쌓이며 이전 방문은 소급 수집하지 않는다. 기존 Google/Meta 페이지 조회는 각 동의 설정에 따른다.
 
 - 조회: 기간 내 page_view가 있는 글 문서 인스턴스. 새로고침은 새 조회, 네트워크 재전송은 중복 제거.
 - 방문자: 동의한 브라우저 식별자. 사람 수나 세션 수가 아니다.

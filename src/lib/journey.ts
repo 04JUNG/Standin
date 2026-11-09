@@ -1,5 +1,7 @@
 // First-party analytics: fixed event fields only, no form contents, raw URLs or session replay.
 export const JOURNEY_VERSION = "2026-11-09";
+// Enable only after Standin-app-server #172 is deployed in production.
+export const BLOG_ANALYTICS_ENABLED = false;
 const COOKIE = "standin_journey";
 const REVOKE = "standin.journey.revoke.v1";
 const TOKEN = /^[A-Za-z0-9_-]{43}$/;
@@ -41,7 +43,7 @@ type Event = { id: string; page: string; sequence: number; name: string; at: str
 export function activeElapsed(previous: number, now: number, lastActivity: number, visible: boolean) {
   return visible ? Math.max(0, Math.min(now, lastActivity + 60_000) - previous) : 0;
 }
-export function createJourney(win?: Window, endpoint = "https://api.standinpose.com/v1/web-analytics") {
+export function createJourney(win?: Window, endpoint = "https://api.standinpose.com/v1/web-analytics", blogAnalytics = BLOG_ANALYTICS_ENABLED) {
   let allowed = false, token = "", page = "", sequence = 0, generation = 0;
   let queue: Event[] = [], flushing = false, retryAt = 0, timer = 0;
   let section = "page", last = 0, activity = 0, elapsed = 0, depth = 0, sentDepth = 0, ticks = 0;
@@ -68,9 +70,10 @@ export function createJourney(win?: Window, endpoint = "https://api.standinpose.
     if (!allowed || !token || !win) return;
     const url = new URL(win.location.href);
     const creative = url.searchParams.get("utm_content");
+    const legacySource = url.searchParams.get('utm_source');
     queue.push({ id: win.crypto.randomUUID(), page, sequence: ++sequence, name, at: new Date().toISOString(), path: url.pathname, section, target,
       creative: creative === "meta-poster-a" || creative === "meta-hook-a" ? creative : "other",
-      source: journeySource(url.href, win.document.referrer),
+      source: blogAnalytics ? journeySource(url.href, win.document.referrer) : legacySource && ['instagram', 'google', 'x'].includes(legacySource) ? legacySource : legacySource ? 'other' : 'direct',
       device: win.matchMedia("(pointer: coarse)").matches ? "mobile" : "desktop", elapsedMs: Math.round(milliseconds), depth });
     queue = queue.slice(-120);
   }
@@ -133,7 +136,7 @@ export function createJourney(win?: Window, endpoint = "https://api.standinpose.
       if (url.origin !== win.location.origin && url.origin !== new URL(win.location.href).origin) return;
       const target = url.pathname === win.location.pathname && url.hash && blogSections[url.pathname]?.includes(url.hash.slice(1)) ? 'toc'
         : url.hash === "#beta" ? "beta" : url.pathname.startsWith('/blog/') ? 'blog' : url.pathname.startsWith("/guides/") ? "guide" : url.pathname === "/feedback/" ? "feedback" : null;
-      if (target) { emit("cta_click", target); void flush(true); }
+      if (target && (blogAnalytics || (target !== 'blog' && target !== 'toc'))) { emit("cta_click", target); void flush(true); }
     } catch { /* ignore non-navigation controls */ }
   };
   function listen(add: boolean) {
@@ -164,6 +167,7 @@ export function createJourney(win?: Window, endpoint = "https://api.standinpose.
       if (!TOKEN.test(previous)) { await retryRevocations(); return pending().length === 0; }
       savePending([...new Set([...pending(), previous])]); return erase(previous);
     }
+    if (!blogAnalytics && blogSections[win.location.pathname]) return true;
     if (allowed) return true;
     allowed = true; const current = ++generation;
     await retryRevocations();

@@ -35,7 +35,7 @@ test('every blog page requires opt-in; reading sections and active dwell reach t
     b.win.document.referrer='https://search.naver.com/?query=private';
     const id=path==='/blog/'?'blog-list':'article-intro';
     b.win.document.getElementById=key=>key===id?{getBoundingClientRect:()=>({top:0,bottom:800})}:key==='blog-content'?{getBoundingClientRect:()=>({top:0,bottom:2400})}:null;
-    const journey=createJourney(b.win);assert.equal(b.calls.length,0);
+    const journey=createJourney(b.win,undefined,true);assert.equal(b.calls.length,0);
     assert.equal(createMeasurement({enabled:true,ga4Id:'',pixelId:'',journey},b.win).available,true);
     await journey.setAllowed(true);await settle();for(let i=0;i<10;i++)b.advance(1000);await settle();
     const events=b.calls.flatMap(c=>c.body.events||[]);
@@ -44,6 +44,20 @@ test('every blog page requires opt-in; reading sections and active dwell reach t
     assert.ok(!JSON.stringify(events).includes('private'));
     await journey.setAllowed(false);
   }
+});
+test('content-first rollout defers blog events, preserves revocation and legacy source values',async()=>{
+  const b=browser();b.win.location={href:'https://www.standinpose.com/blog/bvh-vs-fbx/',pathname:'/blog/bvh-vs-fbx/'};
+  b.win.document.cookie='standin_journey='+token;
+  const journey=createJourney(b.win,undefined,false);
+  await journey.setAllowed(true);b.advance(10000);await settle();
+  assert.equal(b.calls.length,0);
+  await journey.setAllowed(false);await settle();
+  assert.ok(b.calls.some(c=>c.url.endsWith('/revoke')));
+  assert.equal(b.win.document.cookie,'');
+  const home=browser();home.win.location={href:'https://www.standinpose.com/?utm_source=naver',pathname:'/'};
+  home.win.document.referrer='https://search.naver.com/?query=private';
+  await createJourney(home.win,undefined,false).setAllowed(true);await settle();
+  assert.ok(home.calls.flatMap(c=>c.body.events??[]).every(e=>e.source==='other'));
 });
 test('elapsed time excludes hidden time and stops at the idle boundary',()=>{
   assert.equal(activeElapsed(1000,11000,1000,true),10000);assert.equal(activeElapsed(1000,11000,1000,false),0);
