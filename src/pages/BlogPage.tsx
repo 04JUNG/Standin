@@ -8,14 +8,20 @@ import { blogVisuals, type BlogVisual } from '../data/blogVisuals';
 import '../styles/blog.css';
 
 function BlogFigure({ visual, priority = false }: { visual: BlogVisual; priority?: boolean }) {
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(Boolean(visual.animation));
   const displayedSource = playing && visual.animation ? visual.animation.src : visual.src;
+  const media = <img key={displayedSource} src={displayedSource} width={visual.width} height={visual.height} alt={visual.alt} loading={priority || playing ? 'eager' : 'lazy'} decoding="async" fetchPriority={priority ? 'high' : undefined} />;
   return <figure className="blog-figure">
-    {visual.animation && <div className="blog-gif-controls"><span>{visual.animation.label}</span><button type="button" onClick={() => setPlaying(!playing)} aria-pressed={playing}>{playing ? '■ GIF 정지' : '▶ GIF 재생'}</button></div>}
-    <a href={displayedSource} target="_blank" rel="noopener noreferrer" aria-label={`${visual.alt} — 원본 이미지 크게 보기 (새 창)`}>
-      <img key={displayedSource} src={displayedSource} width={visual.width} height={visual.height} alt={visual.alt} loading={priority || playing ? 'eager' : 'lazy'} decoding="async" fetchPriority={priority ? 'high' : undefined} />
+    {visual.animation ? <>
+      <button className="blog-gif-toggle" type="button" onClick={() => setPlaying(value => !value)} aria-pressed={playing} aria-label={`${visual.animation.label} — ${playing ? 'GIF 정지' : 'GIF 재생'}`}>
+        {media}
+        <span className="blog-gif-hint" aria-hidden="true">{playing ? 'Ⅱ 이미지 눌러 정지' : '▶ 이미지 눌러 재생'}</span>
+      </button>
+      <a className="blog-gif-original" href={displayedSource} target="_blank" rel="noopener noreferrer">원본 크게 보기 ↗<span className="sr-only"> (새 창)</span></a>
+    </> : <a href={displayedSource} target="_blank" rel="noopener noreferrer" aria-label={`${visual.alt} — 원본 이미지 크게 보기 (새 창)`}>
+      {media}
       <span className="blog-image-zoom" aria-hidden="true">크게 보기 ↗</span>
-    </a>
+    </a>}
     <figcaption>{visual.caption}</figcaption>
   </figure>;
 }

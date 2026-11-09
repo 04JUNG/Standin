@@ -14,7 +14,7 @@ Repeated workflow/import diagrams are no longer displayed. The BVH/FBX structure
 - `standin-to-clip-studio.gif`: unchanged `대표영상_재촬영_2026-11-06/Standin_러프캡처_원본_1.4배속.gif`, 1240 × 735, 9 seconds, 1.4× speed. Whole user-recorded rough/candidate/save/FBX drag/import demonstration; candidates were prepared. The source `gif-verification.json` documents timing and provenance. This is FBX footage, not proof of BVH behavior.
 - `clip-studio-applied.jpg`, `saved-file-drag.jpg`: unchanged `raw-12.1.jpg`, `raw-4.9.jpg` from the same re-recording's `edit` directory. Show final application and the saved file row respectively.
 
-GIFs load only when the user presses Play; Stop replaces the animation with its static preview. No autoplay, including for reduced-motion readers. Original/full-size links remain available. Poster and media dimensions reserve layout space.
+GIFs autoplay on article load. Clicking the image button (or Enter/Space while focused) switches to the static preview; clicking again restarts playback. A separate original/full-size link remains available. The image button exposes its playing state and action to assistive technology. Poster and media dimensions reserve layout space.
 
 Direct BVH drag-and-drop: Standin-client `docs/adr/ADR-009-pose-file-delivery.md` records successful app-to-CSP BVH validation on 2026-07-31, including automatic figure creation without a preselected model. `SavedFileList.tsx` and `drag.tauri.ts` implement a native copy drag from the saved file row for both formats. The official CSP manual documents the menu path for BVH, so the articles distinguish team-tested direct drop from the documented fallback. BVH requires CSP PRO/EX 3.1.0 or later. No new live app verification is claimed.
 
@@ -33,4 +33,4 @@ All eight instructional sections now have distinct visuals immediately below the
 - `bvh-applied.webp`: live CUA screenshot on 2026-11-09 after importing the existing Standin-produced `문장검색_standin_pose.bvh` into a new blank CSP canvas via File → Import → 3D Data; crop 850×800 at (327,65). This screenshot proves this file's imported result, not a newly tested native drag. Direct-drop evidence remains ADR-009 above.
 - `clip-studio-import-menu.webp`: live CUA screenshot of the expanded File → Import menu, crop 600×800 at (0,0).
 
-Video frames and native screenshots were only cropped and encoded as WebP; no UI was redrawn or generated. New section assets total under 450 KB. GIF playback remains opt-in. Original screenshots are retained in master-docs `tmp/blog-csp-*.png`.
+Video frames and native screenshots were only cropped and encoded as WebP; no UI was redrawn or generated. New section assets total under 450 KB. Original screenshots are retained in master-docs `tmp/blog-csp-*.png`.
