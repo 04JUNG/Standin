@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { BlogPage } from './pages/BlogPage';
 import { blogPosts, blogPath, blogDescription } from './data/blog';
+import { blogVisuals } from './data/blogVisuals';
 import { renderToString } from "react-dom/server";
 import { App } from "./App";
 import { GuidePage } from "./pages/GuidePage";
@@ -41,7 +42,7 @@ export function render(path: string) {
     const title = post ? `${post.title} | Standin 블로그` : 'Standin 블로그 | 러프에서 작화까지';
     const description = post?.description ?? blogDescription;
     const content = post ? { '@type': 'BlogPosting', '@id': `${url}#article`, url, headline: post.title, description,
-      datePublished: post.date, dateModified: post.date, inLanguage: 'ko', image: `${origin}/standin-social-card.png`,
+      datePublished: post.date, dateModified: post.date, inLanguage: 'ko', image: `${origin}${blogVisuals[post.slug].cover.src}`,
       author: { '@id': organization['@id'] }, publisher: { '@id': organization['@id'] }, mainEntityOfPage: url,
       citation: post.sources.map(s => new URL(s.href, origin).href), isPartOf: { '@id': `${origin}/blog/#blog` } }
       : { '@type': 'CollectionPage', '@id': `${url}#page`, url, name: title, description, dateModified: '2026-11-09', inLanguage: 'ko', isPartOf: { '@id': website['@id'] } };

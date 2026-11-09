@@ -38,8 +38,16 @@
 .blog-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; margin-top: 3rem; }
 .blog-card { display: flex; flex-direction: column; padding: 1.75rem; border: 1px solid #d8dde5; border-radius: 20px; background: #fff; }
 .blog-card:hover { border-color: #e95543; }
-.blog-card-number { font-size: 3rem; line-height: 1; color: #e95543; font-weight: 700; letter-spacing: -.05em; }
+.blog-card-number { font-size: 1.5rem; line-height: 1; color: #e95543; font-weight: 700; letter-spacing: -.05em; }
 .blog-card h2 { font-size: 1.4rem; font-weight: 700; line-height: 1.5; letter-spacing: -.02em; }
 .blog-card > p:not(.blog-eyebrow) { margin: 1rem 0; color: #596575; line-height: 1.8; }
 .blog-card .blog-meta { margin-top: auto; padding-top: 1rem; }
+.blog-card-cover { width: calc(100% + 3.5rem); max-width: none; height: auto; aspect-ratio: 3 / 2; margin: -1.75rem -1.75rem 1.5rem; border-radius: 19px 19px 0 0; }
+.blog-figure { margin: 2rem 0; }
+.blog-figure > a { display: block; position: relative; border: 1px solid #d8dde5; border-radius: 16px; overflow: hidden; background: #edf1f4; }
+.blog-figure img { display: block; width: 100%; height: auto; }
+.blog-figure figcaption { margin: .85rem .25rem 0; color: #596575; font-size: .875rem; line-height: 1.8; word-break: keep-all; overflow-wrap: anywhere; }
+.blog-image-zoom { display: block; padding: .55rem .9rem; text-align: right; color: #334b60; background: #fff; font-size: .8rem; }
+.blog-figure a:hover .blog-image-zoom { color: #a73627; text-decoration: underline; }
+.blog-figure a:focus-visible, .blog-card:focus-visible { outline: 3px solid #a73627; outline-offset: 4px; }
 @media (max-width: 800px) { .blog-cards { grid-template-columns: 1fr; } .blog-header nav { gap: .8rem; font-size: .8rem; } }

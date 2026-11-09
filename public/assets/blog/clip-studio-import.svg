@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600" role="img" aria-labelledby="title desc">
+<title id="title">클립스튜디오로 가져오는 두 경로</title><desc id="desc">모델을 포함한 FBX는 모델 데이터를 가져온다. BVH는 기존 인형을 선택한 후 포즈를 적용한다.</desc>
+<defs><g id="person" stroke-linecap="round" stroke-linejoin="round"><circle cx="0" cy="-52" r="14"/><path d="M0-28V22M-37 0L0-24 26-48M0 22L-24 66M0 22L27 66" fill="none" stroke-width="15"/></g><marker id="arrow" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto"><path d="M0 0L6 3 0 6" fill="none" stroke="#d85945" stroke-width="1.5"/></marker></defs>
+<rect width="900" height="600" rx="24" fill="#eef2f4"/>
+<g font-family="Arial,'Noto Sans KR','Malgun Gothic',sans-serif" fill="#17283c">
+<text x="42" y="59" font-size="18" letter-spacing="3" fill="#536e84">CLIP STUDIO PAINT · IMPORT</text><text x="42" y="109" font-size="38" font-weight="700">파일은 같아 보여도, 적용은 다르게</text>
+<rect x="32" y="143" width="836" height="191" rx="18" fill="white"/>
+<rect x="32" y="354" width="836" height="191" rx="18" fill="white"/>
+<g transform="translate(61 174)"><path d="M0 0H77L105 28V113H0Z" fill="#fff1ea" stroke="#db6a55" stroke-width="2"/><path d="M77 0V28H105" fill="none" stroke="#db6a55" stroke-width="2"/><text x="16" y="71" font-size="32" font-weight="700" fill="#a63d2b">FBX</text></g>
+<text x="194" y="204" font-size="31" font-weight="700">모델이 포함된 파일</text><text x="194" y="247" font-size="26" fill="#596a7a">저장한 모델 가져오기</text>
+<path d="M510 239H581" fill="none" stroke="#d85945" stroke-width="3" marker-end="url(#arrow)"/>
+<g transform="translate(614 162)"><rect width="222" height="151" rx="9" fill="#f4f6f7" stroke="#a6b6c3"/><path d="M0 25H222" stroke="#a6b6c3"/><circle cx="14" cy="12" r="3" fill="#d9624d"/><use href="#person" x="111" y="88" transform="translate(33 25) scale(.7)" fill="#afbdc9" stroke="#899dab"/><text x="17" y="19" font-size="12" fill="#647687"> </text></g>
+<g transform="translate(61 385)"><path d="M0 0H77L105 28V113H0Z" fill="#eaf2fa" stroke="#6686a2" stroke-width="2"/><path d="M77 0V28H105" fill="none" stroke="#6686a2" stroke-width="2"/><text x="15" y="71" font-size="32" font-weight="700" fill="#335e80">BVH</text></g>
+<text x="194" y="415" font-size="31" font-weight="700">기존 인형 먼저 선택</text><text x="194" y="458" font-size="26" fill="#596a7a">그 인형에 포즈 적용</text>
+<path d="M510 450H581" fill="none" stroke="#d85945" stroke-width="3" marker-end="url(#arrow)"/>
+<g transform="translate(614 373)"><rect width="222" height="151" rx="9" fill="#f4f6f7" stroke="#a6b6c3"/><path d="M0 25H222" stroke="#a6b6c3"/><circle cx="14" cy="12" r="3" fill="#d9624d"/><rect x="70" y="35" width="85" height="108" rx="5" fill="#fff4ed" stroke="#db6a55" stroke-dasharray="4 3"/><use href="#person" x="111" y="88" transform="translate(33 25) scale(.7)" fill="#afbdc9" stroke="#899dab"/><g fill="#de604b"><circle cx="111" cy="70" r="4"/><circle cx="111" cy="102" r="4"/><circle cx="93" cy="132" r="4"/><circle cx="130" cy="132" r="4"/></g></g>
+<text x="450" y="578" text-anchor="middle" font-size="23" fill="#526476">가져온 다음에는 크기 · 방향 · 관절 · 카메라를 확인하세요</text>
+</g></svg>
