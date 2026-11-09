@@ -46,6 +46,8 @@
 .blog-figure { margin: 2rem 0; }
 .blog-figure > a { display: block; position: relative; border: 1px solid #d8dde5; border-radius: 16px; overflow: hidden; background: #edf1f4; }
 .blog-figure img { display: block; width: 100%; height: auto; }
+.blog-section .blog-figure { max-width: 100%; width: fit-content; margin: 1.5rem auto; }
+.blog-section .blog-figure img { max-height: 620px; object-fit: contain; }
 .blog-figure figcaption { margin: .85rem .25rem 0; color: #596575; font-size: .875rem; line-height: 1.8; word-break: keep-all; overflow-wrap: anywhere; }
 .blog-image-zoom { display: block; padding: .55rem .9rem; text-align: right; color: #334b60; background: #fff; font-size: .8rem; }
 .blog-figure a:hover .blog-image-zoom { color: #a73627; text-decoration: underline; }
