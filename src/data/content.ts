@@ -17,9 +17,9 @@ export const hero = {
   eyebrow: "WEBTOON 3D POSE TOOL",
   title: "Standin — 러프 이미지로 찾는 웹툰 3D 포즈",
   body: "그림 위에 마우스를 올려 Standin이 찾은 같은 자세의 3D 인형을 직접 비교해 보세요.",
-  primaryCta: "오픈베타 다운로드",
+  primaryCta: "블로그 보기",
   // 가이드 페이지에서도 쓰므로 루트 기준 hash로 둔다.
-  primaryHref: "/#beta",
+  primaryHref: "/blog/",
   secondaryCta: "사용 과정 보기",
   assistiveLine: "스포츠·액션·공중 동작까지 네 가지 포즈 예시를 직접 확인할 수 있습니다.",
   mediaLabel: "실제 Standin 사용 영상 · 추후 삽입",

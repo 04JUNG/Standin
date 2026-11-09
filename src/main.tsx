@@ -10,8 +10,8 @@ import { localeFromPath } from "./i18n/locale";
 if (["/signup", "/feedback", "/ja"].includes(window.location.pathname)) {
   window.location.replace(`${window.location.pathname}/${window.location.search}${window.location.hash}`);
 } else if (/^\/closed-beta\/?$/.test(window.location.pathname)) {
-  // 클로즈베타 종료로 없어진 경로. 예전 링크는 현재 다운로드 안내로 보낸다.
-  window.location.replace("/#beta");
+  // 운영을 종료한 경로는 홈으로 보낸다.
+  window.location.replace("/");
 } else {
   const root = document.getElementById("root")!;
   const app = (

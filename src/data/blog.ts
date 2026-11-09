@@ -17,7 +17,7 @@ export const blogPosts: BlogPost[] = [
       { id: 'limits', title: '마지막 연출과 작화는 작가가 결정합니다', paragraphs: ['입력과 후보가 정확히 일치하지 않을 수 있습니다. 가림이 심한 자세나 과장된 동세는 원하는 결과를 찾기 어려울 수 있고, 사용할 만한 후보가 없다면 직접 포즈를 잡는 편이 나을 수도 있습니다.', 'Standin은 클립스튜디오와 별도로 실행하는 도구입니다. 클립스튜디오의 공식 플러그인이 아니며, 내보낸 파일을 가져오는 방식으로 작업을 이어갑니다. 지원 형식은 저장 화면과 사용하는 클립스튜디오 버전을 확인하세요.'] },
       { id: 'next', title: '이제 러프 한 컷으로 시작해 보세요', paragraphs: ['먼저 사용법 글을 옆에 두고 입력부터 파일 가져오기까지 한 번 진행해 보세요. 파일 형식을 고르는 단계가 헷갈리면 BVH·FBX 비교 글을 함께 참고하면 됩니다.'], links: [{ label: '클립스튜디오에서 사용하는 방법', href: '/blog/standin-clip-studio-guide/' }, { label: 'BVH와 FBX 선택 기준', href: '/blog/bvh-vs-fbx/' }] },
     ],
-    sources: [{ label: 'Standin 앱 다운로드·릴리스 안내', href: 'https://github.com/04JUNG/Standin-client/releases/latest' }, { label: 'Standin 러프 입력 가이드', href: '/guides/rough-to-3d-pose/' }],
+    sources: [{ label: 'Standin 러프 입력 가이드', href: '/guides/rough-to-3d-pose/' }],
   },
   {
     slug: 'standin-clip-studio-guide', category: '따라 하는 사용법', date: '2026-11-09',
@@ -25,7 +25,7 @@ export const blogPosts: BlogPost[] = [
     description: 'Standin 저장 완료 화면의 FBX·BVH 파일을 클립스튜디오 캔버스로 바로 드래그 앤 드롭하세요. 실제 사용 GIF로 잡을 위치와 적용 과정을 안내합니다.',
     takeaway: { title: '저장한 파일을, Standin에서 클튜로 바로 드래그', text: '저장 완료 → 파일 이름이 적힌 행을 잡기 → 클립스튜디오 캔버스에 놓기. FBX·BVH 모두 이 흐름으로 가져올 수 있습니다. BVH는 CLIP STUDIO PAINT PRO·EX 3.1.0 이상을 사용하세요.' },
     sections: [
-      { id: 'prepare', title: '시작 전에 준비할 것', paragraphs: ['Standin과 CLIP STUDIO PAINT를 실행하고, 연습할 러프 한 컷을 준비합니다. 이 글은 Windows·macOS의 데스크톱 작업을 기준으로 합니다. 앱 버전에 따라 버튼 배치와 제공되는 내보내기 옵션이 달라질 수 있습니다.', 'BVH를 사용하려면 CLIP STUDIO PAINT PRO·EX 3.1.0 이상인지 확인하세요. 아래 공식 릴리스 노트에서 BVH 지원이 추가된 버전을 확인할 수 있습니다.'], links: [{ label: 'CLIP STUDIO PAINT 3.1.0 릴리스 노트', href: release }, { label: 'Standin 설치 안내', href: 'https://github.com/04JUNG/Standin-client/releases/latest' }] },
+      { id: 'prepare', title: '시작 전에 준비할 것', paragraphs: ['Standin과 CLIP STUDIO PAINT를 실행하고, 연습할 러프 한 컷을 준비합니다. 이 글은 Windows·macOS의 데스크톱 작업을 기준으로 합니다. 앱 버전에 따라 버튼 배치와 제공되는 내보내기 옵션이 달라질 수 있습니다.', 'BVH를 사용하려면 CLIP STUDIO PAINT PRO·EX 3.1.0 이상인지 확인하세요. 아래 공식 릴리스 노트에서 BVH 지원이 추가된 버전을 확인할 수 있습니다.'], links: [{ label: 'CLIP STUDIO PAINT 3.1.0 릴리스 노트', href: release }] },
       { id: 'input', title: '1. 러프를 캡처하거나 이미지로 입력합니다', paragraphs: ['Standin의 화면 캡처에서 분석할 영역을 선택하거나 이미지 파일을 불러옵니다. 입력 미리보기에서 의도한 인물이 들어 있는지 확인하세요.', '문장으로 찾고 싶다면 “서서 한쪽 팔을 앞으로 뻗은 자세”처럼 자세의 큰 형태와 팔다리 동작을 적어보세요. 러프 입력과 문장 검색 중 현재 작업에 편한 방식을 고르면 됩니다.'] },
       { id: 'select', title: '2. 러프와 가까운 후보를 선택합니다', paragraphs: ['검색된 후보의 몸통 기울기, 팔·다리 방향, 무게중심을 비교합니다. 화면에서 보는 각도와 실제 관절 자세를 나누어 살펴보면 어떤 후보를 수정하기 편할지 판단하기 쉽습니다.', '사용할 만한 후보가 없다면 입력 범위나 설명을 바꾸어 보세요. 결과가 정확히 일치할 것이라고 가정하기보다, 지금 컷에 활용할 수 있는 시작점인지 확인합니다.'] },
       { id: 'save', title: '3. 저장 완료 창에서 파일 이름이 적힌 행을 찾습니다', paragraphs: ['저장이 끝나면 Standin에 파일 이름과 확장자가 표시됩니다. 이 파일 행이 드래그 시작 지점입니다. 파일 이름 부분이나 왼쪽 점 손잡이를 잡으세요. 별도로 탐색기나 Finder를 열지 않아도 됩니다.', '저장된 파일이 .fbx인지 .bvh인지 확인하세요. 앱에서 FBX 대신 BVH로 저장했다는 안내가 있으면 실제로 저장된 형식을 기준으로 가져옵니다.'], links: [{ label: '어떤 형식을 선택할지 모르겠다면: BVH·FBX 비교', href: '/blog/bvh-vs-fbx/' }] },

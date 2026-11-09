@@ -80,7 +80,7 @@ export const guides: Guide[] = [
   {
     slug: "clip-studio-pose-import",
     publishedAt: "2026-10-09",
-    modifiedAt: "2026-10-27",
+    modifiedAt: "2026-11-09",
     title: "Standin에서 선택한 3D 포즈를 클립스튜디오 작업에 활용하는 방법",
     description: "Standin에서 선택한 포즈의 결과를 내보낸 뒤 클립스튜디오에서 러프와 크기·방향·구도를 비교하고 작화를 이어갑니다. Standin은 포즈 후보 선택을 돕고, 최종 선화와 연출은 작가가 결정합니다.",
     sections: [
@@ -153,7 +153,6 @@ export const guides: Guide[] = [
       label: "Standin이 찾은 3D 포즈를 Clip Studio 캔버스에 배치하는 작업 흐름 연출 예시",
     },
     references: [
-      { label: "Standin 공식 앱 릴리스: 설치 안내와 변경 내역", url: "https://github.com/04JUNG/Standin-client/releases/latest" },
       { label: "CLIP STUDIO PAINT 공식 매뉴얼: FBX·BVH 가져오기 (영문)", url: "https://help.clip-studio.com/en-us/manual_en/660_3d/Importing_3D_Files.htm" },
       { label: "CLIP STUDIO PAINT 공식 버전 3 릴리스 노트: 3.1.0 BVH 지원 (영문)", url: "https://www.clipstudio.net/en/dl/release_note/v3/" },
       { label: "CLIP STUDIO PAINT 공식 매뉴얼: 3D 인체 포즈 조정 (영문)", url: "https://help.clip-studio.com/en-us/manual_en/660_3d/Posing_3D_drawing_figures.htm" },

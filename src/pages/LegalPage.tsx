@@ -38,7 +38,7 @@ export function LegalPage({ document }: { document: LegalDocument }) {
           <div className="legal-layout">
             <aside className="legal-sidebar">
               <nav aria-label="약관 문서 선택">
-                {legalDocuments.map((item) => <a key={item.slug} href={legalPath(item)} aria-current={item.slug === document.slug ? "page" : undefined}>{item.label}</a>)}
+                {legalDocuments.filter((item) => item.slug !== "beta" || document.slug === "beta").map((item) => <a key={item.slug} href={legalPath(item)} aria-current={item.slug === document.slug ? "page" : undefined}>{item.label}</a>)}
               </nav>
             </aside>
             <article className="legal-article" aria-label={document.label}>

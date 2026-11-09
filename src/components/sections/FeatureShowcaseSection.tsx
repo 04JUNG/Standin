@@ -15,7 +15,7 @@ const getFeatures = (t: Translator) => [
     id: "body-manual", eyebrow: "NEW · BODY CONTROL", title: t("내 캐릭터의 비율로,\n직접 체형을 다듬으세요."),
     body: t("Standin의 체형 커스텀에서 시작 체형을 고르고, 키·등신·어깨와 팔다리 비율을 조절하세요. 이름을 붙여 저장하면 내 체형 목록에서 다시 사용할 수 있어요."),
     steps: [t("시작 체형 선택"), t("비율을 직접 조절"), t("내 체형으로 저장")],
-    note: t("체형 변경 기능 구현 완료 · 오픈베타에서 제공됩니다."),
+    note: t("저장한 체형은 내 체형 목록에서 다시 사용할 수 있습니다."),
     caption: t("Standin 앱 실제 사용 화면 · 체형 조절부터 저장까지"),
   },
   {
@@ -33,8 +33,8 @@ export function FeatureShowcaseSection() {
   return <section id="features" className="feature-showcase">
     <Container wide>
       <div className="feature-showcase__intro">
-        <p className="eyebrow">NEW IN OPEN BETA</p>
-        <h2>{t("오픈베타에서 만날")}<br />{t("새로운 기능들.")}</h2>
+        <p className="eyebrow">STANDIN FEATURES</p>
+        <h2>{t("포즈 검색부터 체형 조절까지.")}</h2>
         <p>{t("문장으로 포즈를 찾고, 내 캐릭터에 맞는 체형까지 만들어 보세요.")}</p>
       </div>
       {features.map((feature, index) => <article id={`feature-${feature.id}`} className="feature-showcase__row" key={feature.id}>
