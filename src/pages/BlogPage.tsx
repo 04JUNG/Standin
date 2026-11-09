@@ -28,9 +28,12 @@ function BlogFigure({ visual, priority = false }: { visual: BlogVisual; priority
 
 export function BlogPage({ post }: { post?: BlogPost }) {
   const visuals = post ? blogVisuals[post.slug] : undefined;
+  const postIndex = post ? blogPosts.findIndex(item => item.slug === post.slug) : -1;
+  const previousPost = postIndex > 0 ? blogPosts[postIndex - 1] : undefined;
+  const nextPost = postIndex >= 0 ? blogPosts[postIndex + 1] : undefined;
   return <>
     <a className="skip-link" href="#main-content">본문으로 바로가기</a>
-    <header className="blog-header"><Container><div className="blog-header-row"><a href="/" aria-label="Standin 홈"><BrandMark className="text-xl" /></a><nav aria-label="블로그 메뉴"><a href="/blog/">블로그</a><a href="/#beta">오픈베타 다운로드</a></nav></div></Container></header>
+    <header className={`blog-header${post ? ' blog-header--reading' : ''}`}><Container><div className="blog-header-row"><a href="/" aria-label="Standin 홈"><BrandMark className="text-xl" /></a><nav aria-label="블로그 메뉴"><a href="/blog/">{post ? '모든 글' : '블로그'}</a><a href="/#beta">오픈베타 다운로드</a></nav></div></Container></header>
     <main id="main-content" className="blog-main"><Container>
       {post ? <article className="blog-article" id="blog-content">
         <header id="article-intro" data-reading-section="article-intro">
@@ -50,7 +53,20 @@ export function BlogPage({ post }: { post?: BlogPost }) {
           {section.links && <ul className="blog-links">{section.links.map(link => <li key={link.href}><a href={link.href}>{link.label} →</a></li>)}</ul>}
         </section>)}
         <section id="article-sources" data-reading-section="article-sources" className="blog-section blog-sources"><h2>참고 자료</h2><p>확인일: {post.date}. 파일 형식과 메뉴 가져오기는 공식 문서를, Standin에서 직접 드래그하는 흐름은 앱 구현과 팀의 사용 검증을 기준으로 설명했습니다. 실제 적용 결과는 사용 버전과 파일 구성에 따라 확인하세요.</p><ul>{post.sources.map(source => <li key={source.href}><a href={source.href}>{source.label}</a></li>)}</ul></section>
-        <aside id="article-related" data-reading-section="article-related" className="blog-related"><h2>함께 읽으면 좋은 글</h2>{blogPosts.filter(p => p.slug !== post.slug).map(p => <a key={p.slug} href={blogPath(p)}>{p.title} →</a>)}<a className="blog-cta" href="/#beta">Standin 다운로드</a></aside>
+        <aside id="article-related" data-reading-section="article-related" className="blog-related">
+          <div className="blog-related-heading"><h2 id="blog-navigation-title">이어서 읽기</h2><a className="blog-all-posts" href="/blog/">모든 글 보기 <span aria-hidden="true">↗</span></a></div>
+          <nav className="blog-post-navigation" aria-labelledby="blog-navigation-title">
+            {previousPost && <a className="blog-post-link" href={blogPath(previousPost)} rel="prev">
+              <span className="blog-post-direction"><span aria-hidden="true">← </span>이전 글</span>
+              <strong>{previousPost.title}</strong><span className="blog-post-category">{previousPost.category}</span>
+            </a>}
+            {nextPost && <a className="blog-post-link blog-post-link--next" href={blogPath(nextPost)} rel="next">
+              <span className="blog-post-direction">다음 글<span aria-hidden="true"> →</span></span>
+              <strong>{nextPost.title}</strong><span className="blog-post-category">{nextPost.category}</span>
+            </a>}
+          </nav>
+          <a className="blog-cta" href="/#beta">Standin 다운로드</a>
+        </aside>
       </article> : <div className="blog-index" id="blog-list" data-reading-section="blog-list"><p className="blog-eyebrow">STANDIN JOURNAL</p><h1>러프 다음의 작업을 위한 이야기</h1><p className="blog-lead">{blogDescription}</p><div className="blog-cards">{blogPosts.map((p, i) => <a className="blog-card" href={blogPath(p)} key={p.slug}><img className="blog-card-cover" src={blogVisuals[p.slug].cover.src} width={blogVisuals[p.slug].cover.width} height={blogVisuals[p.slug].cover.height} alt="" loading="lazy" decoding="async" /><span className="blog-card-number">0{i + 1}</span><p className="blog-eyebrow">{p.category}</p><h2>{p.title}</h2><p>{p.description}</p><span className="blog-meta">{p.date} · 글 읽기 →</span></a>)}</div></div>}
     </Container></main><Footer />
   </>;
