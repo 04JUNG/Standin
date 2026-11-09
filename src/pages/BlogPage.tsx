@@ -33,7 +33,7 @@ export function BlogPage({ post }: { post?: BlogPost }) {
   const nextPost = postIndex >= 0 ? blogPosts[postIndex + 1] : undefined;
   return <>
     <a className="skip-link" href="#main-content">본문으로 바로가기</a>
-    <header className={`blog-header${post ? ' blog-header--reading' : ''}`}><Container><div className="blog-header-row"><a href="/" aria-label="Standin 홈"><BrandMark className="text-xl" /></a><nav aria-label="블로그 메뉴"><a href="/blog/">{post ? '모든 글' : '블로그'}</a><a href="/#beta">오픈베타 다운로드</a></nav></div></Container></header>
+    <header className={`blog-header${post ? ' blog-header--reading' : ''}`}><Container><div className="blog-header-row"><a href="/" aria-label="Standin 홈"><BrandMark className="text-xl" /></a><nav aria-label="블로그 메뉴"><a href="/blog/">{post ? '모든 글' : '블로그'}</a></nav></div></Container></header>
     <main id="main-content" className="blog-main"><Container>
       {post ? <article className="blog-article" id="blog-content">
         <header id="article-intro" data-reading-section="article-intro">
@@ -65,7 +65,6 @@ export function BlogPage({ post }: { post?: BlogPost }) {
               <strong>{nextPost.title}</strong><span className="blog-post-category">{nextPost.category}</span>
             </a>}
           </nav>
-          <a className="blog-cta" href="/#beta">Standin 다운로드</a>
         </aside>
       </article> : <div className="blog-index" id="blog-list" data-reading-section="blog-list"><p className="blog-eyebrow">STANDIN JOURNAL</p><h1>러프 다음의 작업을 위한 이야기</h1><p className="blog-lead">{blogDescription}</p><div className="blog-cards">{blogPosts.map((p, i) => <a className="blog-card" href={blogPath(p)} key={p.slug}><img className="blog-card-cover" src={blogVisuals[p.slug].cover.src} width={blogVisuals[p.slug].cover.width} height={blogVisuals[p.slug].cover.height} alt="" loading="lazy" decoding="async" /><span className="blog-card-number">0{i + 1}</span><p className="blog-eyebrow">{p.category}</p><h2>{p.title}</h2><p>{p.description}</p><span className="blog-meta">{p.date} · 글 읽기 →</span></a>)}</div></div>}
     </Container></main><Footer />

@@ -12,7 +12,7 @@ for (const path of legalPaths) {
   assert.ok(text.endsWith(source), `${path}: download and page use the same full text`);
   assert.match(html, /게시일.*2026년 10월 19일.*적용일.*2026년 10월 19일/s, `${path}: requested dates`);
   assert.ok(!/내부 작성 메모|주소 확인 기록|구현 확인 메모|신청정보 정리 메모|문서 ID:/.test(html), `${path}: internal notes excluded`);
-  for (const link of legalPaths) assert.ok(html.includes(`href="${link}"`), `${path}: sibling document ${link}`);
+  for (const link of legalPaths.filter(link => link !== "/legal/beta/" || path === "/legal/beta/")) assert.ok(html.includes(`href="${link}"`), `${path}: sibling document ${link}`);
   for (const [, anchor] of html.matchAll(/href="#([^"<]+)"/g)) assert.ok(html.includes(`id="${anchor}"`), `${path}: valid anchor ${anchor}`);
   assert.match(html, /href="https:\/\/x.com\/standin_asm" target="_blank" rel="noopener noreferrer"/, `${path}: social link`);
   assert.match(html, /mailto:standin.asm@gmail.com/, `${path}: contact`);

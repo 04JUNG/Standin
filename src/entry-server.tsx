@@ -22,7 +22,7 @@ export const prerenderPaths = [...publicPaths, ...legalPaths];
 export function render(path: string) {
   const locale = localeFromPath(path);
   const { beta, footer, hero, faqItems } = landingContent(locale);
-  const modifiedAt = locale === "ja" ? "2026-11-06" : site.modifiedAt;
+  const modifiedAt = site.modifiedAt;
   const guide = guides.find((item) => guidePath(item) === path);
   const legal = legalDocuments.find((item) => legalPath(item) === path);
   const post = blogPosts.find(item => blogPath(item) === path);
@@ -94,7 +94,6 @@ export function render(path: string) {
       applicationCategory: "MultimediaApplication",
       operatingSystem: ["Windows", "macOS"],
       featureList: beta.updates.filter((update) => !update.upcoming).map((update) => update.title),
-      installUrl: `${url}#beta`,
       softwareHelp: guides.map((item) => ({ "@type": "WebPage", url: `${origin}${guidePath(item)}`, name: item.title })),
       provider: { "@id": organization["@id"] },
       mainEntityOfPage: { "@id": `${url}#page` },

@@ -91,7 +91,7 @@ const faqSchema = homeGraph.find((node) => node["@type"] === "FAQPage");
 const homePage = homeGraph.find((node) => node["@type"] === "WebPage");
 const application = homeGraph.find((node) => node["@type"] === "SoftwareApplication");
 const visibleFaq = [...faq.matchAll(/<details\b[^>]*id="([^"]+)"[^>]*>([\s\S]*?)<\/details>/g)];
-assert.equal(visibleFaq.length, 16, "All product FAQ answers must exist in the initial HTML");
+assert.equal(visibleFaq.length, 14, "All product FAQ answers must exist in the initial HTML");
 assert.equal((faq.match(/<h3\b/g) ?? []).length, visibleFaq.length, "FAQ questions are semantic headings");
 assert.equal(faqSchema.mainEntity.length, visibleFaq.length, "Schema must describe exactly the visible FAQ");
 for (const [index, [, id, markup]] of visibleFaq.entries()) {
@@ -113,44 +113,26 @@ assert.equal(homePage.dateModified, faqSchema.dateModified);
 assert.ok(home.includes(`dateTime="${homePage.dateModified}"`), "FAQ review date is visible");
 assert.deepEqual(application.operatingSystem, ["Windows", "macOS"]);
 assert.equal(application.description, homePage.description);
-assert.equal(application.installUrl, `${origin}/#beta`);
+assert.ok(!application.installUrl, "Do not advertise an installer in structured data");
 for (const feature of application.featureList) assert.ok(home.includes(feature), "Application features match visible copy");
 assert.ok(!application.aggregateRating && !application.review, "Do not invent software ratings or reviews");
-for (const id of ["pricing", "supported-platforms", "export-formats", "unpublished-artwork", "commercial-use"]) {
+for (const id of ["supported-platforms", "export-formats", "unpublished-artwork", "commercial-use"]) {
   assert.ok(home.includes(`id="faq-${id}"`), `Answer buying and trust question: ${id}`);
 }
 assert.ok(home.includes('id="faq-text-search"') && home.includes('id="faq-body-type"'), "Answer text search and body type questions");
-assert.match(home, /Standin 다운로드/, "Show open beta downloads");
-assert.match(home, /정식 출시 후 1개월 무료 이용/, "Show the participant perk");
-assert.match(home, /오픈베타 참여자 전원/, "Free month is for all beta participants");
-assert.match(home, /설문 작성 \+ 사용 화면 스크린샷 제출/, "Show both survey entry requirements");
-assert.match(home, /2026\.10\.21–11\.11/, "Show the survey event period");
-assert.match(home, /추첨 5명 \+ 정성 후기 5명/, "Show the ten-recipient survey award split separately from the universal perk");
-assert.match(home, /검색 화면 개편 예정/, "Do not present the planned search UI as released");
-assert.ok(home.includes('id="faq-availability"'), "Answer the availability question with the open beta status");
-assert.ok(!home.includes("data-launch-countdown"), "Launch PR replaces the countdown");
-assert.ok(!/클로즈베타|CLOSED BETA/i.test(home), "Closed beta copy must not remain on the landing");
-assert.ok(!home.includes("오픈베타 사전등록"), "Do not ask users to preregister after launch");
-assert.match(home, /href="https:\/\/github\.com\/04JUNG\/Standin-client\/releases\/download\/[^\"]+\.exe"/, "Windows installer works before hydration");
-assert.match(home, /href="https:\/\/github\.com\/04JUNG\/Standin-client\/releases\/download\/[^\"]+\.dmg"/, "macOS installer works before hydration");
-assert.ok(!home.includes('href="https://github.com/04JUNG/Standin-client/releases/latest"'), "Downloads stay on the landing instead of linking to GitHub UI");
 for (const [path, html] of documents) {
-  if (path === "/ja/") continue; // Japanese CTA and policy checks live in check-localization.mjs.
-  const downloadHref = path === "/" ? "#beta" : "/#beta";
-  assert.match(html, new RegExp(`href="${downloadHref}"[^>]*>오픈베타 다운로드`), `${path}: link to downloads without dropping home campaign parameters`);
-  assert.ok(!html.includes('href="/closed-beta/"') && html.includes('href="/feedback/"'), `${path}: open beta feedback navigation`);
+  assert.ok(!/오픈베타|클로즈베타|OPEN BETA|CLOSED BETA|オープンベータ/i.test(html), `${path}: no retired beta promotion`);
+  assert.ok(!/href="[^"]*(?:#beta|\/feedback\/|\/closed-beta\/|\/legal\/beta\/|github\.com\/04JUNG\/Standin-client\/releases)/.test(html), `${path}: no retired campaign or app download links`);
+  assert.ok(!html.includes("supporters-popup"), `${path}: no recruitment popup`);
 }
 const signupHtml = await readFile(new URL("signup/index.html", dist), "utf8");
 assert.match(signupHtml, /name="robots" content="noindex"/, "signup: existing private-flow indexing policy");
 assert.match(signupHtml, /<script type="module"[^>]*src="\/assets\//, "signup: preserve the browser entry point");
-const feedbackHtml = await readFile(new URL("feedback/index.html", dist), "utf8");
-assert.match(feedbackHtml, /name="robots" content="noindex"/);
-assert.match(feedbackHtml, /<script type="module"[^>]*src="\/assets\//);
-assert.ok(!feedbackHtml.includes('http-equiv="refresh"'), "Feedback must open the survey, not redirect");
-for (const path of ["closed-beta"]) {
+for (const path of ["feedback", "closed-beta"]) {
   const html = await readFile(new URL(`${path}/index.html`, dist), "utf8");
   assert.match(html, /name="robots" content="noindex"/, `${path}: retired path stays out of the index`);
-  assert.match(html, /http-equiv="refresh" content="0; url=\/#beta"/, `${path}: old links redirect to the open beta status`);
+  assert.match(html, /http-equiv="refresh" content="0; url=\/"/, `${path}: retired campaign redirects home`);
+  assert.ok(!html.includes('type="module"'), `${path}: no active campaign form`);
 }
 const sitemap = await readFile(new URL("sitemap.xml", dist), "utf8");
 const locations = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
@@ -164,4 +146,4 @@ for (const [, url, lastmod] of sitemap.matchAll(/<url><loc>(.*?)<\/loc><lastmod>
 const robots = await readFile(new URL("robots.txt", dist), "utf8");
 assert.ok(robots.includes(`Sitemap: ${origin}/sitemap.xml`));
 assert.ok(!/^Disallow:\s*\/\s*$/m.test(robots), "Public pages must remain crawlable");
-console.log(`SEO checks passed: ${publicPaths.length} prerendered pages, metadata, links, FAQ, open beta downloads, feedback and sitemap.`);
+console.log(`SEO checks passed: ${publicPaths.length} prerendered pages, metadata, links, FAQ, retired campaign/download absence and sitemap.`);

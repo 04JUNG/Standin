@@ -2,7 +2,6 @@ import { useI18n } from "../../i18n/context";
 import { ArrowRight } from "lucide-react";
 import { Container } from "../common/Container";
 import { Button } from "../common/Button";
-import { Badge } from "../common/Badge";
 import { HeroPoseReveal } from "./HeroPoseReveal";
 import { useLandingContent } from "../../i18n/landing";
 
@@ -24,12 +23,9 @@ export function HeroSection() {
 
         <div className="hero-showcase__footer text-center">
           <p className="hero-showcase__line">{t("러프 위를 움직여 같은 자세의 3D 포즈를 확인해 보세요.")}</p>
-          <div className="mb-5 flex justify-center">
-            <Badge tone="coral">{t("오픈베타 참여하기")}</Badge>
-          </div>
 
           <div className="flex flex-col justify-center gap-3 sm:flex-row sm:items-center">
-            <Button as="a" href="#beta" size="lg">
+            <Button as="a" href={hero.primaryHref} size="lg">
               {hero.primaryCta}
               <ArrowRight size={18} />
             </Button>

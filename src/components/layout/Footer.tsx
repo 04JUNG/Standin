@@ -16,10 +16,9 @@ export function Footer() {
             <BrandMark className="text-xl" />
           </a>
           <nav aria-label={t("약관 및 정책")} className="site-footer__links">
-            <a href="/feedback/">{t("오픈베타 설문")}</a>
             <MeasurementSettings />
             <a href="/legal/measurement/">{t("웹사이트 측정 개인정보 고지")}</a>
-            {legalDocuments.map((document) => (
+            {legalDocuments.filter((document) => document.slug !== "beta").map((document) => (
               <a key={document.slug} href={legalPath(document)} className={document.slug === "privacy" ? "site-footer__privacy" : undefined}>
                 {t(document.label)}
               </a>
