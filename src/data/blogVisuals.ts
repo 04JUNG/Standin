@@ -24,7 +24,7 @@ export const blogVisuals: Record<string, { cover: BlogVisual; sections: Record<s
   'standin-clip-studio-guide': { cover: importFlow, sections: { input: capture, select: candidates } },
   'bvh-vs-fbx': {
     cover: { src: '/assets/blog/bvh-fbx-structure.svg', width: 900, height: 600,
-      alt: 'BVH 쪽에는 관절과 골격 및 움직임 프레임이, FBX 쪽에는 표면을 가진 모델과 골격·재질·애니메이션 항목이 표시된 비교 도해',
+      alt: 'BVH 쪽에는 관절과 골격이, FBX 쪽에는 표면을 가진 모델이 표시되고 골격과 움직임, 모델까지 담을 수 있음이라고 설명하는 비교 도해',
       caption: 'BVH는 골격과 프레임별 움직임을 기록합니다. FBX는 모델·골격·재질·애니메이션을 담을 수 있습니다. FBX의 실제 구성은 파일마다 다릅니다.' },
     sections: { 'standin-choice': importFlow },
   },
