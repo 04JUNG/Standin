@@ -63,6 +63,7 @@ export function GuidePage({ guide }: { guide: Guide }) {
             )}
             <aside className="mt-12 rounded-[22px] border border-neutral-250 bg-white p-6" aria-label="관련 안내">
               <h2 className="text-xl font-semibold text-brand-ink">함께 읽기</h2>
+              <a href="/blog/" className="mt-3 block text-brand-coral-dark underline">Standin 블로그: 소개·사용법·BVH와 FBX 비교</a>
               {guides.filter((item) => item.slug !== guide.slug).map((item) => (
                 <a key={item.slug} href={guidePath(item)} className="mt-3 block text-brand-coral-dark underline">{item.title}</a>
               ))}

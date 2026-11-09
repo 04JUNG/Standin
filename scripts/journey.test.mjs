@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createJourney,activeElapsed} from '../src/lib/journey.ts';
+import {createJourney,activeElapsed,journeySource,articleDepth,blogSections} from '../src/lib/journey.ts';
 import {createMeasurement} from '../src/lib/measurement.ts';
 const token='a'.repeat(43);
 const settle=async()=>{for(let i=0;i<8;i++)await Promise.resolve();};
@@ -19,6 +19,46 @@ function browser() {
   };
   return {win,calls,listeners,storage,advance(ms){time+=ms;timers.forEach(f=>f());},hide(){visible='hidden';listeners.get('visibilitychange')?.();},show(){visible='visible';listeners.get('visibilitychange')?.();},blur(){focused=false;listeners.get('blur')?.();}};
 }
+
+test('blog source classification never retains queries and respects exact host boundaries',()=>{
+  const page='https://www.standinpose.com/blog/bvh-vs-fbx/';
+  for(const [ref,source] of [['https://search.naver.com/search.naver?query=private','naver'],['https://www.google.com/search?q=private','google'],['https://www.standinpose.com/blog/','internal'],['https://google.com.evil.test/','referral'],['','direct']]) assert.equal(journeySource(page,ref),source);
+  assert.equal(journeySource(page+'?utm_source=instagram','https://google.com/'),'instagram');
+  assert.equal(journeySource(page+'?utm_source=private-email'),'other');
+  assert.equal(articleDepth(-1200,400,800),100);
+  assert.equal(articleDepth(400,2000,800),25);
+});
+
+test('every blog page requires opt-in; reading sections and active dwell reach the existing collector',async()=>{
+  for(const path of Object.keys(blogSections)) {
+    const b=browser();b.win.location={href:'https://www.standinpose.com'+path,pathname:path};
+    b.win.document.referrer='https://search.naver.com/?query=private';
+    const id=path==='/blog/'?'blog-list':'article-intro';
+    b.win.document.getElementById=key=>key===id?{getBoundingClientRect:()=>({top:0,bottom:800})}:key==='blog-content'?{getBoundingClientRect:()=>({top:0,bottom:2400})}:null;
+    const journey=createJourney(b.win,undefined,true);assert.equal(b.calls.length,0);
+    assert.equal(createMeasurement({enabled:true,ga4Id:'',pixelId:'',journey},b.win).available,true);
+    await journey.setAllowed(true);await settle();for(let i=0;i<10;i++)b.advance(1000);await settle();
+    const events=b.calls.flatMap(c=>c.body.events||[]);
+    assert.ok(events.some(e=>e.name==='page_view'&&e.path===path&&e.source==='naver'));
+    assert.ok(events.some(e=>e.name==='section_engagement'&&e.section===id&&e.elapsedMs===10000));
+    assert.ok(!JSON.stringify(events).includes('private'));
+    await journey.setAllowed(false);
+  }
+});
+test('content-first rollout defers blog events, preserves revocation and legacy source values',async()=>{
+  const b=browser();b.win.location={href:'https://www.standinpose.com/blog/bvh-vs-fbx/',pathname:'/blog/bvh-vs-fbx/'};
+  b.win.document.cookie='standin_journey='+token;
+  const journey=createJourney(b.win,undefined,false);
+  await journey.setAllowed(true);b.advance(10000);await settle();
+  assert.equal(b.calls.length,0);
+  await journey.setAllowed(false);await settle();
+  assert.ok(b.calls.some(c=>c.url.endsWith('/revoke')));
+  assert.equal(b.win.document.cookie,'');
+  const home=browser();home.win.location={href:'https://www.standinpose.com/?utm_source=naver',pathname:'/'};
+  home.win.document.referrer='https://search.naver.com/?query=private';
+  await createJourney(home.win,undefined,false).setAllowed(true);await settle();
+  assert.ok(home.calls.flatMap(c=>c.body.events??[]).every(e=>e.source==='other'));
+});
 test('elapsed time excludes hidden time and stops at the idle boundary',()=>{
   assert.equal(activeElapsed(1000,11000,1000,true),10000);assert.equal(activeElapsed(1000,11000,1000,false),0);
   assert.equal(activeElapsed(50000,100000,0,true),10000);assert.equal(activeElapsed(100000,110000,0,true),0);

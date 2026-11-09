@@ -9,7 +9,7 @@ type MeasurementWindow = Window & { dataLayer?: unknown[]; gtag?: Tag; fbq?: Pix
 
 const choiceKey = "standin.measurement.v3";
 const lifetime = 90 * 24 * 60 * 60 * 1000;
-const publicPaths = new Set(["/", "/ja/", "/guides/rough-to-3d-pose/", "/guides/clip-studio-pose-import/"]);
+const publicPaths = new Set(["/", "/ja/", "/guides/rough-to-3d-pose/", "/guides/clip-studio-pose-import/", '/blog/', '/blog/introducing-standin/', '/blog/standin-clip-studio-guide/', '/blog/bvh-vs-fbx/']);
 const campaignKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_id"] as const;
 const safeValue = /^[a-zA-Z0-9_-]{1,100}$/;
 

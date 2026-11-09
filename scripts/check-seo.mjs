@@ -23,7 +23,16 @@ for (const path of publicPaths) {
   const schema = JSON.parse(schemas[0][1]);
   assert.equal(schema["@context"], "https://schema.org");
   assert.ok(schema["@graph"].some((node) => node.url === `${origin}${path}`), `${path}: schema URL`);
-  const contentNode = schema["@graph"].find((node) => ["WebPage", "Article"].includes(node["@type"]));
+  const contentNode = schema["@graph"].find((node) => ["WebPage", "Article", "BlogPosting", "CollectionPage"].includes(node["@type"]));
+  if (contentNode['@type'] === 'BlogPosting') {
+    assert.match(html, /aria-label="글 목차"/, `${path}: accessible article navigation`);
+    assert.ok(html.includes(`dateTime="${contentNode.datePublished}"`), `${path}: visible publication date`);
+    assert.ok((html.match(/data-reading-section=/g) ?? []).length >= 8, `${path}: addressable reading sections`);
+    for (const citation of contentNode.citation) {
+      const source = new URL(citation);
+      assert.ok(html.includes(`href="${source.origin === origin ? source.pathname : citation}"`), `${path}: visible sources`);
+    }
+  }
   const description = html.match(/name="description"\s+content="([^"]+)"/)[1];
   const title = html.match(/<title>(.*?)<\/title>/)[1];
   const meta = new Map([...html.matchAll(/<meta\s+(?:name|property)="([^"]+)"\s+content="([^"]+)"/g)].map(([, key, value]) => [key, value]));
@@ -149,7 +158,7 @@ assert.deepEqual(locations.sort(), publicPaths.map((path) => `${origin}${path}`)
 for (const [, url, lastmod] of sitemap.matchAll(/<url><loc>(.*?)<\/loc><lastmod>(.*?)<\/lastmod><\/url>/g)) {
   const html = documents.get(new URL(url).pathname);
   const graph = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])["@graph"];
-  const page = graph.find((node) => ["Article", "WebPage"].includes(node["@type"]));
+  const page = graph.find((node) => ["Article", "WebPage", "BlogPosting", "CollectionPage"].includes(node["@type"]));
   assert.equal(lastmod, page.dateModified, `${url}: sitemap and editorial dates agree`);
 }
 const robots = await readFile(new URL("robots.txt", dist), "utf8");

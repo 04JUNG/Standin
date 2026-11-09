@@ -14,6 +14,10 @@ export default defineConfig(({ isSsrBuild }) => ({
     rollupOptions: isSsrBuild ? {} : {
       input: {
         main: "index.html",
+        blog: 'blog/index.html',
+        blogIntro: 'blog/introducing-standin/index.html',
+        blogTutorial: 'blog/standin-clip-studio-guide/index.html',
+        blogFormats: 'blog/bvh-vs-fbx/index.html',
         japanese: "ja/index.html",
         signup: "signup/index.html",
         feedback: "feedback/index.html",
