@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { BrandMark } from '../components/common/BrandMark';
 import { Container } from '../components/common/Container';
 import { Footer } from '../components/layout/Footer';
@@ -7,9 +8,12 @@ import { blogVisuals, type BlogVisual } from '../data/blogVisuals';
 import '../styles/blog.css';
 
 function BlogFigure({ visual, priority = false }: { visual: BlogVisual; priority?: boolean }) {
+  const [playing, setPlaying] = useState(false);
+  const displayedSource = playing && visual.animation ? visual.animation.src : visual.src;
   return <figure className="blog-figure">
-    <a href={visual.src} target="_blank" rel="noopener noreferrer" aria-label={`${visual.alt} — 원본 이미지 크게 보기 (새 창)`}>
-      <img src={visual.src} width={visual.width} height={visual.height} alt={visual.alt} loading={priority ? 'eager' : 'lazy'} decoding="async" fetchPriority={priority ? 'high' : undefined} />
+    {visual.animation && <div className="blog-gif-controls"><span>{visual.animation.label}</span><button type="button" onClick={() => setPlaying(!playing)} aria-pressed={playing}>{playing ? '■ GIF 정지' : '▶ GIF 재생'}</button></div>}
+    <a href={displayedSource} target="_blank" rel="noopener noreferrer" aria-label={`${visual.alt} — 원본 이미지 크게 보기 (새 창)`}>
+      <img key={displayedSource} src={displayedSource} width={visual.width} height={visual.height} alt={visual.alt} loading={priority || playing ? 'eager' : 'lazy'} decoding="async" fetchPriority={priority ? 'high' : undefined} />
       <span className="blog-image-zoom" aria-hidden="true">크게 보기 ↗</span>
     </a>
     <figcaption>{visual.caption}</figcaption>
@@ -27,6 +31,7 @@ export function BlogPage({ post }: { post?: BlogPost }) {
           <a className="blog-back" href="/blog/">← 모든 글</a><p className="blog-eyebrow">{post.category}</p>
           <h1>{post.title}</h1><p className="blog-lead">{post.description}</p>
           <p className="blog-meta">{site.team} · <time dateTime={post.date}>{post.date}</time> · 데스크톱 작업 기준</p>
+          {post.takeaway && <aside className="blog-takeaway" aria-label="사용법 핵심"><strong>{post.takeaway.title}</strong><p>{post.takeaway.text}</p></aside>}
           {visuals && <BlogFigure visual={visuals.cover} priority />}
           <nav className="blog-toc" aria-label="글 목차"><h2>이 글에서 다루는 내용</h2><ol>{post.sections.map(section => <li key={section.id}><a href={`#${section.id}`}>{section.title}</a></li>)}</ol></nav>
         </header>
@@ -37,9 +42,9 @@ export function BlogPage({ post }: { post?: BlogPost }) {
           {visuals?.sections[section.id] && <BlogFigure visual={visuals.sections[section.id]} />}
           {section.links && <ul className="blog-links">{section.links.map(link => <li key={link.href}><a href={link.href}>{link.label} →</a></li>)}</ul>}
         </section>)}
-        <section id="article-sources" data-reading-section="article-sources" className="blog-section blog-sources"><h2>참고 자료</h2><p>확인일: {post.date}. 파일 형식과 가져오기 절차는 공식 문서 기준이며, 실제 결과는 사용 버전과 파일 구성에 따라 확인하세요.</p><ul>{post.sources.map(source => <li key={source.href}><a href={source.href}>{source.label}</a></li>)}</ul></section>
+        <section id="article-sources" data-reading-section="article-sources" className="blog-section blog-sources"><h2>참고 자료</h2><p>확인일: {post.date}. 파일 형식과 메뉴 가져오기는 공식 문서를, Standin에서 직접 드래그하는 흐름은 앱 구현과 팀의 사용 검증을 기준으로 설명했습니다. 실제 적용 결과는 사용 버전과 파일 구성에 따라 확인하세요.</p><ul>{post.sources.map(source => <li key={source.href}><a href={source.href}>{source.label}</a></li>)}</ul></section>
         <aside id="article-related" data-reading-section="article-related" className="blog-related"><h2>함께 읽으면 좋은 글</h2>{blogPosts.filter(p => p.slug !== post.slug).map(p => <a key={p.slug} href={blogPath(p)}>{p.title} →</a>)}<a className="blog-cta" href="/#beta">Standin 다운로드</a></aside>
-      </article> : <div className="blog-index" id="blog-list" data-reading-section="blog-list"><p className="blog-eyebrow">STANDIN JOURNAL</p><h1>러프 다음의 작업을 위한 이야기</h1><p className="blog-lead">{blogDescription}</p><div className="blog-cards">{blogPosts.map((p, i) => <a className="blog-card" href={blogPath(p)} key={p.slug}><img className="blog-card-cover" src={blogVisuals[p.slug].cover.src} width={900} height={600} alt="" loading="lazy" decoding="async" /><span className="blog-card-number">0{i + 1}</span><p className="blog-eyebrow">{p.category}</p><h2>{p.title}</h2><p>{p.description}</p><span className="blog-meta">{p.date} · 글 읽기 →</span></a>)}</div></div>}
+      </article> : <div className="blog-index" id="blog-list" data-reading-section="blog-list"><p className="blog-eyebrow">STANDIN JOURNAL</p><h1>러프 다음의 작업을 위한 이야기</h1><p className="blog-lead">{blogDescription}</p><div className="blog-cards">{blogPosts.map((p, i) => <a className="blog-card" href={blogPath(p)} key={p.slug}><img className="blog-card-cover" src={blogVisuals[p.slug].cover.src} width={blogVisuals[p.slug].cover.width} height={blogVisuals[p.slug].cover.height} alt="" loading="lazy" decoding="async" /><span className="blog-card-number">0{i + 1}</span><p className="blog-eyebrow">{p.category}</p><h2>{p.title}</h2><p>{p.description}</p><span className="blog-meta">{p.date} · 글 읽기 →</span></a>)}</div></div>}
     </Container></main><Footer />
   </>;
 }
