@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600" role="img" aria-labelledby="title desc">
+<title id="title">BVH와 FBX가 담는 정보</title><desc id="desc">BVH는 골격과 프레임별 움직임을 담는다. FBX는 모델, 골격, 재질, 애니메이션 등 여러 데이터를 담을 수 있다.</desc>
+<defs><linearGradient id="mesh" x2="1" y2="1"><stop stop-color="#e9eef2"/><stop offset="1" stop-color="#8a9faf"/></linearGradient></defs>
+<rect width="900" height="600" rx="24" fill="#f0ece5"/>
+<g font-family="Arial,'Noto Sans KR','Malgun Gothic',sans-serif" fill="#17283c">
+<text x="42" y="58" font-size="18" letter-spacing="3" fill="#aa4435">POSE FILES · WHAT IS INSIDE?</text><text x="42" y="109" font-size="38" font-weight="700">움직임을 담을까, 모델도 담을까?</text>
+<rect x="32" y="145" width="400" height="418" rx="20" fill="#e9f1f8"/><rect x="468" y="145" width="400" height="418" rx="20" fill="#fff"/>
+<text x="60" y="199" font-size="40" font-weight="700" fill="#335f81">BVH</text><text x="496" y="199" font-size="40" font-weight="700" fill="#ae4635">FBX</text>
+<g transform="translate(235 340)" stroke="#3d7196" stroke-width="5" stroke-linejoin="round" fill="none"><circle cy="-80" r="21"/><path d="M0-59V-36M-26-34H26M0-36V32M-26-34L-67-10-96 3M26-34L60-62 78-98M-20 32H20M-20 32L-32 87-17 127M20 32L51 77 75 114"/><g fill="#fafdff" stroke="#df6550" stroke-width="4"><circle cy="-36" r="7"/><circle cy="32" r="7"/><circle cx="-26" cy="-34" r="7"/><circle cx="26" cy="-34" r="7"/><circle cx="-67" cy="-10" r="7"/><circle cx="60" cy="-62" r="7"/><circle cx="-32" cy="87" r="7"/><circle cx="51" cy="77" r="7"/></g></g>
+<g transform="translate(670 340)" stroke="#8297a8" stroke-width="2" stroke-linejoin="round"><ellipse cy="-80" rx="23" ry="29" fill="url(#mesh)"/><path d="M-8-52H8L26-38 20 17 29 33 6 48-25 33-19 17-26-38Z" fill="url(#mesh)"/><path d="M-25-34L-65-10-94 4M25-34L60-62 78-98M-13 40L-29 87-15 125M14 40L49 78 74 112" fill="none" stroke="#a5b5c2" stroke-width="23" stroke-linecap="round"/><path d="M-25-37L20 17-19 17 26-37M-19 17L6 48 20 17M-18-90H18M-21-77H21M-15-62H15M0-109V-52M-45-23L-38-9M-62-14L-55-1M45-62L57-50M65-88L78-80M-27 60L-5 65M-35 87L-14 90M31 60L47 48M52 95L70 81" fill="none" stroke="#6d859a" opacity=".65"/></g>
+<g text-anchor="middle" font-size="30" font-weight="700"><text x="232" y="510" fill="#335f81">골격 + 움직임</text><text x="668" y="510" fill="#ae4635">모델까지 담을 수 있음</text></g>
+<g text-anchor="middle" font-size="21" fill="#596c7d"><text x="232" y="542">메시 · 텍스처 없음</text><text x="668" y="542">포함 데이터는 파일마다 다름</text></g>
+</g></svg>

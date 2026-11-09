@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600" role="img" aria-labelledby="title desc">
+<title id="title">러프에서 3D 참고자료까지</title><desc id="desc">러프 입력, 후보 선택, 가져와 조정하는 세 단계. 개념을 설명하기 위한 인체 도해.</desc>
+<defs>
+ <linearGradient id="body" x2="1" y2="1"><stop stop-color="#e8edf2"/><stop offset="1" stop-color="#8c9eaf"/></linearGradient>
+ <g id="pose" stroke="#738598" stroke-width="2" stroke-linejoin="round"><ellipse cx="0" cy="-96" rx="19" ry="24" fill="url(#body)"/><path d="M-22-66Q0-80 22-66L17-13 5 6-17-13Z" fill="url(#body)"/><path d="M-21-63L-60-38-90-26M21-63L49-88 64-125M-9 3L-20 63-8 112M9 3L35 58 58 102" fill="none" stroke="#a4b3c1" stroke-width="18" stroke-linecap="round"/><g fill="#f8fafc"><circle cx="-60" cy="-38" r="7"/><circle cx="49" cy="-88" r="7"/><circle cx="-20" cy="63" r="8"/><circle cx="35" cy="58" r="8"/></g></g>
+ <marker id="arrow" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto"><path d="M0 0L6 3 0 6" fill="none" stroke="#db5946" stroke-width="1.5"/></marker>
+</defs>
+<rect width="900" height="600" rx="24" fill="#f0ece5"/>
+<g font-family="Arial,'Noto Sans KR','Malgun Gothic',sans-serif" fill="#17283c">
+<text x="44" y="61" font-size="18" letter-spacing="3" fill="#aa4435">STANDIN · WORKFLOW</text><text x="44" y="113" font-size="38" font-weight="700">러프 다음, 포즈를 고르는 시간</text>
+<g fill="#fff" stroke="#dbdcd9"><rect x="35" y="151" width="248" height="347" rx="18"/><rect x="326" y="151" width="248" height="347" rx="18"/><rect x="617" y="151" width="248" height="347" rx="18"/></g>
+<g font-size="25" font-weight="700"><text x="56" y="191" fill="#ad4436">01</text><text x="347" y="191" fill="#ad4436">02</text><text x="638" y="191" fill="#ad4436">03</text></g>
+<g transform="translate(167 341)" fill="none" stroke="#5f7a94" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><ellipse cy="-73" rx="17" ry="22" transform="rotate(-10)"/><path d="M-18-46Q0-61 21-45L18 0-8 15-20-2Z M-17-43L-53-24-80-15 M22-43L44-64 58-95 M-6 14L-16 62-5 94 M14 8L34 56 54 86"/><path d="M-21-48L-58-30-82-20 M24-45L49-64 65-94 M-10 16L-23 62-9 96" opacity=".3"/><path d="M-96 101H82 M-96-117H82" stroke="#d5dfe6" stroke-width="1"/><path d="M-93-124V-105M78 95V110" stroke="#e36550" stroke-width="2"/></g>
+<g transform="translate(450 336)"><rect x="-75" y="-120" width="153" height="212" rx="12" fill="#fff3ed" stroke="#df604d" stroke-width="3"/><use href="#pose" transform="scale(.72)"/><circle cx="65" cy="-110" r="16" fill="#df604d"/><path d="M58-110L63-105 72-116" fill="none" stroke="white" stroke-width="3"/><rect x="-100" y="104" width="52" height="18" rx="5" fill="#e2e8ed"/><rect x="-26" y="104" width="52" height="18" rx="5" fill="#e2e8ed"/><rect x="48" y="104" width="52" height="18" rx="5" fill="#e2e8ed"/></g>
+<g transform="translate(745 343)"><path d="M-99 109H99M-83 90H83M-67 72H67M-46 72L-70 110M0 72V110M46 72L70 110" fill="none" stroke="#d7e0e7"/><use href="#pose" transform="scale(.78)"/><path d="M-91-105A110 110 0 0 1 56-111" fill="none" stroke="#da604b" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arrow)"/></g>
+<g stroke="#db5946" stroke-width="3" marker-end="url(#arrow)"><path d="M291 330H315"/><path d="M582 330H606"/></g>
+<g font-size="30" font-weight="700" text-anchor="middle"><text x="159" y="548">러프 입력</text><text x="450" y="548">후보 선택</text><text x="741" y="548">가져와 조정</text></g>
+</g></svg>
