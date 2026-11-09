@@ -1,7 +1,7 @@
 // First-party analytics: fixed event fields only, no form contents, raw URLs or session replay.
 export const JOURNEY_VERSION = "2026-11-09";
-// Enable only after Standin-app-server #172 is deployed in production.
-export const BLOG_ANALYTICS_ENABLED = false;
+// Standin-app-server #172 supplies the blog catalog and aggregate dashboard.
+export const BLOG_ANALYTICS_ENABLED = true;
 const COOKIE = "standin_journey";
 const REVOKE = "standin.journey.revoke.v1";
 const TOKEN = /^[A-Za-z0-9_-]{43}$/;

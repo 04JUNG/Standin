@@ -35,7 +35,7 @@ test('every blog page requires opt-in; reading sections and active dwell reach t
     b.win.document.referrer='https://search.naver.com/?query=private';
     const id=path==='/blog/'?'blog-list':'article-intro';
     b.win.document.getElementById=key=>key===id?{getBoundingClientRect:()=>({top:0,bottom:800})}:key==='blog-content'?{getBoundingClientRect:()=>({top:0,bottom:2400})}:null;
-    const journey=createJourney(b.win,undefined,true);assert.equal(b.calls.length,0);
+    const journey=createJourney(b.win);assert.equal(b.calls.length,0);
     assert.equal(createMeasurement({enabled:true,ga4Id:'',pixelId:'',journey},b.win).available,true);
     await journey.setAllowed(true);await settle();for(let i=0;i<10;i++)b.advance(1000);await settle();
     const events=b.calls.flatMap(c=>c.body.events||[]);

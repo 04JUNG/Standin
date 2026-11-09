@@ -52,10 +52,10 @@
 .blog-image-zoom { display: block; padding: .55rem .9rem; text-align: right; color: #334b60; background: #fff; font-size: .8rem; }
 .blog-figure a:hover .blog-image-zoom { color: #a73627; text-decoration: underline; }
 .blog-figure a:focus-visible, .blog-card:focus-visible { outline: 3px solid #a73627; outline-offset: 4px; }
-.blog-gif-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; padding: .85rem 1rem; background: #152238; color: #fff; border-radius: 14px 14px 0 0; font-size: .875rem; line-height: 1.6; }
-.blog-gif-controls + a { border-radius: 0 0 16px 16px; }
-.blog-gif-controls button { border: 1px solid #dce5ed; border-radius: 8px; padding: .5rem .9rem; min-height: 44px; font-weight: 700; background: #fff; color: #152238; cursor: pointer; }
-.blog-gif-controls button:focus-visible { outline: 3px solid #ffad99; outline-offset: 3px; }
+.blog-gif-toggle { display: block; position: relative; width: 100%; padding: 0; border: 1px solid #d8dde5; border-radius: 16px; overflow: hidden; background: #edf1f4; cursor: pointer; }
+.blog-gif-hint { position: absolute; right: .75rem; bottom: .75rem; padding: .5rem .75rem; border-radius: 8px; background: #152238; color: #fff; font-size: .8rem; line-height: 1.5; }
+.blog-gif-toggle:focus-visible { outline: 3px solid #a73627; outline-offset: 4px; }
+.blog-figure > .blog-gif-original { width: fit-content; margin: .5rem 0 0 auto; padding: .35rem .25rem; border: 0; border-radius: 0; background: transparent; font-size: .8rem; text-decoration: underline; text-underline-offset: 3px; }
 .blog-takeaway { margin-top: 1.75rem; padding: 1.25rem 1.5rem; border-left: 4px solid #df604d; background: #fff1eb; border-radius: 0 12px 12px 0; line-height: 1.8; }
 .blog-takeaway strong { display: block; font-size: 1.15rem; }
 .blog-takeaway p { margin-top: .5rem; }
