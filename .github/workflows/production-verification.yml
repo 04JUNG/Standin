@@ -1,0 +1,27 @@
+name: Verify production content
+
+on:
+  deployment_status:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-production-content
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    if: github.event_name == 'workflow_dispatch' || (github.event.deployment_status.state == 'success' && (github.event.deployment.environment == 'Production' || github.event.deployment.environment == 'production'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify live commit and crawlable blog content
+        run: node scripts/check-production.mjs

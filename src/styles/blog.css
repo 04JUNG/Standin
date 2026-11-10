@@ -73,3 +73,7 @@
 .blog-takeaway p { margin-top: .5rem; }
 @media (max-width: 800px) { .blog-cards { grid-template-columns: 1fr; } .blog-header nav { gap: .8rem; font-size: .8rem; } }
 @media (max-width: 560px) { .blog-post-navigation { grid-template-columns: 1fr; } .blog-post-link { padding: 1.25rem; } .blog-header--reading .blog-header-row { min-height: 64px; } }
+
+.blog-questions > section { padding: 1.4rem 0; border-bottom: 1px solid #d8dde5; scroll-margin-top: 6rem; }
+.blog-questions h3 { font-size: 1.2rem; font-weight: 700; line-height: 1.6; }
+.blog-questions a, .blog-meta a { text-decoration: underline; text-underline-offset: 4px; }

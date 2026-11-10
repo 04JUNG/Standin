@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run check:feedback && npm run check:measurement && npm run check:supporters && tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs && node scripts/check-seo.mjs && node scripts/check-localization.mjs && node scripts/check-legal.mjs",
+    "build": "npm run check:deployment && npm run check:feedback && npm run check:measurement && npm run check:supporters && tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs && node scripts/check-seo.mjs && node scripts/check-localization.mjs && node scripts/check-legal.mjs",
     "check:supporters": "node --experimental-strip-types --test scripts/supporters-popup.test.mjs",
     "check:measurement": "node --experimental-strip-types --test scripts/measurement.test.mjs scripts/acquisition.test.mjs scripts/campaign-downloads.test.mjs scripts/journey.test.mjs",
     "check:countdown": "node --experimental-strip-types scripts/check-countdown.mjs",
@@ -16,7 +16,9 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "sync:feedback": "node scripts/sync-feedback-schema.mjs",
-    "check:feedback": "node scripts/sync-feedback-schema.mjs --check && node --test scripts/open-beta.test.mjs"
+    "check:feedback": "node scripts/sync-feedback-schema.mjs --check && node --test scripts/open-beta.test.mjs",
+    "build:vercel": "node scripts/verify-production-source.mjs && npm run build && node scripts/verify-production-source.mjs",
+    "check:deployment": "node --test scripts/verify-production-source.test.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.454.0",
