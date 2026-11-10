@@ -18,6 +18,7 @@ const origin = site.origin;
 export const publicPaths = ["/", "/ja/", ...guides.map(guidePath), '/blog/', ...blogPosts.map(blogPath)];
 export const legalPaths = legalDocuments.map(legalPath);
 export const prerenderPaths = [...publicPaths, ...legalPaths];
+export { blogPosts, blogPath };
 
 export function render(path: string) {
   const locale = localeFromPath(path);
@@ -42,11 +43,15 @@ export function render(path: string) {
     const title = post ? `${post.title} | Standin 블로그` : 'Standin 블로그 | 러프에서 작화까지';
     const description = post?.description ?? blogDescription;
     const content = post ? { '@type': 'BlogPosting', '@id': `${url}#article`, url, headline: post.title, description,
-      datePublished: post.date, dateModified: post.date, inLanguage: 'ko', image: `${origin}${blogVisuals[post.slug].cover.src}`,
-      author: { '@id': organization['@id'] }, publisher: { '@id': organization['@id'] }, mainEntityOfPage: url,
+      datePublished: post.date, dateModified: post.modifiedAt, inLanguage: 'ko', image: `${origin}${blogVisuals[post.slug].cover.src}`,
+      author: { '@id': organization['@id'], '@type': 'Organization', name: site.team, url: `${origin}/` }, publisher: { '@id': organization['@id'] }, mainEntityOfPage: url,
+      abstract: post.takeaway?.text, articleSection: post.category,
       citation: post.sources.map(s => new URL(s.href, origin).href), isPartOf: { '@id': `${origin}/blog/#blog` } }
-      : { '@type': 'CollectionPage', '@id': `${url}#page`, url, name: title, description, dateModified: '2026-11-09', inLanguage: 'ko', isPartOf: { '@id': website['@id'] } };
-    return { title, description, html: renderToString(<StrictMode><BlogPage post={post} /></StrictMode>), legalText: undefined,
+      : { '@type': 'CollectionPage', '@id': `${url}#page`, url, name: title, description, dateModified: '2026-11-10', inLanguage: 'ko', isPartOf: { '@id': website['@id'] } };
+    const socialImage = post ? (post.slug === 'bvh-vs-fbx'
+      ? { src: '/assets/blog/bvh-applied.webp', width: 850, height: 800, alt: '클립스튜디오에 BVH 포즈를 적용한 실제 화면' }
+      : blogVisuals[post.slug].cover) : undefined;
+    return { title, description, socialImage, html: renderToString(<StrictMode><BlogPage post={post} /></StrictMode>), legalText: undefined,
       structuredData: JSON.stringify({ '@context': 'https://schema.org', '@graph': [organization, website,
         { '@type': 'Blog', '@id': `${origin}/blog/#blog`, url: `${origin}/blog/`, name: 'Standin 블로그', publisher: { '@id': organization['@id'] } }, content,
         { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: '홈', item: `${origin}/` },

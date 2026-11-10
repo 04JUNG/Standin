@@ -1,13 +1,19 @@
 export type BlogSection = { id: string; title: string; paragraphs: string[]; steps?: string[]; table?: { headers: string[]; rows: string[][] }; links?: { label: string; href: string }[] };
-export type BlogPost = { slug: string; title: string; description: string; category: string; date: string; takeaway?: { title: string; text: string }; sections: BlogSection[]; sources: { label: string; href: string }[] };
+export type BlogPost = { slug: string; title: string; description: string; category: string; date: string; modifiedAt: string; questions: { id: string; question: string; answer: string; href: string }[]; takeaway?: { title: string; text: string }; sections: BlogSection[]; sources: { label: string; href: string }[] };
 const manual = 'https://help.clip-studio.com/en-us/manual_en/660_3d/Importing_3D_Files.htm';
 const release = 'https://www.clipstudio.net/en/dl/release_note/v3/';
 export const blogPath = (post: BlogPost) => `/blog/${post.slug}/`;
 export const blogDescription = 'Standin 소개부터 클립스튜디오 사용법, BVH·FBX 선택까지. 러프와 3D 포즈를 작화로 연결하는 방법을 안내합니다.';
 export const blogPosts: BlogPost[] = [
   {
-    slug: 'introducing-standin', category: 'Standin 시작하기', date: '2026-11-09',
+    slug: 'introducing-standin', category: 'Standin 시작하기', date: '2026-11-09', modifiedAt: '2026-11-10',
     title: 'Standin 소개: 러프에서 가까운 3D 포즈를 찾는 작업 도구',
+    takeaway: { title: 'Standin은 어떤 도구인가요?', text: 'Standin은 러프 이미지나 문장으로 가까운 3D 인체 포즈 후보를 찾는 Windows·macOS용 웹툰 작업 보조 앱입니다. 작가가 후보를 선택·조정하고, 저장한 FBX·BVH 파일을 클립스튜디오 캔버스로 드래그해 작화를 이어갑니다.' },
+    questions: [
+      { id: 'what-is-standin', question: 'Standin은 그림을 자동으로 완성하나요?', answer: 'Standin은 참고할 3D 인체 포즈 후보를 찾는 도구입니다. 최종 포즈 선택과 크기·방향·관절·카메라 조정, 선화와 연출은 작가가 진행합니다.', href: '#limits' },
+      { id: 'plugin', question: 'Standin은 클립스튜디오 플러그인인가요?', answer: 'Standin은 클립스튜디오와 별도로 실행하는 독립 앱이며 공식 플러그인이 아닙니다. 저장한 포즈 파일을 클립스튜디오로 가져와 함께 사용합니다.', href: '#limits' },
+      { id: 'start-with-text', question: '러프 없이 문장으로 포즈를 찾을 수 있나요?', answer: '원하는 자세를 문장으로 입력해 가까운 3D 포즈 후보를 찾을 수 있습니다. 몸통과 팔다리 방향을 비교해 사용할 후보를 선택하세요.', href: '#workflow' },
+    ],
     description: '러프나 문장으로 3D 포즈 후보를 찾고, 저장한 파일을 클립스튜디오로 바로 드래그합니다. 실제 사용 GIF와 함께 Standin의 작업 흐름을 소개합니다.',
     sections: [
       { id: 'why', title: '러프는 그렸는데, 참고할 자세를 찾기 어렵다면', paragraphs: ['머릿속 장면을 러프로 옮긴 다음에도 할 일은 남습니다. 몸통은 얼마나 기울어지는지, 팔이 어디를 향하는지, 이 각도에서 다리가 어떻게 보이는지 확인해야 하죠. 3D 인체를 처음부터 움직여 참고자료를 만드는 과정이 부담스러울 때 Standin을 시작점으로 사용할 수 있습니다.', 'Standin은 러프 이미지나 자세를 설명하는 문장으로 가까운 3D 인체 포즈 후보를 찾는 도구입니다. 후보를 비교하고 사용할 포즈를 고르는 사람은 작가입니다.'] },
@@ -20,8 +26,13 @@ export const blogPosts: BlogPost[] = [
     sources: [{ label: 'Standin 러프 입력 가이드', href: '/guides/rough-to-3d-pose/' }],
   },
   {
-    slug: 'standin-clip-studio-guide', category: '따라 하는 사용법', date: '2026-11-09',
-    title: 'Standin으로 찾은 포즈, 클립스튜디오에서 사용하는 방법',
+    slug: 'standin-clip-studio-guide', category: '따라 하는 사용법', date: '2026-11-09', modifiedAt: '2026-11-10',
+    title: '클립스튜디오에 FBX·BVH 가져오기: Standin 드래그 앤 드롭 사용법',
+    questions: [
+      { id: 'drag-from-standin', question: 'Standin에서 클립스튜디오로 파일을 바로 가져올 수 있나요?', answer: '저장이 완료되면 Standin의 FBX·BVH 파일 이름이 적힌 행을 잡아 클립스튜디오 캔버스로 끌어놓습니다. 포즈 미리보기 대신 파일 행이나 왼쪽 점 손잡이에서 드래그를 시작하세요.', href: '#save' },
+      { id: 'bvh-version', question: '클립스튜디오에서 BVH를 쓰려면 어떤 버전이 필요한가요?', answer: 'BVH 지원은 CLIP STUDIO PAINT PRO·EX 3.1.0부터 추가됐습니다. 기존 인형에 적용하려면 인형을 선택하고 파일 → 가져오기 → 3D 데이터에서 BVH를 불러옵니다.', href: '#import-bvh' },
+      { id: 'drop-troubleshooting', question: '드래그 앤 드롭이 안 되면 어떻게 하나요?', answer: '저장 완료 여부와 실제 확장자를 확인하세요. Standin의 폴더 열기로 파일을 찾은 뒤 탐색기·Finder에서 끌어놓거나, 클립스튜디오의 파일 → 가져오기 → 3D 데이터 메뉴를 사용합니다.', href: '#check' },
+    ],
     description: 'Standin 저장 완료 화면의 FBX·BVH 파일을 클립스튜디오 캔버스로 바로 드래그 앤 드롭하세요. 실제 사용 GIF로 잡을 위치와 적용 과정을 안내합니다.',
     takeaway: { title: '저장한 파일을, Standin에서 클튜로 바로 드래그', text: '저장 완료 → 파일 이름이 적힌 행을 잡기 → 클립스튜디오 캔버스에 놓기. FBX·BVH 모두 이 흐름으로 가져올 수 있습니다. BVH는 CLIP STUDIO PAINT PRO·EX 3.1.0 이상을 사용하세요.' },
     sections: [
@@ -37,8 +48,14 @@ export const blogPosts: BlogPost[] = [
     sources: [{ label: 'CLIP STUDIO PAINT 공식 매뉴얼: 3D 파일과 BVH 가져오기', href: manual }, { label: 'CLIP STUDIO PAINT 공식 버전 3 릴리스 노트', href: release }],
   },
   {
-    slug: 'bvh-vs-fbx', category: '포즈 파일 이해하기', date: '2026-11-09',
+    slug: 'bvh-vs-fbx', category: '포즈 파일 이해하기', date: '2026-11-09', modifiedAt: '2026-11-10',
     title: 'BVH와 FBX의 차이: 클립스튜디오에서는 무엇을 선택할까?',
+    takeaway: { title: 'BVH와 FBX는 무엇이 다른가요?', text: 'BVH는 골격의 계층과 움직임을 기록하며 메시·텍스처를 담지 않습니다. FBX는 모델·골격·재질·애니메이션을 담을 수 있지만 실제 구성은 파일마다 다릅니다. Standin에서는 두 형식 모두 저장 완료 화면의 파일 행을 클립스튜디오로 드래그할 수 있습니다.' },
+    questions: [
+      { id: 'bvh-model', question: 'BVH 파일에 캐릭터 모델도 들어 있나요?', answer: 'BVH에는 골격 계층과 움직임이 들어 있으며 메시나 텍스처는 들어 있지 않습니다. 클립스튜디오에서 보이는 인형은 포즈를 적용받는 모델입니다.', href: '#basics' },
+      { id: 'fbx-contents', question: 'FBX라면 체형·손·카메라까지 그대로 옮겨지나요?', answer: 'FBX는 다양한 3D 데이터를 담을 수 있지만 파일 구성과 가져오는 프로그램에 따라 결과가 달라집니다. 체형·손·카메라가 모두 동일하게 전달된다고 보장할 수 없으므로 적용 후 확인하세요.', href: '#choose-fbx' },
+      { id: 'conversion', question: 'BVH를 FBX로 변환하면 모델도 생기나요?', answer: '확장자를 바꾸거나 형식을 변환하는 것만으로 없던 메시나 텍스처가 만들어지지는 않습니다. 모델을 함께 쓰려면 별도의 모델 데이터와 연결 작업이 필요합니다.', href: '#misconceptions' },
+    ],
     description: 'BVH는 골격의 움직임을, FBX는 모델과 애니메이션 등 더 넓은 3D 데이터를 담을 수 있습니다. 클립스튜디오 작업 목적에 맞는 선택 기준을 정리합니다.',
     sections: [
       { id: 'basics', title: '둘 다 드래그하고, 담긴 데이터는 구분하세요', paragraphs: ['Standin의 저장 완료 화면에서는 FBX·BVH 모두 파일 이름이 적힌 행을 클립스튜디오 캔버스로 드래그 앤 드롭할 수 있습니다. 가져오는 손동작은 같아도 파일에 담긴 데이터는 다릅니다. 동작을 옮기려면 BVH를, 내보낸 모델도 함께 사용하려면 FBX를 살펴보세요.', 'BVH는 BioVision Hierarchy의 약자로, 골격의 계층 구조와 프레임별 움직임을 기록하는 형식입니다. 메시나 텍스처는 담지 않습니다. BVH를 드롭했을 때 보이는 데생 인형은 클립스튜디오가 제공하는 모델이며, BVH 파일에 모델이 들어 있다는 뜻은 아닙니다. FBX는 모델 형상, 재질, 골격, 애니메이션 등 다양한 3D 데이터를 담을 수 있지만 실제 포함 데이터는 내보내기 설정에 따라 달라집니다.'] },

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
-import { publicPaths } from "../dist-ssr/entry-server.js";
+import { publicPaths, blogPosts, blogPath } from "../dist-ssr/entry-server.js";
 
 const origin = "https://www.standinpose.com";
 const dist = new URL("../dist/", import.meta.url);
@@ -25,6 +25,18 @@ for (const path of publicPaths) {
   assert.ok(schema["@graph"].some((node) => node.url === `${origin}${path}`), `${path}: schema URL`);
   const contentNode = schema["@graph"].find((node) => ["WebPage", "Article", "BlogPosting", "CollectionPage"].includes(node["@type"]));
   if (contentNode['@type'] === 'BlogPosting') {
+    const post = blogPosts.find(post => blogPath(post) === path);
+    assert.equal(contentNode.dateModified, post.modifiedAt);
+    assert.ok(html.includes(`dateTime="${post.modifiedAt}"`), `${path}: visible modification date`);
+    assert.ok(html.includes(escapeText(post.takeaway.text)), `${path}: answer is visible in initial HTML`);
+    assert.equal(contentNode.abstract, post.takeaway.text, `${path}: structured abstract matches visible answer`);
+    assert.ok(html.includes('id="article-questions"'), `${path}: answerable question section`);
+    for (const question of post.questions) {
+      assert.ok(html.includes(`id="question-${question.id}"`), `${path}: addressable answer`);
+      assert.ok(html.includes(escapeText(question.question)) && html.includes(escapeText(question.answer)), `${path}: visible question and answer`);
+    }
+    assert.ok(html.includes('href="/blog/feed.xml"'), `${path}: feed discovery`);
+    assert.ok(html.includes('max-image-preview:large'), `${path}: large preview permission`);
     assert.match(html, /aria-label="글 목차"/, `${path}: accessible article navigation`);
     assert.ok(html.includes(`dateTime="${contentNode.datePublished}"`), `${path}: visible publication date`);
     assert.ok((html.match(/data-reading-section=/g) ?? []).length >= 8, `${path}: addressable reading sections`);
@@ -68,6 +80,13 @@ for (const path of publicPaths) {
     }
   }
 }
+
+function escapeText(value) { return value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#x27;'); }
+const feed = await readFile(new URL('blog/feed.xml', dist), 'utf8');
+assert.equal((feed.match(/<item>/g) ?? []).length, blogPosts.length, 'Feed covers every published article');
+for (const post of blogPosts) assert.ok(feed.includes(`<link>${origin}${blogPath(post)}</link>`), 'Feed uses canonical article URLs');
+const deployment = JSON.parse(await readFile(new URL('deployment.json', dist), 'utf8'));
+assert.match(deployment.commit, /^[a-f0-9]{40}$/, 'Published artifact identifies its source commit');
 
 for (const [path, html] of documents) {
   for (const [, attribute] of html.matchAll(/(?:href|src|poster)="([^"<]+)"/g)) {
