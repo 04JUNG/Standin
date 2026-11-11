@@ -5,6 +5,7 @@ import { InputSection } from "./components/sections/InputSection";
 import { ProcessSection } from "./components/sections/ProcessSection";
 import { ResultSection } from "./components/sections/ResultSection";
 import { StandinIntro } from "./components/hero/StandinIntro";
+import { FundingPopup } from "./components/common/FundingPopup";
 import { FaqSection } from "./components/sections/FaqSection";
 import { GuidesSection } from "./components/sections/GuidesSection";
 import { FeatureShowcaseSection } from "./components/sections/FeatureShowcaseSection";
@@ -20,6 +21,7 @@ function Landing() {
   return (
     <div className="landing-shell">
       <StandinIntro />
+      {locale === "ko" && <FundingPopup />}
       <a className="skip-link" href="#main-content">
         {locale === "ja" ? "本文へスキップ" : "본문으로 바로가기"}
       </a>

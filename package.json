@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run check:deployment && npm run check:feedback && npm run check:measurement && npm run check:supporters && tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs && node scripts/check-seo.mjs && node scripts/check-localization.mjs && node scripts/check-legal.mjs",
-    "check:supporters": "node --experimental-strip-types --test scripts/supporters-popup.test.mjs",
+    "build": "npm run check:deployment && npm run check:feedback && npm run check:measurement && npm run check:funding && tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs && node scripts/check-seo.mjs && node scripts/check-localization.mjs && node scripts/check-legal.mjs",
+    "check:funding": "node --experimental-strip-types --test scripts/funding-popup.test.mjs",
     "check:measurement": "node --experimental-strip-types --test scripts/measurement.test.mjs scripts/acquisition.test.mjs scripts/campaign-downloads.test.mjs scripts/journey.test.mjs",
     "check:countdown": "node --experimental-strip-types scripts/check-countdown.mjs",
     "sync:legal": "node scripts/sync-legal.mjs",
