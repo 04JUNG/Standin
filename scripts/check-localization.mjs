@@ -15,7 +15,7 @@ for (const [locale, html, path] of [["ko", ko, "/"], ["ja", ja, "/ja/"]]) {
 
 const withoutCode = ja.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "").replace(/<style\b[^>]*>[\s\S]*?<\/style>/g, "");
 assert.ok(!/[가-힣]/.test(withoutCode.replaceAll("한국어", "")), "Japanese HTML, labels and alt text must not fall back to Korean");
-for (const marker of ["supporters-popup", "survey-reward", "baemin-giftcard"]) assert.ok(!ja.includes(marker), `Japanese page excludes Korean promotion: ${marker}`);
+for (const marker of ["supporters-popup", "funding-popup", "survey-reward", "baemin-giftcard"]) assert.ok(!ja.includes(marker), `Japanese page excludes Korean promotion: ${marker}`);
 assert.ok(!/オープンベータ|ベータ版をダウンロード|インストーラーをダウンロード/.test(ja));
 assert.ok(!/href="[^"]*(?:#beta|Standin-client\/releases)/.test(ja));
 assert.match(ja, /property="og:locale" content="ja_JP"/);
