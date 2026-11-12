@@ -5,11 +5,20 @@ import { publicPaths, blogPosts, blogPath } from "../dist-ssr/entry-server.js";
 const origin = "https://www.standinpose.com";
 const dist = new URL("../dist/", import.meta.url);
 const documents = new Map();
+const supporters = await readFile(new URL("supporters/download/index.html", dist), "utf8");
+assert.match(supporters, /name="robots" content="noindex, nofollow"/, "supporters: exclude from search indexing");
+assert.match(supporters, /<h1[^>]*>서포터즈 다운로드<\/h1>/, "supporters: independent download page");
+assert.match(supporters, /href="https:\/\/github.com\/04JUNG\/Standin-client\/releases\/download\/v2\.10\.0\/Standin_2\.10\.0_x64-setup\.exe"/, "supporters: Windows fallback works without JS");
+assert.match(supporters, /href="https:\/\/github.com\/04JUNG\/Standin-client\/releases\/download\/v2\.10\.0\/Standin_2\.10\.0_universal\.dmg"/, "supporters: Mac fallback works without JS");
+assert.ok(!supporters.includes("funding-popup"), "supporters: no landing promotion");
+assert.ok(!publicPaths.includes("/supporters/download/"), "supporters: not a public discovery page");
+assert.ok(!(await readFile(new URL("sitemap.xml", dist), "utf8")).includes("/supporters/"), "supporters: omitted from sitemap");
 const unescapeHtml = (value) => value.replaceAll("&quot;", '"').replaceAll("&#x27;", "'").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&");
 
 for (const path of publicPaths) {
   const html = await readFile(new URL(`.${path}index.html`, dist), "utf8");
   documents.set(path, html);
+  assert.ok(!/href="[^"]*\/supporters\//.test(html), `${path}: no public navigation to supporter downloads`);
   assert.equal((html.match(/<h1\b/g) ?? []).length, 1, `${path}: one product/article heading`);
   assert.match(html, /<main\b[^>]*id="main-content"/, `${path}: initial HTML must contain main content`);
   assert.ok(!html.includes('<div id="root"></div>'), `${path}: empty client-only shell`);
